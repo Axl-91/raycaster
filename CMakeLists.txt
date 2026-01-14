@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.10)
 
 project(pruebaSDL)
 
@@ -16,8 +16,7 @@ src/Walls.cpp
 src/Objects.cpp 
 )
 
-# Agrego la carpeta con los headers autogenerados a los includes
-message("Agregando '${PROJECT_BINARY_DIR}' como directorio de includes")
+message("Adding '${PROJECT_BINARY_DIR}' as includes DIR")
 include_directories(${PROJECT_BINARY_DIR})
 
 add_executable (main src/main.cpp)
