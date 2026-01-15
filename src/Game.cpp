@@ -51,41 +51,42 @@ void Game::fill() {
 
 void Game::exitPollEvent(SDL_Event &evento) {
     if (evento.type == SDL_QUIT) {
-        gameOver = true;
+        this->gameOver = true;
     }
     if (evento.type == SDL_KEYDOWN) {
         switch (evento.key.keysym.sym) {
         case SDLK_ESCAPE:
-            gameOver = true;
+            this->gameOver = true;
         }
     }
 }
 
 void Game::pollEvent() {
-    SDL_Event evento;
+    SDL_Event event;
 
-    if (SDL_PollEvent(&evento)) {
-        // POLL EVENT PLAYER
-        exitPollEvent(evento);
-        gunGame.pollEvent(evento);
-        if (!gunGame.estaEnAccion()) {
-            hudGame.pollEvent(evento);
+    if (SDL_PollEvent(&event)) {
+        // Check exit event
+        exitPollEvent(event);
+
+        gunGame.pollEvent(event);
+        if (!gunGame.getIsShooting()) {
+            hudGame.pollEvent(event);
         }
-        player.pollEvent(evento);
+        player.pollEvent(event);
     }
 }
 
 void Game::render() {
     fill();
     player.render();
-    // RENDER DE SPRITES
-    gunGame.render(320, 240);
+    // Sprites rendering
+    gunGame.render();
     hudGame.renderHud(320, 240);
     hudGame.renderGun(320, 240);
     SDL_RenderPresent(renderer);
 }
 
-bool Game::isGameOver() { return gameOver; }
+bool Game::isGameOver() { return this->gameOver; }
 
 SDL_Renderer *Game::getRenderer() { return renderer; }
 

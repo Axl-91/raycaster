@@ -4,29 +4,30 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-// Largo y alto del arma
-#define GUNL 128
-#define GUNA 128
+#define GUN_WIDTH 128
+#define GUN_HEIGHT 128
+
+#define FRAMES_MAX 4
 
 class Guns {
   private:
     SDL_Rect srcGun = {0, 0, 64, 64};
     int offset = 65;
-    int numAuxiliar = 0;
-    bool estaDisparando = false;
-    SDL_Texture *textura;
+    int auxNum = 0;
+    bool isShooting = false;
+    SDL_Texture *texture;
     SDL_Renderer *winRenderer;
-    void getTexture();
-    void disparar();
+    void loadTexture();
+    void shoot();
 
   public:
     Guns();
     Guns(const Guns &copy) = delete;
-    Guns operator=(const Guns &copy) = delete;
+    Guns &operator=(const Guns &copy) = delete;
     void setRenderer(SDL_Renderer *renderer);
-    void pollEvent(SDL_Event &evento);
-    bool estaEnAccion();
-    void render(int posX, int posY);
+    void pollEvent(SDL_Event &event);
+    bool getIsShooting();
+    void render();
     ~Guns();
 };
 
