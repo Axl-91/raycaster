@@ -14,20 +14,45 @@ class Guns {
     SDL_Rect srcGun = {0, 0, 64, 64};
     int offset = 65;
     int auxNum = 0;
-    bool isShooting = false;
+    bool shooting = false;
     SDL_Texture *texture;
     SDL_Renderer *winRenderer;
+
+    /**
+     * Load gun sprite sheet texture from file
+     * Loads "guns.png" and sets magenta (152, 0, 136) as transparent color
+     * @throws std::runtime_error if surface or texture creation fails
+     */
     void loadTexture();
-    void shoot();
 
   public:
     Guns();
     Guns(const Guns &copy) = delete;
     Guns &operator=(const Guns &copy) = delete;
+
+    /**
+     * Set renderer for the Gun Object and initialize texture
+     * @param renderer SDL renderer to use for creating textures
+     */
     void setRenderer(SDL_Renderer *renderer);
+
+    /**
+     * Handles keyboard input for gun selection and shooting
+     * Keys 1-4 select different guns, Space initiates shooting
+     */
     void pollEvent(SDL_Event &event);
-    bool getIsShooting();
+
+    /**
+     * @return true if gun is currently shooting, false otherwise
+     */
+    bool isShooting();
+
+    /**
+     * Render the gun sprite to the screen
+     * Handles shooting animation by cycling through sprite frames
+     */
     void render();
+
     ~Guns();
 };
 

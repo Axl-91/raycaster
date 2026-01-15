@@ -4,101 +4,108 @@
 #include "Map.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <iostream>
+#include <stdexcept>
 
-Game::Game(int largo, int alto) {
-    int hayError;
-    winLargo = largo;
-    winAlto = alto;
-    const char *title = "WOLFENSTEIN 3D";
+Game::Game(int width, int height) {
+    this->winWidth = width;
+    this->winHeight = height;
 
-    hayError = SDL_Init(SDL_INIT_VIDEO);
-    if (hayError) {
-        std::cout << "ERROR : " << SDL_GetError() << std::endl;
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        throw std::runtime_error(std::string("SDL_Init failed: ") +
+                                 SDL_GetError());
     }
 
-    hayError = SDL_CreateWindowAndRenderer(
-        winLargo, winAlto, SDL_RENDERER_ACCELERATED, &window, &renderer);
-    if (hayError) {
-        std::cout << "ERROR : " << SDL_GetError() << std::endl;
+    if (SDL_CreateWindowAndRenderer(this->winWidth, this->winHeight,
+                                    SDL_RENDERER_ACCELERATED, &this->window,
+                                    &this->renderer) != 0) {
+        SDL_Quit();
+        throw std::runtime_error(std::string("Window creation failed: ") +
+                                 SDL_GetError());
     }
 
-    SDL_SetWindowTitle(window, title);
-    SDL_RenderSetLogicalSize(renderer, largoReal, altoReal);
+    SDL_SetWindowTitle(this->window, "WOLFENSTEIN 3D");
+    SDL_RenderSetLogicalSize(this->renderer, this->realWidth, this->realHeight);
 
-    hudGame.setRenderer(renderer);
-    gunGame.setRenderer(renderer);
-    mapGame.setRenderer(renderer);
-    player.setPos(96, 96);
-    player.setMap(mapGame);
-    player.setRenderer(renderer);
+    this->hud.setRenderer(this->renderer);
+    this->gun.setRenderer(this->renderer);
+    this->map.setRenderer(this->renderer);
+
+    // TODO: Fix magic numbers
+    this->player.setPos(96, 96);
+    this->player.setMap(this->map);
+    this->player.setRenderer(this->renderer);
 }
 
 void Game::setFullScreen() {
-    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+    SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN);
 }
 
 void Game::fill() {
-    /*Dibuja la pantalla en gris claro y luego dibuja
-    desde la mitad para arriba en gris oscuro */
-    SDL_SetRenderDrawColor(renderer, 0x80, 0x80, 0x80, 0xFF);
-    SDL_RenderClear(renderer);
+    static constexpr SDL_Color FLOOR_COLOR = {0x80, 0x80, 0x80, 0xFF};
+    static constexpr SDL_Color CEILING_COLOR = {0x33, 0x33, 0x33, 0xFF};
 
-    SDL_Rect rect = {0, 0, largoReal, (altoReal - 40) / 2};
-    SDL_SetRenderDrawColor(renderer, 0x33, 0x33, 0x33, 0xFF);
-    SDL_RenderFillRect(renderer, &rect);
+    // Fill all screen with the FLOOR_COLOR
+    SDL_SetRenderDrawColor(this->renderer, FLOOR_COLOR.r, FLOOR_COLOR.g,
+                           FLOOR_COLOR.b, FLOOR_COLOR.a);
+    SDL_RenderClear(this->renderer);
+
+    // TODO: The 40 is the height of the HUD, change it, no magic numbers
+    SDL_Rect ceilingRect = {0, 0, this->realWidth, (this->realHeight - 40) / 2};
+
+    // Render CEILING_COLOR on the top half of the screen
+    SDL_SetRenderDrawColor(this->renderer, CEILING_COLOR.r, CEILING_COLOR.g,
+                           CEILING_COLOR.b, CEILING_COLOR.a);
+    SDL_RenderFillRect(this->renderer, &ceilingRect);
 }
 
-void Game::exitPollEvent(SDL_Event &evento) {
-    if (evento.type == SDL_QUIT) {
+void Game::exitPollEvent(SDL_Event &event) {
+    if (event.type == SDL_QUIT) {
         this->gameOver = true;
     }
-    if (evento.type == SDL_KEYDOWN) {
-        switch (evento.key.keysym.sym) {
-        case SDLK_ESCAPE:
-            this->gameOver = true;
-        }
+    if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+        gameOver = true;
     }
 }
 
 void Game::pollEvent() {
     SDL_Event event;
 
-    if (SDL_PollEvent(&event)) {
-        // Check exit event
+    while (SDL_PollEvent(&event)) {
         exitPollEvent(event);
+        this->gun.pollEvent(event);
 
-        gunGame.pollEvent(event);
-        if (!gunGame.getIsShooting()) {
-            hudGame.pollEvent(event);
+        if (!this->gun.isShooting()) {
+            this->hud.pollEvent(event);
         }
-        player.pollEvent(event);
+
+        this->player.pollEvent(event);
     }
 }
 
 void Game::render() {
+    // Draw ceiling and floor colors
     fill();
-    player.render();
-    // Sprites rendering
-    gunGame.render();
-    hudGame.renderHud(320, 240);
-    hudGame.renderGun(320, 240);
-    SDL_RenderPresent(renderer);
+
+    // render sprites
+    this->player.render();
+    this->gun.render();
+    this->hud.renderHud(this->realWidth, this->realHeight);
+    this->hud.renderGun(this->realWidth, this->realHeight);
+
+    SDL_RenderPresent(this->renderer);
 }
 
 bool Game::isGameOver() { return this->gameOver; }
 
-SDL_Renderer *Game::getRenderer() { return renderer; }
-
 Game::~Game() {
-    if (renderer) {
+    if (this->renderer) {
         SDL_DestroyRenderer(renderer);
-        renderer = nullptr;
+        this->renderer = nullptr;
     }
 
-    if (window) {
-        SDL_DestroyWindow(window);
-        window = nullptr;
+    if (this->window) {
+        SDL_DestroyWindow(this->window);
+        this->window = nullptr;
     }
 
     SDL_Quit();

@@ -6,20 +6,11 @@
 
 Guns::Guns() {}
 
-/**
- * Set renderer for the Gun Object and initialize texture
- * @param renderer SDL renderer to use for creating textures
- */
 void Guns::setRenderer(SDL_Renderer *renderer) {
     winRenderer = renderer;
     loadTexture();
 }
 
-/**
- * Load gun sprite sheet texture from file
- * Loads "guns.png" and sets magenta (152, 0, 136) as transparent color
- * @throws std::runtime_error if surface or texture creation fails
- */
 void Guns::loadTexture() {
     SDL_Surface *surface = IMG_Load("guns.png");
     if (!surface) {
@@ -36,17 +27,10 @@ void Guns::loadTexture() {
     SDL_FreeSurface(surface);
 }
 
-/**
- * @return true if gun is currently shooting, false otherwise
- */
-bool Guns::getIsShooting() { return this->isShooting; }
+bool Guns::isShooting() { return this->shooting; }
 
-/**
- * Handles keyboard input for gun selection and shooting
- * Keys 1-4 select different guns, Space initiates shooting
- */
 void Guns::pollEvent(SDL_Event &event) {
-    if (!this->isShooting && event.type == SDL_KEYDOWN) {
+    if (!this->shooting && event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
         case SDLK_1:
             this->srcGun.y = this->offset * 0;
@@ -61,25 +45,21 @@ void Guns::pollEvent(SDL_Event &event) {
             this->srcGun.y = this->offset * 3;
             break;
         case SDLK_SPACE:
-            this->isShooting = true;
+            this->shooting = true;
             break;
         }
     }
 }
 
-/**
- * Render the gun sprite to the screen
- * Handles shooting animation by cycling through sprite frames
- */
 void Guns::render() {
-    if (this->isShooting) {
+    if (this->shooting) {
         int frame = this->auxNum / this->offset;
         this->srcGun.x = this->offset * frame;
         this->auxNum++;
         if (frame > FRAMES_MAX) {
             this->auxNum = 0;
             this->srcGun.x = 0;
-            this->isShooting = false;
+            this->shooting = false;
         }
     }
     SDL_Rect gun = {96, 72, GUN_WIDTH, GUN_HEIGHT};
