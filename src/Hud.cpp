@@ -1,31 +1,31 @@
 #include "Hud.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <iostream>
+#include <stdexcept>
 
 Hud::Hud() {}
 
 void Hud::setRenderer(SDL_Renderer *renderer) {
     winRenderer = renderer;
-    getTexture();
+    loadTexture();
 }
 
-void Hud::getTexture() {
+void Hud::loadTexture() {
     SDL_Surface *surface = IMG_Load("hud.png");
     if (!surface) {
-        throw std::exception(); // Crear excepcion SDL
+        throw std::runtime_error("SDL surface error on HUD");
     }
 
-    textura = SDL_CreateTextureFromSurface(winRenderer, surface);
-    if (!textura) {
-        throw std::exception(); // Crear excepcion SDL
+    texture = SDL_CreateTextureFromSurface(winRenderer, surface);
+    if (!texture) {
+        throw std::runtime_error("SDL texture error on HUD");
     }
     SDL_FreeSurface(surface);
 }
 
-void Hud::pollEvent(SDL_Event &evento) {
-    if (evento.type == SDL_KEYDOWN) {
-        switch (evento.key.keysym.sym) {
+void Hud::pollEvent(SDL_Event &event) {
+    if (event.type == SDL_KEYDOWN) {
+        switch (event.key.keysym.sym) {
         case SDLK_1:
             srcGun.x = offsetGun * 0;
             break;
@@ -42,14 +42,16 @@ void Hud::pollEvent(SDL_Event &evento) {
     }
 }
 
-void Hud::renderHud(int largoWin, int altoWin) {
-    SDL_Rect hud = {largoWin - HUDL, altoWin - HUDA, HUDL, HUDA};
-    SDL_RenderCopy(winRenderer, textura, &srcHud, &hud);
+void Hud::renderHud(int winWidth, int winHeight) {
+    SDL_Rect hud = {winWidth - HUD_WIDTH, winHeight - HUD_HEIGTH, HUD_WIDTH,
+                    HUD_HEIGTH};
+    SDL_RenderCopy(winRenderer, texture, &srcHud, &hud);
 }
 
-void Hud::renderGun(int largoWin, int altoWin) {
-    SDL_Rect gun = {255, 210, HGUNL, HGUNA};
-    SDL_RenderCopy(winRenderer, textura, &srcGun, &gun);
+void Hud::renderGun(int winWidth, int winHeight) {
+    // TODO: Fix magic numbers
+    SDL_Rect gun = {255, 210, HUD_GUN_WIDTH, HUD_GUN_HEIGHT};
+    SDL_RenderCopy(winRenderer, texture, &srcGun, &gun);
 }
 
-Hud::~Hud() { SDL_DestroyTexture(textura); }
+Hud::~Hud() { SDL_DestroyTexture(texture); }

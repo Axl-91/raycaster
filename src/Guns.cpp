@@ -14,15 +14,16 @@ void Guns::setRenderer(SDL_Renderer *renderer) {
 void Guns::loadTexture() {
     SDL_Surface *surface = IMG_Load("guns.png");
     if (!surface) {
-        throw std::runtime_error("SDL surface error");
+        throw std::runtime_error("SDL surface error on Guns");
     }
+
     auto color = SDL_MapRGB(surface->format, 152, 0, 136);
     SDL_SetColorKey(surface, SDL_TRUE, color);
 
     texture = SDL_CreateTextureFromSurface(winRenderer, surface);
     if (!texture) {
         SDL_FreeSurface(surface);
-        throw std::runtime_error("SDL texture error");
+        throw std::runtime_error("SDL texture error on Guns");
     }
     SDL_FreeSurface(surface);
 }

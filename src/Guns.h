@@ -20,7 +20,6 @@ class Guns {
 
     /**
      * Load gun sprite sheet texture from file
-     * Loads "guns.png" and sets magenta (152, 0, 136) as transparent color
      * @throws std::runtime_error if surface or texture creation fails
      */
     void loadTexture();
