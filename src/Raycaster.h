@@ -1,14 +1,14 @@
 #ifndef __RAYCASTER__
 #define __RAYCASTER__
 
-#include <iostream>
 #include "Map.h"
 #include "Vector.h"
+#include <iostream>
 
 #define PI 3.14159265358979323846
 
-class Raycaster{
-private:
+class Raycaster {
+  private:
     Vector rayV;
     Vector rayH;
     Vector rayFinal;
@@ -22,7 +22,8 @@ private:
     void raycasterVertical();
     void raycasterHorizontal();
     void calcularRayFinal();
-public:
+
+  public:
     Raycaster(Vector &pos, float &anguloPlayer, Map &map);
     void crearRay(float &anguloRay);
     float getDistancia();
