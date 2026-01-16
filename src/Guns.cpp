@@ -45,10 +45,15 @@ void Guns::pollEvent(SDL_Event &event) {
         case SDLK_4:
             this->srcGun.y = this->offset * 3;
             break;
-        case SDLK_SPACE:
-            this->shooting = true;
-            break;
         }
+    }
+}
+
+void Guns::handleShooting() {
+    const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+
+    if (keystate[SDL_SCANCODE_SPACE] && !shooting) {
+        shooting = true;
     }
 }
 

@@ -80,7 +80,10 @@ void Game::pollEvent() {
     }
 }
 
-void Game::handleMovement() { player.handleMovement(); }
+void Game::update() {
+    player.handleMovement();
+    gun.handleShooting();
+}
 
 void Game::render() {
     // Draw ceiling and floor colors

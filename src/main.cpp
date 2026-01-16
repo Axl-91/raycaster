@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
 
     while (!game.isGameOver()) {
         game.pollEvent();
-        game.handleMovement();
+        game.update();
         game.render();
 
         SDL_Delay(16);

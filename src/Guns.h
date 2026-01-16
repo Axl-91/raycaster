@@ -43,6 +43,12 @@ class Guns {
     void pollEvent(SDL_Event &event);
 
     /**
+     * Handle continuous shooting input
+     * Checks if Space is held and starts new shooting animation when ready
+     */
+    void handleShooting();
+
+    /**
      * @return true if gun is currently shooting, false otherwise
      */
     bool isShooting();

@@ -66,10 +66,11 @@ class Game {
     void pollEvent();
 
     /**
-     * Handle continuous keyboard input for player movement
-     * Processes held keys for smooth movement (WASD/Arrow keys)
+     * Update game state each frame
+     * Handles continuous input (player movement, gun shooting)
+     * Called every frame to process held keys
      */
-    void handleMovement();
+    void update();
 
     /**
      * Check if the game should exit
