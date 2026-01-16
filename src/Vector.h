@@ -13,6 +13,8 @@ class Vector {
 
     float getY();
 
+    void set(float x, float y);
+
     /**
      * Add another vector to this vector
      * Modifies this vector by adding the components of the given vector

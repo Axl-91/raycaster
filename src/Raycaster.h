@@ -3,32 +3,43 @@
 
 #include "Map.h"
 #include "Vector.h"
+#include "constants.h"
 #include <iostream>
-
-#define PI 3.14159265358979323846
+#include <limits>
 
 class Raycaster {
   private:
-    Vector rayV;
-    Vector rayH;
-    Vector rayFinal;
-    Vector &posPlayer;
-    float distV = 10000;
-    float distH = 10000;
-    float &angPlayer;
-    float angRay;
-    Map &mapRay;
-    float distT;
-    void raycasterVertical();
-    void raycasterHorizontal();
-    void calcularRayFinal();
+    Vector horizontalRay;
+    float hRayDist = std::numeric_limits<float>::infinity();
+
+    Vector verticalRay;
+    float vRayDist = std::numeric_limits<float>::infinity();
+
+    Vector finalRay;
+    float finalRayDist = std::numeric_limits<float>::infinity();
+
+    Vector &playerPos;
+    float playerAngle;
+    float rayAngle;
+
+    Map &map;
+
+    void calculateVerticalRay();
+
+    void calculateHorizontalRay();
+
+    void calculateFinalRay();
 
   public:
-    Raycaster(Vector &pos, float &anguloPlayer, Map &map);
-    void crearRay(float &anguloRay);
-    float getDistancia();
-    void render(int &pos);
-    ~Raycaster();
+    Raycaster(Vector &playerPos, float playerAngle, Map &map);
+
+    void calculateRay(float rayAngle);
+
+    float getDistance();
+
+    void render(int pos);
+
+    ~Raycaster() = default;
 };
 
 #endif

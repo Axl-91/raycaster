@@ -1,56 +1,51 @@
 #include "Walls.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <iostream>
+#include <stdexcept>
 
 Walls::Walls() {}
 
 void Walls::setRenderer(SDL_Renderer *renderer) {
-    rendererWin = renderer;
-    getTexture();
+    this->renderer = renderer;
+    loadTexture();
 }
 
-void Walls::getTexture() {
+void Walls::loadTexture() {
     SDL_Surface *surface = IMG_Load("walls.png");
     if (!surface) {
-        throw std::exception(); // Crear excepcion SDL
+        throw std::runtime_error("SDL surface error on Walls");
     }
 
-    textura = SDL_CreateTextureFromSurface(rendererWin, surface);
-    if (!textura) {
-        throw std::exception(); // Crear excepcion SDL
+    this->texture = SDL_CreateTextureFromSurface(this->renderer, surface);
+    if (!this->texture) {
+        throw std::runtime_error("SDL texture error on Walls");
     }
     SDL_FreeSurface(surface);
 }
 
-void Walls::setSrc(int &posX, int &posY, int &largo, int &alto) {
-    src = {posX, posY, largo, alto};
+void Walls::setWall(int numWall) {
+    int col = numWall % SPRITE_COLS;
+    int row = numWall / SPRITE_COLS;
+
+    this->wallX = col * OFFSET_WALL * SPRITE_SIZE;
+    this->wallY = row * SPRITE_SIZE;
+
+    this->wallRect.x = this->wallX;
+    this->wallRect.y = this->wallY;
 }
 
-void Walls::recortar(int &posX, int &posY, int &largo, int &alto) {
-    int x = srcX + posX;
-    int y = srcY + posY;
-    setSrc(x, y, largo, alto);
-}
-
-void Walls::setWall(int &num) {
-    int x = ((num % 3) * 2) * 64;
-    int y = (num / 3) * 64;
-
-    srcX = x;
-    srcY = y;
-    src.x = srcX;
-    src.y = srcY;
+void Walls::selectSpriteCol(int xOffset) {
+    this->wallRect = {this->wallX + xOffset, this->wallY, 1, SPRITE_SIZE};
 }
 
 void Walls::setDark() {
-    srcX += offset;
-    src.x += offset;
+    this->wallRect.x += SPRITE_SIZE;
+    this->wallX = this->wallRect.x;
 }
 
-void Walls::render(int &posX, int &posY, int &largo, int &alto) {
+void Walls::render(int posX, int posY, int largo, int alto) {
     SDL_Rect wall = {posX, posY, largo, alto};
-    SDL_RenderCopy(rendererWin, textura, &src, &wall);
+    SDL_RenderCopy(this->renderer, this->texture, &this->wallRect, &wall);
 }
 
-Walls::~Walls() { SDL_DestroyTexture(textura); }
+Walls::~Walls() { SDL_DestroyTexture(texture); }

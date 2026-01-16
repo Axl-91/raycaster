@@ -1,31 +1,36 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(pruebaSDL)
+project(wolf3d LANGUAGES CXX)
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-
-add_library(sdl-lib 
-src/Game.cpp 
-src/Vector.cpp
-src/Hud.cpp 
-src/Guns.cpp 
-src/Player.cpp 
-src/Raycaster.cpp
-src/Map.cpp 
-src/Walls.cpp 
-src/Objects.cpp 
+add_library(sdl-lib
+    src/Game.cpp
+    src/Vector.cpp
+    src/Hud.cpp
+    src/Guns.cpp
+    src/Player.cpp
+    src/Raycaster.cpp
+    src/Map.cpp
+    src/Walls.cpp
+    src/Objects.cpp
 )
 
-message("Adding '${PROJECT_BINARY_DIR}' as includes DIR")
-include_directories(${PROJECT_BINARY_DIR})
+target_compile_features(sdl-lib PRIVATE cxx_std_11)
 
-add_executable (main src/main.cpp)
+target_compile_options(sdl-lib PRIVATE
+    $<$<CONFIG:Debug>:-g>
+    $<$<CONFIG:Debug>:-O0>
+    $<$<CONFIG:Debug>:-Wall>
+    $<$<CONFIG:Debug>:-Wextra>
+)
 
-target_link_libraries(main sdl-lib SDL2 SDL2_image)
+add_executable(main src/main.cpp)
 
-install(FILES 
-assets/guns.png 
-assets/hud.png 
-assets/walls.png 
-assets/objects.png 
-DESTINATION ${CMAKE_BINARY_DIR})
+target_link_libraries(main PRIVATE sdl-lib SDL2 SDL2_image)
+
+install(FILES
+    assets/guns.png
+    assets/hud.png
+    assets/walls.png
+    assets/objects.png
+    DESTINATION ${CMAKE_BINARY_DIR}
+)

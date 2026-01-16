@@ -7,6 +7,11 @@ float Vector::getX() { return this->x; }
 
 float Vector::getY() { return this->y; }
 
+void Vector::set(float x, float y) {
+    this->x = x;
+    this->y = y;
+}
+
 void Vector::sum(Vector vector) {
     this->x += vector.getX();
     this->y += vector.getY();

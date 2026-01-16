@@ -8,7 +8,8 @@
 class Objects {
   private:
     static constexpr int SPRITE_SIZE = 64;
-    static constexpr int OFFSET = SPRITE_SIZE + 1;
+    static constexpr int SPRITE_COLS = 5;
+    static constexpr int SPRITE_BORDER = 1;
 
     int objX = 0;
     int objY = 0;

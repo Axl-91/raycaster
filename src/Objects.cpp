@@ -12,14 +12,12 @@ void Objects::setRenderer(SDL_Renderer *renderer) {
 }
 
 void Objects::setObject(int objNum) {
-    // amount of objects on a row
-    int limit = 5;
+    int col = objNum % SPRITE_COLS;
+    int row = objNum / SPRITE_COLS;
 
-    int x = (objNum % limit) * this->OFFSET;
-    int y = (objNum / limit) * this->OFFSET;
+    this->objX = col * (SPRITE_SIZE + SPRITE_BORDER);
+    this->objY = row * (SPRITE_SIZE + SPRITE_BORDER);
 
-    this->objX = x;
-    this->objY = y;
     this->objRect.x = objX;
     this->objRect.y = objY;
 }
@@ -42,7 +40,7 @@ void Objects::loadTexture() {
 }
 
 void Objects::selectSpriteCol(int xOffset) {
-    this->objRect = {objX + xOffset, objY, 1, this->SPRITE_SIZE};
+    this->objRect = {this->objX + xOffset, this->objY, 1, SPRITE_SIZE};
 }
 
 void Objects::render(int x, int y, int width, int height) {

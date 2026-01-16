@@ -73,10 +73,10 @@ void Player::renderRaycaster() {
         } else if (anguloRay > 2 * PI) {
             anguloRay -= 2 * PI;
         }
-        raycaster.crearRay(anguloRay);
+        raycaster.calculateRay(anguloRay);
         raycaster.render(pos);
 
-        distBuffer[pos] = raycaster.getDistancia();
+        distBuffer[pos] = raycaster.getDistance();
 
         anguloRay += PI / 960;
     }

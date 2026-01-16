@@ -42,14 +42,16 @@ Map::Map() {
     load(lvl1);
     Objeto luz1 = {Vector(640, 192), 6};
     vectObj.push_back(luz1);
-    // Objeto luz2 = {Vector(), 9};
-    // Objeto luz3 = {Vector(), 9};
+
     Objeto col1 = {Vector(192, 384), 9};
     vectObj.push_back(col1);
+
     Objeto col2 = {Vector(192, 448), 9};
     vectObj.push_back(col2);
+
     Objeto col3 = {Vector(192, 320), 9};
     vectObj.push_back(col3);
+
     Objeto col4 = {Vector(705, 192), 9};
     vectObj.push_back(col4);
 }
@@ -69,7 +71,7 @@ void Map::setRenderer(SDL_Renderer *renderer) {
 
 int Map::getLongBloques() { return largoBloque; }
 
-bool Map::hayCoordenadas(float &x, float &y) {
+bool Map::hayCoordenadas(float x, float y) {
     int posX = x / largoBloque;
     int posY = y / largoBloque;
 
@@ -89,7 +91,7 @@ bool Map::hayCoordenadas(Vector &vector) {
     return hayCoordenadas(x, y);
 }
 
-int Map::getBloque(float &x, float &y) {
+int Map::getBloque(float x, float y) {
     int posX = x / largoBloque;
     int posY = y / largoBloque;
 
@@ -110,15 +112,13 @@ void Map::setWall(Vector &vector, bool dark) {
     }
 }
 
-void Map::setColWall(float &pos) {
-    int y = 0;
-    int largoCol = 1;
+void Map::setColWall(float pos) {
     int rayInt = floor(pos);
     int posWall = rayInt % largoBloque;
-    walls.recortar(posWall, y, largoCol, largoBloque);
+    walls.selectSpriteCol(posWall);
 }
 
-void Map::renderWall(int &posX, int &posY, int &largo, int &alto) {
+void Map::renderWall(int posX, int posY, int largo, int alto) {
     walls.render(posX, posY, largo, alto);
 }
 
@@ -151,21 +151,21 @@ void Map::ordenarObjects(Vector &pos) {
     vectObj.swap(vectorAux);
 }
 
-Vector Map::getPosObj(int &pos) {
+Vector Map::getPosObj(int pos) {
     Objeto objPedido = vectObj.at(pos);
     return objPedido.posicion;
 }
 
-int Map::getTipoObj(int &pos) {
+int Map::getTipoObj(int pos) {
     Objeto objPedido = vectObj.at(pos);
     return objPedido.tipoObjecto;
 }
 
-void Map::setObj(int &tipo) { objects.setObject(tipo); }
+void Map::setObj(int tipo) { objects.setObject(tipo); }
 
-void Map::setColObject(int &posOffset) { objects.selectSpriteCol(posOffset); }
+void Map::setColObject(int posOffset) { objects.selectSpriteCol(posOffset); }
 
-void Map::renderObject(int &posX, int &posY, int &largo, int &alto) {
+void Map::renderObject(int posX, int posY, int largo, int alto) {
     objects.render(posX, posY, largo, alto);
 }
 

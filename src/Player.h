@@ -2,11 +2,10 @@
 #define __PLAYER__
 
 #include "Map.h"
+#include "constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
-
-#define PI 3.14159265358979323846
 
 class Player {
   private:
