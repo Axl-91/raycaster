@@ -16,7 +16,7 @@ class Guns {
     int auxNum = 0;
     bool shooting = false;
     SDL_Texture *texture;
-    SDL_Renderer *winRenderer;
+    SDL_Renderer *renderer;
 
     /**
      * Load gun sprite sheet texture from file

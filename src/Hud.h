@@ -17,7 +17,7 @@ class Hud {
     SDL_Rect srcNumber = {0, 0, 0, 0};
     SDL_Rect srcKey = {0, 0, 0, 0};
     SDL_Texture *texture;
-    SDL_Renderer *winRenderer;
+    SDL_Renderer *renderer;
 
     /**
      * Load hud sprite sheet texture from file

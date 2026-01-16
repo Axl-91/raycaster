@@ -7,7 +7,7 @@
 Guns::Guns() {}
 
 void Guns::setRenderer(SDL_Renderer *renderer) {
-    winRenderer = renderer;
+    this->renderer = renderer;
     loadTexture();
 }
 
@@ -20,8 +20,8 @@ void Guns::loadTexture() {
     auto color = SDL_MapRGB(surface->format, 152, 0, 136);
     SDL_SetColorKey(surface, SDL_TRUE, color);
 
-    texture = SDL_CreateTextureFromSurface(winRenderer, surface);
-    if (!texture) {
+    this->texture = SDL_CreateTextureFromSurface(this->renderer, surface);
+    if (!this->texture) {
         SDL_FreeSurface(surface);
         throw std::runtime_error("SDL texture error on Guns");
     }
@@ -69,7 +69,7 @@ void Guns::render() {
         }
     }
     SDL_Rect gun = {96, 72, this->GUN_WIDTH, this->GUN_HEIGHT};
-    SDL_RenderCopy(winRenderer, texture, &this->srcGun, &gun);
+    SDL_RenderCopy(this->renderer, this->texture, &this->srcGun, &gun);
 }
 
-Guns::~Guns() { SDL_DestroyTexture(texture); }
+Guns::~Guns() { SDL_DestroyTexture(this->texture); }

@@ -163,7 +163,7 @@ int Map::getTipoObj(int &pos) {
 
 void Map::setObj(int &tipo) { objects.setObject(tipo); }
 
-void Map::setColObject(int &pos) { objects.recortar(pos, 0, 1, 64); }
+void Map::setColObject(int &posOffset) { objects.selectSpriteCol(posOffset); }
 
 void Map::renderObject(int &posX, int &posY, int &largo, int &alto) {
     objects.render(posX, posY, largo, alto);
