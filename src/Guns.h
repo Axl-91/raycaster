@@ -8,6 +8,7 @@
 #define GUN_HEIGHT 128
 
 #define FRAMES_MAX 4
+#define SPEED_FRAMES 18
 
 class Guns {
   private:

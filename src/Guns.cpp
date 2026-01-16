@@ -56,7 +56,7 @@ void Guns::render() {
     if (this->shooting) {
         int frame = this->auxNum / this->offset;
         this->srcGun.x = this->offset * frame;
-        this->auxNum++;
+        this->auxNum += SPEED_FRAMES;
         if (frame > FRAMES_MAX) {
             this->auxNum = 0;
             this->srcGun.x = 0;

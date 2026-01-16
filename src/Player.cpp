@@ -21,81 +21,44 @@ void Player::setMap(Map &map) { mapPlayer = map; }
 
 void Player::setRenderer(SDL_Renderer *renderer) { rendererPlayer = renderer; }
 
-void Player::moveForwards() {
-    posX += dx;
-    posY += dy;
-
-    /*Vector lado1(posX-dx, posY);
-    Vector lado2(posX+dx, posY);
-    Vector lado3(posX, posY-dy);
-    Vector lado4(posX, posY+dy);
-
-        if (mapPlayer.getBloque(lado1) != 0){
-
-        } else if (mapPlayer.getBloque(lado2) != 0){
-
-        } else if (mapPlayer.getBloque(lado3) != 0){
-
-        } else if (mapPlayer.getBloque(lado4) != 0){
-
-        } else {
-                posX += dx;
-                posY += dy;
-        }*/
+void Player::moveForward() {
+    posX += MOVE_SPEED * cos(angle);
+    posY += MOVE_SPEED * sin(angle);
 }
 
-void Player::moveBackwards() {
-    posX -= dx;
-    posY -= dy;
-
-    /*Vector lado1(posX-dx, posY);
-    Vector lado2(posX+dx, posY);
-    Vector lado3(posX, posY-dy);
-    Vector lado4(posX, posY+dy);
-
-        if (mapPlayer.getBloque(lado1) != 0){
-
-        } else if (mapPlayer.getBloque(lado2) != 0){
-
-        } else if (mapPlayer.getBloque(lado3) != 0){
-
-        } else if (mapPlayer.getBloque(lado4) != 0){
-
-        } else {
-                posX -= dx;
-                posY -= dy;
-        }
-        */
+void Player::moveBackward() {
+    posX -= MOVE_SPEED * cos(angle);
+    posY -= MOVE_SPEED * sin(angle);
 }
 
-void Player::pollEvent(SDL_Event &evento) {
-    if (evento.type == SDL_KEYDOWN) {
-        switch (evento.key.keysym.sym) {
-        case SDLK_UP:
-            moveForwards();
-            break;
-        case SDLK_DOWN:
-            moveBackwards();
-            break;
-        case SDLK_RIGHT:
-            angle += PI / 36;
-            if (toGrados(angle) >= 360) {
-                angle -= 2 * PI;
-            }
-            dx = 5 * cos(angle);
-            dy = 5 * sin(angle);
-            break;
-        case SDLK_LEFT:
-            angle -= PI / 36;
-            if (toGrados(angle) < 0) {
-                angle += 2 * PI;
-            }
-            dx = 5 * cos(angle);
-            dy = 5 * sin(angle);
-            break;
-        default:
-            break;
-        }
+void Player::rotateLeft() {
+    angle -= ROTATION_SPEED;
+    if (angle < 0) {
+        angle += 2 * PI;
+    }
+}
+
+void Player::rotateRight() {
+    angle += ROTATION_SPEED;
+    if (angle >= 2 * PI) {
+        angle -= 2 * PI;
+    }
+}
+
+void Player::handleMovement() {
+    const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+
+    if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]) {
+        moveForward();
+    }
+    if (keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN]) {
+        moveBackward();
+    }
+    if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT]) {
+        rotateLeft();
+    }
+    if (keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]) {
+        rotateRight();
     }
 }
 

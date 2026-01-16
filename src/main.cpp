@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_timer.h>
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
@@ -9,8 +10,10 @@ int main(int argc, char *argv[]) {
 
     while (!game.isGameOver()) {
         game.pollEvent();
+        game.handleMovement();
         game.render();
-        sleep(1 / 60);
+
+        SDL_Delay(16);
     }
 
     return 0;

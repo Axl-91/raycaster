@@ -66,6 +66,12 @@ class Game {
     void pollEvent();
 
     /**
+     * Handle continuous keyboard input for player movement
+     * Processes held keys for smooth movement (WASD/Arrow keys)
+     */
+    void handleMovement();
+
+    /**
      * Check if the game should exit
      * @return true if game should close, false otherwise
      */

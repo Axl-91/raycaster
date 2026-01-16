@@ -77,10 +77,10 @@ void Game::pollEvent() {
         if (!this->gun.isShooting()) {
             this->hud.pollEvent(event);
         }
-
-        this->player.pollEvent(event);
     }
 }
+
+void Game::handleMovement() { player.handleMovement(); }
 
 void Game::render() {
     // Draw ceiling and floor colors
