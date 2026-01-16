@@ -4,14 +4,13 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#define GUN_WIDTH 128
-#define GUN_HEIGHT 128
-
-#define FRAMES_MAX 4
-#define SPEED_FRAMES 18
-
 class Guns {
   private:
+    static constexpr int GUN_WIDTH = 128;
+    static constexpr int GUN_HEIGHT = 128;
+    static constexpr int FRAMES_MAX = 4;
+    static constexpr int ANIMATION_SPEED = 18;
+
     SDL_Rect srcGun = {0, 0, 64, 64};
     int offset = 65;
     int auxNum = 0;

@@ -1,25 +1,26 @@
 #include "Vector.h"
 #include <math.h>
 
-Vector::Vector(float x, float y) : posX(x), posY(y) {}
+Vector::Vector(float posX, float posY) : x(posX), y(posY) {}
 
-float Vector::getX() { return posX; }
+float Vector::getX() { return this->x; }
 
-float Vector::getY() { return posY; }
+float Vector::getY() { return this->y; }
 
-void Vector::sumar(Vector vector) {
-    posX += vector.getX();
-    posY += vector.getY();
+void Vector::sum(Vector vector) {
+    this->x += vector.getX();
+    this->y += vector.getY();
 }
 
-void Vector::restar(Vector vector) {
-    posX -= vector.getX();
-    posY -= vector.getY();
+void Vector::sub(Vector vector) {
+    this->x -= vector.getX();
+    this->y -= vector.getY();
 }
 
-float Vector::distancia(Vector vector) {
-    float x = vector.getX() - posX;
-    float y = vector.getY() - posY;
+float Vector::distance(Vector vector) {
+    float x = vector.getX() - this->x;
+    float y = vector.getY() - this->y;
+
     return (sqrt((x * x) + (y * y)));
 }
 

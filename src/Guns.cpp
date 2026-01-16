@@ -61,14 +61,14 @@ void Guns::render() {
     if (this->shooting) {
         int frame = this->auxNum / this->offset;
         this->srcGun.x = this->offset * frame;
-        this->auxNum += SPEED_FRAMES;
-        if (frame > FRAMES_MAX) {
+        this->auxNum += this->ANIMATION_SPEED;
+        if (frame > this->FRAMES_MAX) {
             this->auxNum = 0;
             this->srcGun.x = 0;
             this->shooting = false;
         }
     }
-    SDL_Rect gun = {96, 72, GUN_WIDTH, GUN_HEIGHT};
+    SDL_Rect gun = {96, 72, this->GUN_WIDTH, this->GUN_HEIGHT};
     SDL_RenderCopy(winRenderer, texture, &this->srcGun, &gun);
 }
 

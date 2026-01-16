@@ -4,17 +4,14 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-// Width and height of the HUD
-#define HUD_WIDTH 320
-#define HUD_HEIGTH 40
-
-// Largo y alto del arma en HUD
-#define HUD_GUN_WIDTH 48
-#define HUD_GUN_HEIGHT 23
-
 class Hud {
   private:
-    const SDL_Rect srcHud = {0, 0, HUD_WIDTH, HUD_HEIGTH};
+    static constexpr int HUD_WIDTH = 320;
+    static constexpr int HUD_HEIGHT = 40;
+    static constexpr int HUD_GUN_WIDTH = 48;
+    static constexpr int HUD_GUN_HEIGHT = 23;
+
+    const SDL_Rect srcHud = {0, 0, HUD_WIDTH, HUD_HEIGHT};
     SDL_Rect srcGun = {0, 42, HUD_GUN_WIDTH, HUD_GUN_HEIGHT};
     int offsetGun = 49;
     SDL_Rect srcNumber = {0, 0, 0, 0};

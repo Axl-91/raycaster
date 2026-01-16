@@ -43,14 +43,14 @@ void Hud::pollEvent(SDL_Event &event) {
 }
 
 void Hud::renderHud(int winWidth, int winHeight) {
-    SDL_Rect hud = {winWidth - HUD_WIDTH, winHeight - HUD_HEIGTH, HUD_WIDTH,
-                    HUD_HEIGTH};
+    SDL_Rect hud = {winWidth - this->HUD_WIDTH, winHeight - this->HUD_HEIGHT,
+                    this->HUD_WIDTH, this->HUD_HEIGHT};
     SDL_RenderCopy(winRenderer, texture, &srcHud, &hud);
 }
 
 void Hud::renderGun(int winWidth, int winHeight) {
     // TODO: Fix magic numbers
-    SDL_Rect gun = {255, 210, HUD_GUN_WIDTH, HUD_GUN_HEIGHT};
+    SDL_Rect gun = {255, 210, this->HUD_GUN_WIDTH, this->HUD_GUN_HEIGHT};
     SDL_RenderCopy(winRenderer, texture, &srcGun, &gun);
 }
 
