@@ -22,24 +22,24 @@ void Player::setMap(Map &map) { mapPlayer = map; }
 void Player::setRenderer(SDL_Renderer *renderer) { rendererPlayer = renderer; }
 
 void Player::moveForward() {
-    posX += MOVE_SPEED * cos(angle);
-    posY += MOVE_SPEED * sin(angle);
+    posX += this->MOVE_SPEED * cos(angle);
+    posY += this->MOVE_SPEED * sin(angle);
 }
 
 void Player::moveBackward() {
-    posX -= MOVE_SPEED * cos(angle);
-    posY -= MOVE_SPEED * sin(angle);
+    posX -= this->MOVE_SPEED * cos(angle);
+    posY -= this->MOVE_SPEED * sin(angle);
 }
 
 void Player::rotateLeft() {
-    angle -= ROTATION_SPEED;
+    angle -= this->ROTATION_SPEED;
     if (angle < 0) {
         angle += 2 * PI;
     }
 }
 
 void Player::rotateRight() {
-    angle += ROTATION_SPEED;
+    angle += this->ROTATION_SPEED;
     if (angle >= 2 * PI) {
         angle -= 2 * PI;
     }

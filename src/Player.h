@@ -8,17 +8,14 @@
 
 #define PI 3.14159265358979323846
 
-static constexpr float MOVE_SPEED = 3.0f;
-static constexpr float ROTATION_SPEED = PI / 36;
-
 class Player {
   private:
+    static constexpr float MOVE_SPEED = 3.0f;
+    static constexpr float ROTATION_SPEED = PI / 36;
+
     float posX;
     float posY;
     float angle = 0;
-
-    float dx = 5 * cos(angle);
-    float dy = 5 * sin(angle);
     float distBuffer[320];
     Map mapPlayer;
     SDL_Renderer *rendererPlayer;
