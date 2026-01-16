@@ -54,13 +54,13 @@ void Raycaster::raycasterHorizontal() {
     }
 
     while (noHayColision) {
-        distH = posPlayer.distancia(rayH);
+        distH = posPlayer.distance(rayH);
 
         if (!mapRay.hayCoordenadas(rayH)) {
             break;
         }
         if (mapRay.getBloque(rayH) == 0) {
-            rayH.sumar(raySuma);
+            rayH.sum(raySuma);
         } else {
             noHayColision = false;
         }
@@ -100,13 +100,13 @@ void Raycaster::raycasterVertical() {
     }
 
     while (noHayColision) {
-        distV = posPlayer.distancia(rayV);
+        distV = posPlayer.distance(rayV);
 
         if (!mapRay.hayCoordenadas(rayV)) {
             break;
         }
         if (mapRay.getBloque(rayV) == 0) {
-            rayV.sumar(raySuma);
+            rayV.sum(raySuma);
         } else {
             noHayColision = false;
         }
@@ -146,7 +146,7 @@ void Raycaster::render(int &pos) {
     int largoBloque = mapRay.getLongBloques();
     float largoPared = (largoBloque * LARGO_PANTALLA) / distT;
     // Desde donde voy a empezar a dibujar la pared
-    float offset = (ALTO_PANTALLA / 2) - (largoPared / 2);
+    float offset = (ALTO_PANTALLA / 2.0f) - (largoPared / 2.0f);
 
     int largoParedInt = largoPared;
     int offsetInt = offset;

@@ -118,7 +118,7 @@ void Player::renderObjects() {
             continue;
         }
         int tipoObj = mapPlayer.getTipoObj(obj);
-        float distanciaObj = posJugador.distancia(posObjeto);
+        float distanciaObj = posJugador.distance(posObjeto);
 
         // Coordenadas en Y
         float sizeObj = (64 * 320) / distanciaObj;

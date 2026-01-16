@@ -130,10 +130,10 @@ void Map::addObject(Vector &posicion, int tipo) {
 int Map::getCantObjects() { return vectObj.size(); }
 
 void agregarVectDist(std::vector<Objeto> &v, Objeto &obj, Vector &pos) {
-    float dist = pos.distancia(obj.posicion);
+    float dist = pos.distance(obj.posicion);
     for (auto i = v.begin(); i != v.end(); ++i) {
         Objeto objVec = *i;
-        float distV = pos.distancia(objVec.posicion);
+        float distV = pos.distance(objVec.posicion);
         if (dist > distV) {
             v.insert(i, obj);
             return;
