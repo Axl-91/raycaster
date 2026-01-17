@@ -33,7 +33,6 @@ Game::Game(int width, int height) {
     // TODO: Fix magic numbers
     this->player.setPos(96, 96);
     this->player.setMap(this->map);
-    this->player.setRenderer(this->renderer);
 }
 
 void Game::setFullScreen() {

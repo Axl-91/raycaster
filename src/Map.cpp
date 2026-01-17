@@ -1,7 +1,7 @@
 #include "Map.h"
 #include "Objects.h"
 #include "Walls.h"
-#include "constants.h"
+#include "Constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <algorithm>

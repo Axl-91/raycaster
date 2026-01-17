@@ -1,48 +1,52 @@
 #include "Player.h"
+#include "Constants.h"
 #include "Map.h"
 #include "Raycaster.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <vector>
 
-int toGrados(float radiales) {
-    float anguloGrados = (radiales / PI) * 180;
-    int anguloInt = round(anguloGrados);
-    return anguloInt;
+namespace {
+float normalizeAngle(float angle) {
+    if (angle < 0) {
+        angle += 2 * PI;
+    } else if (angle > 2 * PI) {
+        angle -= 2 * PI;
+    }
+    return angle;
 }
+} // namespace
 
 Player::Player() {}
 
 void Player::setPos(float x, float y) {
-    posX = x;
-    posY = y;
+    this->posX = x;
+    this->posY = y;
 }
 
-void Player::setMap(Map &map) { mapPlayer = map; }
-
-void Player::setRenderer(SDL_Renderer *renderer) { rendererPlayer = renderer; }
+void Player::setMap(Map &map) { this->map = map; }
 
 void Player::moveForward() {
-    posX += this->MOVE_SPEED * cos(angle);
-    posY += this->MOVE_SPEED * sin(angle);
+    this->posX += MOVE_SPEED * cos(this->angle);
+    this->posY += MOVE_SPEED * sin(this->angle);
 }
 
 void Player::moveBackward() {
-    posX -= this->MOVE_SPEED * cos(angle);
-    posY -= this->MOVE_SPEED * sin(angle);
+    this->posX -= MOVE_SPEED * cos(this->angle);
+    this->posY -= MOVE_SPEED * sin(this->angle);
 }
 
 void Player::rotateLeft() {
-    angle -= this->ROTATION_SPEED;
-    if (angle < 0) {
-        angle += 2 * PI;
+    this->angle -= ROTATION_SPEED;
+    if (this->angle < 0) {
+        this->angle += 2 * PI;
     }
 }
 
 void Player::rotateRight() {
-    angle += this->ROTATION_SPEED;
-    if (angle >= 2 * PI) {
-        angle -= 2 * PI;
+    this->angle += ROTATION_SPEED;
+    if (this->angle >= 2 * PI) {
+        this->angle -= 2 * PI;
     }
 }
 
@@ -63,23 +67,24 @@ void Player::handleMovement() {
     }
 }
 
-void Player::renderRaycaster() {
-    Vector vectorPos(posX, posY);
-    Raycaster raycaster(vectorPos, angle, mapPlayer);
-    float anguloRay = angle - PI / 6;
+void Player::renderWalls() {
+    Vector vectorPos(this->posX, this->posY);
+    Raycaster raycaster(vectorPos, this->angle, this->map);
 
-    for (int pos = 0; pos < 320; ++pos) {
-        if (anguloRay < 0) {
-            anguloRay += 2 * PI;
-        } else if (anguloRay > 2 * PI) {
-            anguloRay -= 2 * PI;
-        }
-        raycaster.calculateRay(anguloRay);
+    // We need to start to create rays from the angle of the player minus 30°
+    float angleRay = this->angle - OFFSET_RAYCASTER;
+
+    for (int pos = 0; pos < SCREEN_WIDTH; ++pos) {
+        angleRay = normalizeAngle(angleRay);
+
+        raycaster.calculateRay(angleRay);
         raycaster.renderWalls(pos);
 
-        distBuffer[pos] = raycaster.getDistance();
+        this->distancesList[pos] = raycaster.getDistance();
 
-        anguloRay += PI / 960;
+        // Step is the amount neccesary to add so we can
+        // fill the entire screen with the rays from -30° to +30°
+        angleRay += STEP_RAYCASTER;
     }
 }
 
@@ -90,11 +95,11 @@ bool Player::objIsVisible(Vector &posObj) {
     float gVis = 35.0 / 180.0;
     float visible = PI * gVis;
 
-    float dx = posObj.getX() - posX;
-    float dy = posObj.getY() - posY;
+    float dx = posObj.getX() - this->posX;
+    float dy = posObj.getY() - this->posY;
 
     float anguloObj = atan2(dy, dx);
-    float difAng = angle - anguloObj;
+    float difAng = this->angle - anguloObj;
 
     if (difAng < -PI) {
         difAng += 2 * PI;
@@ -110,9 +115,9 @@ bool Player::objIsVisible(Vector &posObj) {
 
 void Player::renderObjects() {
     int uno = 1;
-    Vector posJugador = Vector(posX, posY);
-    mapPlayer.sortObjByDist(posJugador);
-    std::vector<mapObject> mapObjects = mapPlayer.getObjects();
+    Vector posJugador = Vector(this->posX, this->posY);
+    this->map.sortObjByDist(posJugador);
+    std::vector<mapObject> mapObjects = this->map.getObjects();
 
     for (mapObject obj : mapObjects) {
         if (!objIsVisible(obj.position)) {
@@ -124,17 +129,17 @@ void Player::renderObjects() {
         float sizeObj = (64 * 320) / distanciaObj;
         float yo = 100 - (sizeObj / 2);
         // Coordenadas en X
-        float dx = posX - obj.position.getX();
-        float dy = posY - obj.position.getY();
+        float dx = this->posX - obj.position.getX();
+        float dy = this->posY - obj.position.getY();
 
-        float anguloObj = atan2(dy, dx) - angle;
+        float anguloObj = atan2(dy, dx) - this->angle;
         float xo = tan(anguloObj) * 277.1281;
         float x = 160.0f + xo - sizeObj / 2.0f;
 
         float anchura = sizeObj / 64;
         int yoInt = yo;
         int sizeObjInt = sizeObj;
-        mapPlayer.setObjType(obj.type);
+        this->map.setObjType(obj.type);
 
         for (int i = 0; i < 64; ++i) {
             for (int j = 0; j < anchura; ++j) {
@@ -143,9 +148,9 @@ void Player::renderObjects() {
                     continue;
                 }
 
-                if (distBuffer[z] > distanciaObj) {
-                    mapPlayer.setColObject(i);
-                    mapPlayer.renderObject(z, yoInt, uno, sizeObjInt);
+                if (this->distancesList[z] > distanciaObj) {
+                    this->map.setColObject(i);
+                    this->map.renderObject(z, yoInt, uno, sizeObjInt);
                 }
             }
         }
@@ -153,7 +158,7 @@ void Player::renderObjects() {
 }
 
 void Player::render() {
-    renderRaycaster();
+    renderWalls();
     renderObjects();
 }
 

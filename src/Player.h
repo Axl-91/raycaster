@@ -1,40 +1,68 @@
 #ifndef __PLAYER__
 #define __PLAYER__
 
+#include "Constants.h"
 #include "Map.h"
-#include "constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
 
 class Player {
   private:
+    static constexpr float OFFSET_RAYCASTER = PI / 6;
+    static constexpr float STEP_RAYCASTER =
+        (OFFSET_RAYCASTER * 2) / SCREEN_WIDTH;
+
     static constexpr float MOVE_SPEED = 3.0f;
     static constexpr float ROTATION_SPEED = PI / 36;
 
     float posX;
     float posY;
     float angle = 0;
-    float distBuffer[320];
-    Map mapPlayer;
-    SDL_Renderer *rendererPlayer;
+    float distancesList[SCREEN_WIDTH];
+    Map map;
 
+    /**
+     * Player movement controls.
+     * Updates position or orientation angle based on input.
+     */
     void moveForward();
     void moveBackward();
     void rotateLeft();
     void rotateRight();
 
-    void renderRaycaster();
+    /**
+     * Checks if the object is visible by the Player
+     * @param posObj a Vector that represents the position of the object
+     */
     bool objIsVisible(Vector &posObj);
+
+    /**
+     * Render all the walls on the Player vision on screen
+     */
+    void renderWalls();
+
+    /**
+     * Render all the objects that are visible to the Player on screen
+     */
     void renderObjects();
 
   public:
     Player();
+
     void setPos(float x, float y);
     void setMap(Map &map);
-    void setRenderer(SDL_Renderer *renderer);
+
+    /**
+     * Handles the movements of the player based on keyboard input
+     */
     void handleMovement();
+
+    /**
+     * Render the walls and the objects on screen
+     */
     void render();
+
     ~Player();
 };
 

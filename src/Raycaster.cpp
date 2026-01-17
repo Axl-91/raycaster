@@ -1,6 +1,6 @@
 #include "Raycaster.h"
+#include "Constants.h"
 #include "Vector.h"
-#include "constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
