@@ -1,7 +1,9 @@
 #include "Map.h"
+#include "Constants.h"
+#include "DefaultMapData.h"
+#include "DefaultObjects.h"
 #include "Objects.h"
 #include "Walls.h"
-#include "Constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <algorithm>

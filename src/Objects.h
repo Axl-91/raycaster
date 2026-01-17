@@ -1,19 +1,19 @@
 #ifndef __TEXTURE_OBJECTS__
 #define __TEXTURE_OBJECTS__
 
+#include "Constants.h"
 #include "Vector.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
 class Objects {
   private:
-    static constexpr int SPRITE_SIZE = 64;
     static constexpr int SPRITE_COLS = 5;
     static constexpr int SPRITE_BORDER = 1;
 
     int objX = 0;
     int objY = 0;
-    SDL_Rect objRect = {objX, objY, SPRITE_SIZE, SPRITE_SIZE};
+    SDL_Rect objRect = {objX, objY, BLOCK_SIZE, BLOCK_SIZE};
     SDL_Texture *texture;
     SDL_Renderer *renderer;
 
@@ -50,12 +50,11 @@ class Objects {
      * @param x Screen X coordinate where sprite will be drawn
      * @param y Screen Y coordinate where sprite will be drawn
      * @param width Width of the rendered sprite in pixels (default:
-     * SPRITE_SIZE)
+     * BLOCK_SIZE)
      * @param height Height of the rendered sprite in pixels (default:
-     * SPRITE_SIZE)
+     * BLOCK_SIZE)
      */
-    void render(int x, int y, int width = SPRITE_SIZE,
-                int height = SPRITE_SIZE);
+    void render(int x, int y, int width = BLOCK_SIZE, int height = BLOCK_SIZE);
 
     ~Objects();
 };

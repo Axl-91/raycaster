@@ -1,4 +1,5 @@
 #include "Walls.h"
+#include "Constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdexcept>
@@ -27,20 +28,20 @@ void Walls::setWall(int numWall, bool isDark) {
     int col = numWall % SPRITE_COLS;
     int row = numWall / SPRITE_COLS;
 
-    this->wallX = col * OFFSET_WALL * SPRITE_SIZE;
-    this->wallY = row * SPRITE_SIZE;
+    this->wallX = col * OFFSET_WALL * BLOCK_SIZE;
+    this->wallY = row * BLOCK_SIZE;
 
     this->wallRect.x = this->wallX;
     this->wallRect.y = this->wallY;
 
     if (isDark) {
-        this->wallRect.x += SPRITE_SIZE;
+        this->wallRect.x += BLOCK_SIZE;
         this->wallX = this->wallRect.x;
     }
 }
 
 void Walls::selectSpriteCol(int xOffset) {
-    this->wallRect = {this->wallX + xOffset, this->wallY, 1, SPRITE_SIZE};
+    this->wallRect = {this->wallX + xOffset, this->wallY, 1, BLOCK_SIZE};
 }
 
 void Walls::render(int posX, int posY, int largo, int alto) {

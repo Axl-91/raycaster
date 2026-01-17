@@ -15,6 +15,8 @@ set(SOURCES
     src/Map.cpp
     src/Walls.cpp
     src/Objects.cpp
+    src/DefaultMapData.cpp
+    src/DefaultObjects.cpp
 )
 
 add_library(sdl-lib)

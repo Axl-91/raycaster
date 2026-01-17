@@ -1,4 +1,5 @@
 #include "Objects.h"
+#include "Constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdexcept>
@@ -15,8 +16,8 @@ void Objects::setObject(int objNum) {
     int col = objNum % SPRITE_COLS;
     int row = objNum / SPRITE_COLS;
 
-    this->objX = col * (SPRITE_SIZE + SPRITE_BORDER);
-    this->objY = row * (SPRITE_SIZE + SPRITE_BORDER);
+    this->objX = col * (BLOCK_SIZE + SPRITE_BORDER);
+    this->objY = row * (BLOCK_SIZE + SPRITE_BORDER);
 
     this->objRect.x = objX;
     this->objRect.y = objY;
@@ -40,7 +41,7 @@ void Objects::loadTexture() {
 }
 
 void Objects::selectSpriteCol(int xOffset) {
-    this->objRect = {this->objX + xOffset, this->objY, 1, SPRITE_SIZE};
+    this->objRect = {this->objX + xOffset, this->objY, 1, BLOCK_SIZE};
 }
 
 void Objects::render(int x, int y, int width, int height) {
