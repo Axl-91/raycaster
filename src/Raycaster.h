@@ -10,6 +10,10 @@
 
 class Raycaster {
   private:
+    // Small offset to push ray intersections inside the correct grid cell
+    // and avoid precision issues when hitting tile boundaries.
+    static constexpr float EPSILON = 0.0001f;
+
     Vector horizontalRay;
     float hRayDist = std::numeric_limits<float>::infinity();
 

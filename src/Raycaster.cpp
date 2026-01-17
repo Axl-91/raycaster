@@ -21,125 +21,127 @@ void Raycaster::calculateRay(float rayAngle) {
 }
 
 void Raycaster::calculateHorizontalRay() {
-    float rx, ry, xo, yo;
-    Vector raySuma;
-    bool noHayColision = true;
-    int grados = toGradosRay(rayAngle);
-    float tangH = -1 / tan(rayAngle);
-
-    if (grados > 180) {
-        int bloqPasados = playerPos.getY() / BLOCK_SIZE;
-        ry = bloqPasados * BLOCK_SIZE - 0.0001;
-        rx = (playerPos.getY() - ry) * tangH + playerPos.getX();
-        horizontalRay = Vector(rx, ry);
-
-        yo = -BLOCK_SIZE;
-        xo = -yo * tangH;
-        raySuma = Vector(xo, yo);
-    }
-    if (grados < 180) {
-        int bloqPasados = playerPos.getY() / BLOCK_SIZE;
-        ry = bloqPasados * BLOCK_SIZE + BLOCK_SIZE;
-        rx = (playerPos.getY() - ry) * tangH + playerPos.getX();
-        horizontalRay = Vector(rx, ry);
-
-        yo = BLOCK_SIZE;
-        xo = -yo * tangH;
-        raySuma = Vector(xo, yo);
-    }
-    if (grados == 0 || grados == 360 || grados == 180) {
-        noHayColision = false;
+    if (fabs(sin(rayAngle)) < EPSILON) {
+        this->hRayDist = std::numeric_limits<float>::infinity();
+        return;
     }
 
-    while (noHayColision) {
-        hRayDist = playerPos.distance(horizontalRay);
+    Vector raySum;
+    bool hitWall = false;
+    float hTang = -1 / tan(rayAngle);
 
-        if (!map.isInsideMap(horizontalRay)) {
+    if (rayAngle > PI) {
+        int blockPos = playerPos.getY() / BLOCK_SIZE;
+
+        // Initial ray position
+        float ry = blockPos * BLOCK_SIZE - EPSILON;
+        float rx = ((playerPos.getY() - ry) * hTang) + playerPos.getX();
+
+        this->horizontalRay = Vector(rx, ry);
+
+        float yo = -BLOCK_SIZE;
+        float xo = -yo * hTang;
+
+        raySum = Vector(xo, yo);
+    } else {
+        int blockPos = playerPos.getY() / BLOCK_SIZE;
+
+        // Initial ray position
+        float ry = blockPos * BLOCK_SIZE + BLOCK_SIZE;
+        float rx = (playerPos.getY() - ry) * hTang + playerPos.getX();
+
+        this->horizontalRay = Vector(rx, ry);
+
+        float yo = BLOCK_SIZE;
+        float xo = -yo * hTang;
+
+        raySum = Vector(xo, yo);
+    }
+
+    while (!hitWall) {
+        this->hRayDist = playerPos.distance(this->horizontalRay);
+
+        if (!map.isInsideMap(this->horizontalRay)) {
             break;
         }
-        if (map.getBlock(horizontalRay) == 0) {
-            horizontalRay.sum(raySuma);
-        } else {
-            noHayColision = false;
+        if (map.getBlock(this->horizontalRay) == 0) {
+            this->horizontalRay.sum(raySum);
+            continue;
         }
+        hitWall = true;
     }
 }
 
 void Raycaster::calculateVerticalRay() {
-    float rx, ry, xo, yo;
-    Vector raySuma;
-    bool noHayColision = true;
-    int grados = toGradosRay(rayAngle);
-    float tangV = -tan(rayAngle);
-
-    if (grados < 270 && grados > 90) {
-        int bloqPasados = playerPos.getX() / BLOCK_SIZE;
-        rx = bloqPasados * BLOCK_SIZE - 0.0001;
-        ry = (playerPos.getX() - rx) * tangV + playerPos.getY();
-        verticalRay = Vector(rx, ry);
-
-        xo = -BLOCK_SIZE;
-        yo = -xo * tangV;
-        raySuma = Vector(xo, yo);
-    }
-    if (grados > 270 || grados < 90) {
-        int bloqPasados = playerPos.getX() / BLOCK_SIZE;
-        rx = bloqPasados * BLOCK_SIZE + BLOCK_SIZE;
-        ry = (playerPos.getX() - rx) * tangV + playerPos.getY();
-        verticalRay = Vector(rx, ry);
-
-        xo = BLOCK_SIZE;
-        yo = -xo * tangV;
-        raySuma = Vector(xo, yo);
-    }
-    if (grados == 270 || grados == 90) {
-        noHayColision = false;
+    if (fabs(cos(rayAngle)) < EPSILON) {
+        this->vRayDist = std::numeric_limits<float>::infinity();
+        return;
     }
 
-    while (noHayColision) {
-        vRayDist = playerPos.distance(verticalRay);
+    Vector raySum;
+    bool hitWall = false;
+    float vTang = -tan(rayAngle);
 
-        if (!map.isInsideMap(verticalRay)) {
+    if (rayAngle < 3 * PI / 2 && rayAngle > PI / 2) {
+        int blockPos = playerPos.getX() / BLOCK_SIZE;
+
+        float rx = blockPos * BLOCK_SIZE - EPSILON;
+        float ry = (playerPos.getX() - rx) * vTang + playerPos.getY();
+
+        this->verticalRay = Vector(rx, ry);
+
+        float xo = -BLOCK_SIZE;
+        float yo = -xo * vTang;
+        raySum = Vector(xo, yo);
+    }
+    if (rayAngle > 3 * PI / 2 || rayAngle < PI / 2) {
+        int blockPos = playerPos.getX() / BLOCK_SIZE;
+
+        float rx = blockPos * BLOCK_SIZE + BLOCK_SIZE;
+        float ry = (playerPos.getX() - rx) * vTang + playerPos.getY();
+
+        this->verticalRay = Vector(rx, ry);
+
+        float xo = BLOCK_SIZE;
+        float yo = -xo * vTang;
+
+        raySum = Vector(xo, yo);
+    }
+
+    while (!hitWall) {
+        this->vRayDist = playerPos.distance(this->verticalRay);
+
+        if (!map.isInsideMap(this->verticalRay)) {
             break;
         }
-        if (map.getBlock(verticalRay) == 0) {
-            verticalRay.sum(raySuma);
-        } else {
-            noHayColision = false;
+        if (map.getBlock(this->verticalRay) == 0) {
+            this->verticalRay.sum(raySum);
+            continue;
         }
+        hitWall = true;
     }
 }
 
 void Raycaster::calculateFinalRay() {
     if (hRayDist < vRayDist) {
-        finalRayDist = hRayDist;
-        this->finalRay = horizontalRay;
-        if (!map.isInsideMap(finalRay)) {
-            SDL_Log("Raycaster (%f, %f)", finalRay.getX(), finalRay.getY());
-        }
+        this->finalRayDist = this->hRayDist;
+        this->finalRay = this->horizontalRay;
+
         map.setWallType(finalRay, false);
         float rayX = finalRay.getX();
         map.setColWall(rayX);
     } else {
-        finalRayDist = vRayDist;
-        this->finalRay = verticalRay;
-        if (!map.isInsideMap(finalRay)) {
-            SDL_Log("Raycaster (%f, %f)", finalRay.getX(), finalRay.getY());
-        }
+        this->finalRayDist = this->vRayDist;
+        this->finalRay = this->verticalRay;
+
         map.setWallType(finalRay, true);
         float rayY = finalRay.getY();
         map.setColWall(rayY);
     }
 
-    /* Para evitar efecto fisheye */
-    float angNuevo = playerAngle - rayAngle;
-    if (angNuevo < 0) {
-        angNuevo += 2 * PI;
-    }
-    if (angNuevo > 2 * PI) {
-        angNuevo -= 2 * PI;
-    }
-    finalRayDist = finalRayDist * cos(angNuevo);
+    // To avoid fisheye effect
+    float newAngle = playerAngle - rayAngle;
+    finalRayDist = finalRayDist * cos(newAngle);
 }
 
 float Raycaster::getDistance() { return finalRayDist; }
