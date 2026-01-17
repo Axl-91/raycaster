@@ -23,7 +23,7 @@ void Walls::loadTexture() {
     SDL_FreeSurface(surface);
 }
 
-void Walls::setWall(int numWall) {
+void Walls::setWall(int numWall, bool isDark) {
     int col = numWall % SPRITE_COLS;
     int row = numWall / SPRITE_COLS;
 
@@ -32,15 +32,15 @@ void Walls::setWall(int numWall) {
 
     this->wallRect.x = this->wallX;
     this->wallRect.y = this->wallY;
+
+    if (isDark) {
+        this->wallRect.x += SPRITE_SIZE;
+        this->wallX = this->wallRect.x;
+    }
 }
 
 void Walls::selectSpriteCol(int xOffset) {
     this->wallRect = {this->wallX + xOffset, this->wallY, 1, SPRITE_SIZE};
-}
-
-void Walls::setDark() {
-    this->wallRect.x += SPRITE_SIZE;
-    this->wallX = this->wallRect.x;
 }
 
 void Walls::render(int posX, int posY, int largo, int alto) {

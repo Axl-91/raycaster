@@ -34,14 +34,10 @@ class Walls {
 
     /**
      * Set the wall from the sprite sheet to be used
+     * if isDark is true we change the sprite to the dark variant
      * @param numWall the number of the wall to be used
      */
-    void setWall(int numWall);
-
-    /**
-     * Set the wall selected into the dark mode
-     */
-    void setDark();
+    void setWall(int numWall, bool isDark);
 
     /**
      * Select which column of the sprite sheet to render

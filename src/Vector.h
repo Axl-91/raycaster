@@ -9,9 +9,9 @@ class Vector {
   public:
     Vector(float posX = 0, float posY = 0);
 
-    float getX();
+    float getX() const;
 
-    float getY();
+    float getY() const;
 
     void set(float x, float y);
 

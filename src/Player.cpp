@@ -1,8 +1,10 @@
 #include "Player.h"
+#include "Map.h"
 #include "Raycaster.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
+#include <vector>
 
 int toGrados(float radiales) {
     float anguloGrados = (radiales / PI) * 180;
@@ -74,7 +76,7 @@ void Player::renderRaycaster() {
             anguloRay -= 2 * PI;
         }
         raycaster.calculateRay(anguloRay);
-        raycaster.render(pos);
+        raycaster.renderWalls(pos);
 
         distBuffer[pos] = raycaster.getDistance();
 
@@ -110,22 +112,21 @@ bool Player::objIsVisible(Vector &posObj) {
 void Player::renderObjects() {
     int uno = 1;
     Vector posJugador = Vector(posX, posY);
-    mapPlayer.ordenarObjects(posJugador);
+    mapPlayer.sortObjByDist(posJugador);
+    std::vector<mapObject> mapObjects = mapPlayer.getObjects();
 
-    for (int obj = 0; obj < mapPlayer.getCantObjects(); ++obj) {
-        Vector posObjeto = mapPlayer.getPosObj(obj);
-        if (!objIsVisible(posObjeto)) {
+    for (mapObject obj : mapObjects) {
+        if (!objIsVisible(obj.position)) {
             continue;
         }
-        int tipoObj = mapPlayer.getTipoObj(obj);
-        float distanciaObj = posJugador.distance(posObjeto);
+        float distanciaObj = posJugador.distance(obj.position);
 
         // Coordenadas en Y
         float sizeObj = (64 * 320) / distanciaObj;
         float yo = 100 - (sizeObj / 2);
         // Coordenadas en X
-        float dx = posX - posObjeto.getX();
-        float dy = posY - posObjeto.getY();
+        float dx = posX - obj.position.getX();
+        float dy = posY - obj.position.getY();
 
         float anguloObj = atan2(dy, dx) - angle;
         float xo = tan(anguloObj) * 277.1281;
@@ -134,7 +135,7 @@ void Player::renderObjects() {
         float anchura = sizeObj / 64;
         int yoInt = yo;
         int sizeObjInt = sizeObj;
-        mapPlayer.setObj(tipoObj);
+        mapPlayer.setObjType(obj.type);
 
         for (int i = 0; i < 64; ++i) {
             for (int j = 0; j < anchura; ++j) {

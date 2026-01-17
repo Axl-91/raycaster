@@ -3,7 +3,8 @@
 #include "Walls.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <iostream>
+#include <cstddef>
+#include <vector>
 
 int lvl1[15][20] = {
     {34, 34, 34, 34, 34, 34, 34, 34, 34, 34,
@@ -38,27 +39,24 @@ int lvl1[15][20] = {
      34, 34, 34, 34, 34, 34, 34, 34, 34, 34},
 };
 
+MapObject light1 = {Vector(640, 192), 6};
+MapObject column1 = {Vector(192, 384), 9};
+MapObject column2 = {Vector(192, 448), 9};
+MapObject column3 = {Vector(192, 320), 9};
+MapObject column4 = {Vector(705, 192), 9};
+
 Map::Map() {
-    load(lvl1);
-    Objeto luz1 = {Vector(640, 192), 6};
-    vectObj.push_back(luz1);
-
-    Objeto col1 = {Vector(192, 384), 9};
-    vectObj.push_back(col1);
-
-    Objeto col2 = {Vector(192, 448), 9};
-    vectObj.push_back(col2);
-
-    Objeto col3 = {Vector(192, 320), 9};
-    vectObj.push_back(col3);
-
-    Objeto col4 = {Vector(705, 192), 9};
-    vectObj.push_back(col4);
+    loadMap(lvl1);
+    addObject(light1.position, light1.type);
+    addObject(column1.position, column1.type);
+    addObject(column2.position, column2.type);
+    addObject(column3.position, column3.type);
+    addObject(column4.position, column4.type);
 }
 
-void Map::load(int lvl[15][20]) {
-    for (int i = 0; i < filas; ++i) {
-        for (int j = 0; j < columnas; ++j) {
+void Map::loadMap(int lvl[15][20]) {
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < columns; ++j) {
             map[i][j] = lvl[i][j];
         }
     }
@@ -69,52 +67,43 @@ void Map::setRenderer(SDL_Renderer *renderer) {
     objects.setRenderer(renderer);
 }
 
-int Map::getLongBloques() { return largoBloque; }
+int Map::getBlockSize() { return BLOCK_SIZE; }
 
-bool Map::hayCoordenadas(float x, float y) {
-    int posX = x / largoBloque;
-    int posY = y / largoBloque;
+bool Map::isInsideMap(float x, float y) {
 
-    if (posX > columnas || posX < 0) {
+    int posX = static_cast<int>(floor(x / BLOCK_SIZE));
+    int posY = static_cast<int>(floor(y / BLOCK_SIZE));
+
+    if (posX < 0 || posX >= columns)
         return false;
-    }
-    if (posY > filas || posY < 0) {
+
+    if (posY < 0 || posY >= rows)
         return false;
-    }
 
     return true;
 }
 
-bool Map::hayCoordenadas(Vector &vector) {
-    float x = vector.getX();
-    float y = vector.getY();
-    return hayCoordenadas(x, y);
+bool Map::isInsideMap(const Vector &vector) {
+    return isInsideMap(vector.getX(), vector.getY());
 }
 
-int Map::getBloque(float x, float y) {
-    int posX = x / largoBloque;
-    int posY = y / largoBloque;
+int Map::getBlock(float x, float y) {
+    int posX = static_cast<int>(floor(x / BLOCK_SIZE));
+    int posY = static_cast<int>(floor(y / BLOCK_SIZE));
 
     return map[posY][posX];
 }
 
-int Map::getBloque(Vector &vector) {
-    float x = vector.getX();
-    float y = vector.getY();
-    return getBloque(x, y);
-}
+int Map::getBlock(const Vector &v) { return getBlock(v.getX(), v.getY()); }
 
-void Map::setWall(Vector &vector, bool dark) {
-    int tipoWall = getBloque(vector) - 1;
-    walls.setWall(tipoWall);
-    if (dark) {
-        walls.setDark();
-    }
+void Map::setWallType(Vector &vector, bool dark) {
+    int wallType = getBlock(vector) - 1;
+    walls.setWall(wallType, dark);
 }
 
 void Map::setColWall(float pos) {
     int rayInt = floor(pos);
-    int posWall = rayInt % largoBloque;
+    int posWall = rayInt % BLOCK_SIZE;
     walls.selectSpriteCol(posWall);
 }
 
@@ -123,17 +112,15 @@ void Map::renderWall(int posX, int posY, int largo, int alto) {
 }
 
 void Map::addObject(Vector &posicion, int tipo) {
-    Objeto obj = {posicion, tipo};
+    MapObject obj = {posicion, tipo};
     vectObj.push_back(obj);
 }
 
-int Map::getCantObjects() { return vectObj.size(); }
-
-void agregarVectDist(std::vector<Objeto> &v, Objeto &obj, Vector &pos) {
-    float dist = pos.distance(obj.posicion);
+void addInOrderByDist(std::vector<MapObject> &v, MapObject &obj, Vector &pos) {
+    float dist = pos.distance(obj.position);
     for (auto i = v.begin(); i != v.end(); ++i) {
-        Objeto objVec = *i;
-        float distV = pos.distance(objVec.posicion);
+        MapObject objVec = *i;
+        float distV = pos.distance(objVec.position);
         if (dist > distV) {
             v.insert(i, obj);
             return;
@@ -142,26 +129,18 @@ void agregarVectDist(std::vector<Objeto> &v, Objeto &obj, Vector &pos) {
     v.push_back(obj);
 }
 
-void Map::ordenarObjects(Vector &pos) {
-    std::vector<Objeto> vectorAux;
+void Map::sortObjByDist(Vector &pos) {
+    std::vector<MapObject> vectorAux;
 
-    for (Objeto obj : vectObj) {
-        agregarVectDist(vectorAux, obj, pos);
+    for (MapObject obj : vectObj) {
+        addInOrderByDist(vectorAux, obj, pos);
     }
     vectObj.swap(vectorAux);
 }
 
-Vector Map::getPosObj(int pos) {
-    Objeto objPedido = vectObj.at(pos);
-    return objPedido.posicion;
-}
+std::vector<MapObject> Map::getObjects() { return vectObj; }
 
-int Map::getTipoObj(int pos) {
-    Objeto objPedido = vectObj.at(pos);
-    return objPedido.tipoObjecto;
-}
-
-void Map::setObj(int tipo) { objects.setObject(tipo); }
+void Map::setObjType(int objType) { objects.setObject(objType); }
 
 void Map::setColObject(int posOffset) { objects.selectSpriteCol(posOffset); }
 

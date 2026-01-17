@@ -37,7 +37,7 @@ class Raycaster {
 
     float getDistance();
 
-    void render(int pos);
+    void renderWalls(int pos);
 
     ~Raycaster() = default;
 };

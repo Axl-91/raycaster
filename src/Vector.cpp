@@ -3,9 +3,9 @@
 
 Vector::Vector(float posX, float posY) : x(posX), y(posY) {}
 
-float Vector::getX() { return this->x; }
+float Vector::getX() const { return this->x; }
 
-float Vector::getY() { return this->y; }
+float Vector::getY() const { return this->y; }
 
 void Vector::set(float x, float y) {
     this->x = x;

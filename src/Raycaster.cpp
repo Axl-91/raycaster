@@ -25,7 +25,7 @@ void Raycaster::calculateHorizontalRay() {
     bool noHayColision = true;
     int grados = toGradosRay(rayAngle);
     float tangH = -1 / tan(rayAngle);
-    int largoBloque = map.getLongBloques();
+    int largoBloque = map.getBlockSize();
 
     if (grados > 180) {
         int bloqPasados = playerPos.getY() / largoBloque;
@@ -54,10 +54,10 @@ void Raycaster::calculateHorizontalRay() {
     while (noHayColision) {
         hRayDist = playerPos.distance(horizontalRay);
 
-        if (!map.hayCoordenadas(horizontalRay)) {
+        if (!map.isInsideMap(horizontalRay)) {
             break;
         }
-        if (map.getBloque(horizontalRay) == 0) {
+        if (map.getBlock(horizontalRay) == 0) {
             horizontalRay.sum(raySuma);
         } else {
             noHayColision = false;
@@ -71,7 +71,7 @@ void Raycaster::calculateVerticalRay() {
     bool noHayColision = true;
     int grados = toGradosRay(rayAngle);
     float tangV = -tan(rayAngle);
-    int largoBloque = map.getLongBloques();
+    int largoBloque = map.getBlockSize();
 
     if (grados < 270 && grados > 90) {
         int bloqPasados = playerPos.getX() / largoBloque;
@@ -100,10 +100,10 @@ void Raycaster::calculateVerticalRay() {
     while (noHayColision) {
         vRayDist = playerPos.distance(verticalRay);
 
-        if (!map.hayCoordenadas(verticalRay)) {
+        if (!map.isInsideMap(verticalRay)) {
             break;
         }
-        if (map.getBloque(verticalRay) == 0) {
+        if (map.getBlock(verticalRay) == 0) {
             verticalRay.sum(raySuma);
         } else {
             noHayColision = false;
@@ -116,14 +116,14 @@ void Raycaster::calculateFinalRay() {
         finalRayDist = hRayDist;
         this->finalRay = horizontalRay;
         SDL_Log("Raycaster (%f, %f)", finalRay.getX(), finalRay.getY());
-        map.setWall(finalRay, false);
+        map.setWallType(finalRay, false);
         float rayX = finalRay.getX();
         map.setColWall(rayX);
     } else {
         finalRayDist = vRayDist;
         this->finalRay = verticalRay;
         SDL_Log("Raycaster (%f, %f)", finalRay.getX(), finalRay.getY());
-        map.setWall(finalRay, true);
+        map.setWallType(finalRay, true);
         float rayY = finalRay.getY();
         map.setColWall(rayY);
     }
@@ -141,10 +141,11 @@ void Raycaster::calculateFinalRay() {
 
 float Raycaster::getDistance() { return finalRayDist; }
 
-void Raycaster::render(int pos) {
+void Raycaster::renderWalls(int pos) {
     int largoCol = 1;
-    int largoBloque = map.getLongBloques();
+    int largoBloque = map.getBlockSize();
     float largoPared = (largoBloque * SCREEN_WIDTH) / finalRayDist;
+
     // Desde donde voy a empezar a dibujar la pared
     float offset = (SCREEN_HEIGHT / 2.0f) - (largoPared / 2.0f);
 
