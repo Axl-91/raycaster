@@ -114,14 +114,18 @@ void Raycaster::calculateFinalRay() {
     if (hRayDist < vRayDist) {
         finalRayDist = hRayDist;
         this->finalRay = horizontalRay;
-        SDL_Log("Raycaster (%f, %f)", finalRay.getX(), finalRay.getY());
+        if (!map.isInsideMap(finalRay)) {
+            SDL_Log("Raycaster (%f, %f)", finalRay.getX(), finalRay.getY());
+        }
         map.setWallType(finalRay, false);
         float rayX = finalRay.getX();
         map.setColWall(rayX);
     } else {
         finalRayDist = vRayDist;
         this->finalRay = verticalRay;
-        SDL_Log("Raycaster (%f, %f)", finalRay.getX(), finalRay.getY());
+        if (!map.isInsideMap(finalRay)) {
+            SDL_Log("Raycaster (%f, %f)", finalRay.getX(), finalRay.getY());
+        }
         map.setWallType(finalRay, true);
         float rayY = finalRay.getY();
         map.setColWall(rayY);
