@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(wolf3d LANGUAGES CXX)
+project(Raycaster LANGUAGES CXX)
 
-add_library(sdl-lib
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+
+set(SOURCES
     src/Game.cpp
     src/Vector.cpp
     src/Hud.cpp
@@ -14,23 +17,17 @@ add_library(sdl-lib
     src/Objects.cpp
 )
 
+add_library(sdl-lib)
+target_sources(sdl-lib PRIVATE ${SOURCES})
+
 target_compile_features(sdl-lib PRIVATE cxx_std_11)
 
 target_compile_options(sdl-lib PRIVATE
-    $<$<CONFIG:Debug>:-g>
-    $<$<CONFIG:Debug>:-O0>
-    $<$<CONFIG:Debug>:-Wall>
-    $<$<CONFIG:Debug>:-Wextra>
+    $<$<CONFIG:Debug>:-g -O0 -Wall -Wextra>
 )
 
 add_executable(main src/main.cpp)
 
 target_link_libraries(main PRIVATE sdl-lib SDL2 SDL2_image)
 
-install(FILES
-    assets/guns.png
-    assets/hud.png
-    assets/walls.png
-    assets/objects.png
-    DESTINATION ${CMAKE_BINARY_DIR}
-)
+file(COPY assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

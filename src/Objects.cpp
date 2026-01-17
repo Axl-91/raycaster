@@ -23,7 +23,7 @@ void Objects::setObject(int objNum) {
 }
 
 void Objects::loadTexture() {
-    SDL_Surface *surface = IMG_Load("objects.png");
+    SDL_Surface *surface = IMG_Load("assets/objects.png");
     if (!surface) {
         throw std::runtime_error("SDL surface error on Object");
     }

@@ -11,7 +11,7 @@ void Walls::setRenderer(SDL_Renderer *renderer) {
 }
 
 void Walls::loadTexture() {
-    SDL_Surface *surface = IMG_Load("walls.png");
+    SDL_Surface *surface = IMG_Load("assets/walls.png");
     if (!surface) {
         throw std::runtime_error("SDL surface error on Walls");
     }

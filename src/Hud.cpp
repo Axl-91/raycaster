@@ -11,7 +11,7 @@ void Hud::setRenderer(SDL_Renderer *renderer) {
 }
 
 void Hud::loadTexture() {
-    SDL_Surface *surface = IMG_Load("hud.png");
+    SDL_Surface *surface = IMG_Load("assets/hud.png");
     if (!surface) {
         throw std::runtime_error("SDL surface error on HUD");
     }

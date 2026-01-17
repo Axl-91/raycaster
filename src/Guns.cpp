@@ -12,7 +12,7 @@ void Guns::setRenderer(SDL_Renderer *renderer) {
 }
 
 void Guns::loadTexture() {
-    SDL_Surface *surface = IMG_Load("guns.png");
+    SDL_Surface *surface = IMG_Load("assets/guns.png");
     if (!surface) {
         throw std::runtime_error("SDL surface error on Guns");
     }
