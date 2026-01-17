@@ -20,21 +20,21 @@ class Vector {
      * Modifies this vector by adding the components of the given vector
      * @param vector The vector to add to this one
      */
-    void sum(Vector vector);
+    void sum(const Vector &vector);
 
     /**
      * Subtract another vector from this vector
      * Modifies this vector by subtracting the components of the given vector
      * @param vector The vector to subtract from this one
      */
-    void sub(Vector vector);
+    void sub(const Vector &vector);
 
     /**
      * Calculate the distance between this vector and another vector
      * @param vector The other vector to calculate distance to
      * @return The Euclidean distance between the two vectors
      */
-    float distance(Vector vector);
+    float distance(const Vector &vector) const;
 
     ~Vector();
 };

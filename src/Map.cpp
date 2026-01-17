@@ -3,10 +3,10 @@
 #include "Walls.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <cstddef>
+#include <algorithm>
 #include <vector>
 
-int lvl1[15][20] = {
+std::vector<std::vector<int>> default_level = {
     {34, 34, 34, 34, 34, 34, 34, 34, 34, 34,
      34, 34, 34, 34, 34, 34, 34, 34, 34, 34},
     {34, 00, 00, 00, 00, 00, 00, 00, 00, 00,
@@ -39,26 +39,36 @@ int lvl1[15][20] = {
      34, 34, 34, 34, 34, 34, 34, 34, 34, 34},
 };
 
-MapObject light1 = {Vector(640, 192), 6};
-MapObject column1 = {Vector(192, 384), 9};
-MapObject column2 = {Vector(192, 448), 9};
-MapObject column3 = {Vector(192, 320), 9};
-MapObject column4 = {Vector(705, 192), 9};
+std::vector<mapObject> default_objects = {
+    {Vector(640, 192), 6}, {Vector(192, 384), 9}, {Vector(192, 448), 9},
+    {Vector(192, 320), 9}, {Vector(705, 192), 9},
+};
 
 Map::Map() {
-    loadMap(lvl1);
-    addObject(light1.position, light1.type);
-    addObject(column1.position, column1.type);
-    addObject(column2.position, column2.type);
-    addObject(column3.position, column3.type);
-    addObject(column4.position, column4.type);
+    loadMap(default_level);
+    loadObjects(default_objects);
 }
 
-void Map::loadMap(int lvl[15][20]) {
-    for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < columns; ++j) {
-            map[i][j] = lvl[i][j];
-        }
+void Map::loadMap(std::vector<std::vector<int>> &level) {
+    if (level.empty()) {
+        return;
+    }
+    size_t cols = level.front().size();
+
+    this->rows = level.size();
+    this->columns = cols;
+
+    map = level;
+}
+
+void Map::addObject(Vector &position, int type) {
+    MapObject obj = {position, type};
+    vectObj.push_back(obj);
+}
+
+void Map::loadObjects(std::vector<MapObject> objects) {
+    for (MapObject object : objects) {
+        addObject(object.position, object.type);
     }
 }
 
@@ -111,31 +121,13 @@ void Map::renderWall(int posX, int posY, int largo, int alto) {
     walls.render(posX, posY, largo, alto);
 }
 
-void Map::addObject(Vector &posicion, int tipo) {
-    MapObject obj = {posicion, tipo};
-    vectObj.push_back(obj);
-}
-
-void addInOrderByDist(std::vector<MapObject> &v, MapObject &obj, Vector &pos) {
-    float dist = pos.distance(obj.position);
-    for (auto i = v.begin(); i != v.end(); ++i) {
-        MapObject objVec = *i;
-        float distV = pos.distance(objVec.position);
-        if (dist > distV) {
-            v.insert(i, obj);
-            return;
-        }
-    }
-    v.push_back(obj);
-}
-
-void Map::sortObjByDist(Vector &pos) {
-    std::vector<MapObject> vectorAux;
-
-    for (MapObject obj : vectObj) {
-        addInOrderByDist(vectorAux, obj, pos);
-    }
-    vectObj.swap(vectorAux);
+void Map::sortObjByDist(const Vector &pos) {
+    // lambda function to compare distances
+    auto compareByDistanceDesc = [&pos](const MapObject &objA,
+                                        const MapObject &objB) {
+        return pos.distance(objA.position) > pos.distance(objB.position);
+    };
+    std::sort(vectObj.begin(), vectObj.end(), compareByDistanceDesc);
 }
 
 std::vector<MapObject> Map::getObjects() { return vectObj; }

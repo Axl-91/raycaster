@@ -12,17 +12,17 @@ void Vector::set(float x, float y) {
     this->y = y;
 }
 
-void Vector::sum(Vector vector) {
+void Vector::sum(const Vector &vector) {
     this->x += vector.getX();
     this->y += vector.getY();
 }
 
-void Vector::sub(Vector vector) {
+void Vector::sub(const Vector &vector) {
     this->x -= vector.getX();
     this->y -= vector.getY();
 }
 
-float Vector::distance(Vector vector) {
+float Vector::distance(const Vector &vector) const {
     float x = vector.getX() - this->x;
     float y = vector.getY() - this->y;
 

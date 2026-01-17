@@ -17,9 +17,9 @@ class Map {
   private:
     static constexpr int BLOCK_SIZE = 64;
 
-    int rows = 15;
-    int columns = 20;
-    int map[15][20];
+    int rows = -1;
+    int columns = -1;
+    std::vector<std::vector<int>> map;
 
     Walls walls;
     Objects objects;
@@ -29,10 +29,14 @@ class Map {
 
     int getBlock(float x, float y);
 
+    void addObject(Vector &posicion, int tipo);
+
   public:
     Map();
 
-    void loadMap(int lvl[15][20]);
+    void loadMap(std::vector<std::vector<int>> &level);
+
+    void loadObjects(std::vector<mapObject> objects);
 
     void setRenderer(SDL_Renderer *renderer);
 
@@ -48,9 +52,7 @@ class Map {
 
     void renderWall(int posX, int posY, int largo, int alto);
 
-    void addObject(Vector &posicion, int tipo);
-
-    void sortObjByDist(Vector &pos);
+    void sortObjByDist(const Vector &pos);
 
     std::vector<MapObject> getObjects();
 
