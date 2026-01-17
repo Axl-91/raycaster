@@ -1,64 +1,32 @@
 #include "Map.h"
 #include "Objects.h"
 #include "Walls.h"
+#include "constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <algorithm>
 #include <vector>
 
-std::vector<std::vector<int>> default_level = {
-    {34, 34, 34, 34, 34, 34, 34, 34, 34, 34,
-     34, 34, 34, 34, 34, 34, 34, 34, 34, 34},
-    {34, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-     00, 00, 00, 00, 00, 00, 00, 00, 00, 34},
-    {34, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-     00, 00, 00, 00, 00, 00, 00, 00, 00, 34},
-    {34, 35, 49, 35, 35, 49, 35, 35, 00, 00,
-     00, 00, 00, 36, 36, 00, 00, 00, 00, 34},
-    {34, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-     00, 00, 00, 36, 36, 00, 00, 00, 00, 34},
-    {34, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-     00, 00, 00, 00, 00, 00, 00, 00, 00, 34},
-    {34, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-     00, 00, 00, 00, 00, 00, 00, 00, 00, 34},
-    {34, 00, 00, 00, 00, 00, 00, 00, 00, 00,
-     00, 00, 00, 00, 00, 00, 00, 00, 00, 34},
-    {34, 34, 34, 34, 34, 34, 00, 00, 34, 34,
-     34, 34, 00, 00, 00, 00, 00, 34, 34, 34},
-    {34, 00, 00, 00, 00, 00, 00, 00, 34, 34,
-     00, 00, 00, 00, 00, 00, 00, 00, 00, 34},
-    {34, 00, 00, 00, 00, 00, 00, 00, 34, 34,
-     00, 00, 00, 00, 00, 00, 00, 00, 00, 34},
-    {34, 00, 00, 00, 00, 00, 00, 00, 34, 34,
-     00, 00, 00, 00, 00, 00, 00, 00, 00, 34},
-    {34, 00, 00, 00, 00, 00, 00, 00, 34, 34,
-     00, 00, 00, 00, 00, 00, 00, 00, 00, 34},
-    {34, 00, 00, 00, 00, 00, 00, 00, 34, 34,
-     00, 00, 00, 00, 00, 00, 00, 00, 00, 34},
-    {34, 34, 34, 34, 34, 34, 34, 34, 34, 34,
-     34, 34, 34, 34, 34, 34, 34, 34, 34, 34},
-};
-
-std::vector<mapObject> default_objects = {
-    {Vector(640, 192), 6}, {Vector(192, 384), 9}, {Vector(192, 448), 9},
-    {Vector(192, 320), 9}, {Vector(705, 192), 9},
-};
-
 Map::Map() {
-    loadMap(default_level);
-    loadObjects(default_objects);
+    loadMap(DEFAULT_MAP);
+    loadObjects(DEFAULT_OBJECTS);
 }
 
-void Map::loadMap(std::vector<std::vector<int>> &level) {
-    if (level.empty()) {
+Map::Map(std::vector<std::vector<int>> map, std::vector<mapObject> objects) {
+    loadMap(map);
+    loadObjects(objects);
+}
+
+void Map::loadMap(const std::vector<std::vector<int>> &map) {
+    if (map.empty()) {
         return;
     }
-    size_t cols = level.front().size();
+    size_t cols = map.front().size();
 
-    this->rows = level.size();
+    this->rows = map.size();
     this->columns = cols;
 
-    map = level;
+    this->map = map;
 }
 
 void Map::addObject(Vector &position, int type) {
@@ -77,17 +45,14 @@ void Map::setRenderer(SDL_Renderer *renderer) {
     objects.setRenderer(renderer);
 }
 
-int Map::getBlockSize() { return BLOCK_SIZE; }
-
 bool Map::isInsideMap(float x, float y) {
-
     int posX = static_cast<int>(floor(x / BLOCK_SIZE));
     int posY = static_cast<int>(floor(y / BLOCK_SIZE));
 
-    if (posX < 0 || posX >= columns)
+    if (posX < 0 || posX >= this->columns)
         return false;
 
-    if (posY < 0 || posY >= rows)
+    if (posY < 0 || posY >= this->rows)
         return false;
 
     return true;
@@ -106,19 +71,19 @@ int Map::getBlock(float x, float y) {
 
 int Map::getBlock(const Vector &v) { return getBlock(v.getX(), v.getY()); }
 
-void Map::setWallType(Vector &vector, bool dark) {
+void Map::setWallType(Vector &vector, bool isDark) {
     int wallType = getBlock(vector) - 1;
-    walls.setWall(wallType, dark);
+    walls.setWall(wallType, isDark);
 }
 
-void Map::setColWall(float pos) {
-    int rayInt = floor(pos);
-    int posWall = rayInt % BLOCK_SIZE;
-    walls.selectSpriteCol(posWall);
+void Map::setColWall(float posX) {
+    int intPosX = floor(posX);
+    int xOffset = intPosX % BLOCK_SIZE;
+    walls.selectSpriteCol(xOffset);
 }
 
-void Map::renderWall(int posX, int posY, int largo, int alto) {
-    walls.render(posX, posY, largo, alto);
+void Map::renderWall(int posX, int posY, int width, int height) {
+    walls.render(posX, posY, width, height);
 }
 
 void Map::sortObjByDist(const Vector &pos) {
@@ -134,7 +99,7 @@ std::vector<MapObject> Map::getObjects() { return vectObj; }
 
 void Map::setObjType(int objType) { objects.setObject(objType); }
 
-void Map::setColObject(int posOffset) { objects.selectSpriteCol(posOffset); }
+void Map::setColObject(int posX) { objects.selectSpriteCol(posX); }
 
 void Map::renderObject(int posX, int posY, int largo, int alto) {
     objects.render(posX, posY, largo, alto);

@@ -1,5 +1,6 @@
 #include "Raycaster.h"
 #include "Vector.h"
+#include "constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
@@ -25,25 +26,24 @@ void Raycaster::calculateHorizontalRay() {
     bool noHayColision = true;
     int grados = toGradosRay(rayAngle);
     float tangH = -1 / tan(rayAngle);
-    int largoBloque = map.getBlockSize();
 
     if (grados > 180) {
-        int bloqPasados = playerPos.getY() / largoBloque;
-        ry = bloqPasados * largoBloque - 0.0001;
+        int bloqPasados = playerPos.getY() / BLOCK_SIZE;
+        ry = bloqPasados * BLOCK_SIZE - 0.0001;
         rx = (playerPos.getY() - ry) * tangH + playerPos.getX();
         horizontalRay = Vector(rx, ry);
 
-        yo = -largoBloque;
+        yo = -BLOCK_SIZE;
         xo = -yo * tangH;
         raySuma = Vector(xo, yo);
     }
     if (grados < 180) {
-        int bloqPasados = playerPos.getY() / largoBloque;
-        ry = bloqPasados * largoBloque + largoBloque;
+        int bloqPasados = playerPos.getY() / BLOCK_SIZE;
+        ry = bloqPasados * BLOCK_SIZE + BLOCK_SIZE;
         rx = (playerPos.getY() - ry) * tangH + playerPos.getX();
         horizontalRay = Vector(rx, ry);
 
-        yo = largoBloque;
+        yo = BLOCK_SIZE;
         xo = -yo * tangH;
         raySuma = Vector(xo, yo);
     }
@@ -71,25 +71,24 @@ void Raycaster::calculateVerticalRay() {
     bool noHayColision = true;
     int grados = toGradosRay(rayAngle);
     float tangV = -tan(rayAngle);
-    int largoBloque = map.getBlockSize();
 
     if (grados < 270 && grados > 90) {
-        int bloqPasados = playerPos.getX() / largoBloque;
-        rx = bloqPasados * largoBloque - 0.0001;
+        int bloqPasados = playerPos.getX() / BLOCK_SIZE;
+        rx = bloqPasados * BLOCK_SIZE - 0.0001;
         ry = (playerPos.getX() - rx) * tangV + playerPos.getY();
         verticalRay = Vector(rx, ry);
 
-        xo = -largoBloque;
+        xo = -BLOCK_SIZE;
         yo = -xo * tangV;
         raySuma = Vector(xo, yo);
     }
     if (grados > 270 || grados < 90) {
-        int bloqPasados = playerPos.getX() / largoBloque;
-        rx = bloqPasados * largoBloque + largoBloque;
+        int bloqPasados = playerPos.getX() / BLOCK_SIZE;
+        rx = bloqPasados * BLOCK_SIZE + BLOCK_SIZE;
         ry = (playerPos.getX() - rx) * tangV + playerPos.getY();
         verticalRay = Vector(rx, ry);
 
-        xo = largoBloque;
+        xo = BLOCK_SIZE;
         yo = -xo * tangV;
         raySuma = Vector(xo, yo);
     }
@@ -143,8 +142,7 @@ float Raycaster::getDistance() { return finalRayDist; }
 
 void Raycaster::renderWalls(int pos) {
     int largoCol = 1;
-    int largoBloque = map.getBlockSize();
-    float largoPared = (largoBloque * SCREEN_WIDTH) / finalRayDist;
+    float largoPared = (BLOCK_SIZE * SCREEN_WIDTH) / finalRayDist;
 
     // Desde donde voy a empezar a dibujar la pared
     float offset = (SCREEN_HEIGHT / 2.0f) - (largoPared / 2.0f);

@@ -15,8 +15,6 @@ typedef struct mapObject {
 
 class Map {
   private:
-    static constexpr int BLOCK_SIZE = 64;
-
     int rows = -1;
     int columns = -1;
     std::vector<std::vector<int>> map;
@@ -25,41 +23,114 @@ class Map {
     Objects objects;
     std::vector<mapObject> vectObj;
 
+    /**
+     * Check if the x and y positions are inside the map array
+     * @params x the X value in the array
+     * @params y the Y value in the array
+     */
     bool isInsideMap(float x, float y);
 
+    /**
+     * Gets the block in the position x and y
+     * @params x the X value in the array
+     * @params y the Y value in the array
+     */
     int getBlock(float x, float y);
 
-    void addObject(Vector &posicion, int tipo);
+    /**
+     * Adds an object to the Map
+     * @params position a Vector with the position of the object
+     * @params type the type of the object to be added
+     */
+    void addObject(Vector &position, int type);
 
-  public:
-    Map();
+    /**
+     * Loads the given map
+     * @params map an array of arrays of int, represents a map
+     */
+    void loadMap(const std::vector<std::vector<int>> &map);
 
-    void loadMap(std::vector<std::vector<int>> &level);
-
+    /**
+     * Loads a the given objects
+     * @params objects an array of mapObject
+     */
     void loadObjects(std::vector<mapObject> objects);
 
+  public:
+    /**
+     * Initializes the Map with the DEFAULT_MAP and DEFAULT_OBJECTS
+     */
+    Map();
+
+    /**
+     * Initializes the Map with the given map and object
+     */
+    Map(std::vector<std::vector<int>> map, std::vector<MapObject> objects = {});
+
+    /**
+     * Set renderer for the map
+     * @param renderer SDL renderer to use for creating textures
+     */
     void setRenderer(SDL_Renderer *renderer);
 
-    int getBlockSize();
+    /**
+     * Check if the given Vector position is inside the map
+     * @param position the Vector with the position
+     * @return true if it is inside, false otherwise
+     */
+    bool isInsideMap(const Vector &position);
 
-    bool isInsideMap(const Vector &posicion);
+    /**
+     * get the Block value in the position given
+     * @param position the Vector with the position
+     * @return the value of the position on the map
+     */
+    int getBlock(const Vector &position);
 
-    int getBlock(const Vector &posicion);
+    /**
+     * Set the wall type and if isDark is true we use the dark variant
+     * @param position the position in the map where the wall is
+     * @param isDark check for the dark variant
+     */
+    void setWallType(Vector &position, bool isDark);
 
-    void setWallType(Vector &posicion, bool dark);
+    /**
+     * Set the wall column to render
+     * @param posX the x position that will be render as a 1px column
+     */
+    void setColWall(float posX);
 
-    void setColWall(float pos);
+    /**
+     * Render the wall in the given position
+     */
+    void renderWall(int posX, int posY, int width, int height);
 
-    void renderWall(int posX, int posY, int largo, int alto);
+    /**
+     * Sort the objects by distance with the playerPos
+     * @param playerPos the Vector position of the player
+     */
+    void sortObjByDist(const Vector &playerPos);
 
-    void sortObjByDist(const Vector &pos);
-
+    /**
+     * Render the wall in the given position
+     */
     std::vector<MapObject> getObjects();
 
+    /**
+     * Set the object type
+     * @param position the position in the map where the object is
+     */
     void setObjType(int objType);
 
-    void setColObject(int pos);
+    /**
+     * Set the object column to render
+     * @param posX the x position that will be render as a 1px column
+     */
+    void setColObject(int posX);
 
+    /**
+     * Render the object in the given position
+     */
     void renderObject(int posX, int posY, int largo, int alto);
 
     ~Map();
