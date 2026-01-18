@@ -8,26 +8,17 @@
 Raycaster::Raycaster(Vector &playerPos, float playerAngle, Map &map)
     : playerPos(playerPos), playerAngle(playerAngle), map(map) {}
 
-void Raycaster::calculateRay(float rayAngle) {
-    this->rayAngle = rayAngle;
-
-    calculateHorizontalRay();
-    calculateVerticalRay();
-    calculateFinalRay();
-}
-
-void Raycaster::moveRayIntoWall(Vector &ray, const Vector &step,
-                                float &distance) {
+void Raycaster::moveRayIntoWall(Ray &ray, const Vector &step) {
     bool hitWall = false;
 
     while (!hitWall) {
-        distance = this->playerPos.distance(ray);
+        ray.distance = this->playerPos.distance(ray.position);
 
-        if (!map.isInsideMap(ray)) {
+        if (!map.isInsideMap(ray.position)) {
             break;
         }
-        if (map.getBlock(ray) == 0) {
-            ray.sum(step);
+        if (map.getBlock(ray.position) == 0) {
+            ray.position.sum(step);
             continue;
         }
         hitWall = true;
@@ -57,15 +48,19 @@ bool Raycaster::isRayValid(RayDirection direction) {
     return (fabs(angle) > EPSILON);
 }
 
-bool Raycaster::isAngleFacingUp() { return this->rayAngle > PI; }
+bool Raycaster::isAngleFacingUp() {
+    // Angle lower than 180°
+    return this->rayAngle > PI;
+}
 
 bool Raycaster::isAngleFacingLeft() {
+    // Angle between 90° and 270°
     return (this->rayAngle < 3 * PI / 2) && (this->rayAngle > PI / 2);
 }
 
 void Raycaster::calculateHorizontalRay() {
     if (!isRayValid(RayDirection::HORIZONTAL)) {
-        this->hRayDist = std::numeric_limits<float>::infinity();
+        this->horizontalRay.distance = std::numeric_limits<float>::infinity();
         return;
     }
 
@@ -83,16 +78,16 @@ void Raycaster::calculateHorizontalRay() {
         xo = -yo * hTang;
     }
 
-    this->horizontalRay =
+    this->horizontalRay.position =
         calculateInitialRay(blockPos, offset, hTang, RayDirection::HORIZONTAL);
 
     Vector RayStep(xo, yo);
-    moveRayIntoWall(this->horizontalRay, RayStep, this->hRayDist);
+    moveRayIntoWall(this->horizontalRay, RayStep);
 }
 
 void Raycaster::calculateVerticalRay() {
     if (!isRayValid(RayDirection::VERTICAL)) {
-        this->vRayDist = std::numeric_limits<float>::infinity();
+        this->verticalRay.distance = std::numeric_limits<float>::infinity();
         return;
     }
 
@@ -110,40 +105,48 @@ void Raycaster::calculateVerticalRay() {
         yo = -xo * vTang;
     }
 
-    this->verticalRay =
+    this->verticalRay.position =
         calculateInitialRay(blockPos, offset, vTang, RayDirection::VERTICAL);
 
     Vector RayStep(xo, yo);
-    moveRayIntoWall(this->verticalRay, RayStep, this->vRayDist);
+    moveRayIntoWall(this->verticalRay, RayStep);
 }
 
 void Raycaster::calculateFinalRay() {
-    if (hRayDist < vRayDist) {
-        this->finalRayDist = this->hRayDist;
+    if (this->horizontalRay.distance < this->verticalRay.distance) {
+        this->finalRay.distance = this->horizontalRay.distance;
         this->finalRay = this->horizontalRay;
 
-        map.setWallType(finalRay, false);
-        float rayX = finalRay.getX();
+        map.setWallType(this->finalRay.position, false);
+        float rayX = this->finalRay.position.getX();
         map.setColWall(rayX);
     } else {
-        this->finalRayDist = this->vRayDist;
+        this->finalRay.distance = this->verticalRay.distance;
         this->finalRay = this->verticalRay;
 
-        map.setWallType(finalRay, true);
-        float rayY = finalRay.getY();
+        map.setWallType(this->finalRay.position, true);
+        float rayY = this->finalRay.position.getY();
         map.setColWall(rayY);
     }
 
     // To avoid fisheye effect
     float newAngle = playerAngle - this->rayAngle;
-    finalRayDist = finalRayDist * cos(newAngle);
+    this->finalRay.distance *= cos(newAngle);
 }
 
-float Raycaster::getDistance() { return finalRayDist; }
+void Raycaster::calculateRay(float rayAngle) {
+    this->rayAngle = rayAngle;
+
+    calculateHorizontalRay();
+    calculateVerticalRay();
+    calculateFinalRay();
+}
+
+float Raycaster::getDistance() { return this->finalRay.distance; }
 
 void Raycaster::renderWalls(int posX) {
     int wallHeight =
-        static_cast<int>((BLOCK_SIZE * SCREEN_WIDTH) / finalRayDist);
+        static_cast<int>((BLOCK_SIZE * SCREEN_WIDTH) / this->finalRay.distance);
 
     float screenCenterY = SCREEN_HEIGHT / 2.0f;
     float wallCenter = wallHeight / 2.0f;

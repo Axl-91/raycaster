@@ -8,6 +8,11 @@
 #include <iostream>
 #include <limits>
 
+typedef struct Ray {
+    Vector position;
+    float distance;
+} Ray;
+
 class Raycaster {
   private:
     /*
@@ -18,14 +23,9 @@ class Raycaster {
     static constexpr int COL_WIDTH = 1;
     enum class RayDirection { HORIZONTAL, VERTICAL };
 
-    Vector horizontalRay;
-    float hRayDist = std::numeric_limits<float>::infinity();
-
-    Vector verticalRay;
-    float vRayDist = std::numeric_limits<float>::infinity();
-
-    Vector finalRay;
-    float finalRayDist = std::numeric_limits<float>::infinity();
+    Ray horizontalRay = {Vector(), std::numeric_limits<float>::infinity()};
+    Ray verticalRay = {Vector(), std::numeric_limits<float>::infinity()};
+    Ray finalRay = {Vector(), std::numeric_limits<float>::infinity()};
 
     Vector &playerPos;
     float playerAngle;
@@ -42,7 +42,7 @@ class Raycaster {
     Vector calculateInitialRay(float blockPos, float offset, float tang,
                                RayDirection direction);
 
-    void moveRayIntoWall(Vector &ray, const Vector &step, float &distance);
+    void moveRayIntoWall(Ray &ray, const Vector &step);
 
     void calculateVerticalRay();
 
