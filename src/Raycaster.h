@@ -10,9 +10,12 @@
 
 class Raycaster {
   private:
-    // Small offset to push ray intersections inside the correct grid cell
-    // and avoid precision issues when hitting tile boundaries.
+    /*
+      Small offset to push ray intersections inside the correct grid cell
+      and avoid precision issues when hitting tile boundaries.
+    */
     static constexpr float EPSILON = 0.0001f;
+    static constexpr int COL_WIDTH = 1;
 
     Vector horizontalRay;
     float hRayDist = std::numeric_limits<float>::infinity();
@@ -29,6 +32,10 @@ class Raycaster {
 
     Map &map;
 
+    bool isAngleFacingUp();
+
+    bool isAngleFacingLeft();
+
     void calculateVerticalRay();
 
     void calculateHorizontalRay();
@@ -42,7 +49,7 @@ class Raycaster {
 
     float getDistance();
 
-    void renderWalls(int pos);
+    void renderWalls(int posX);
 
     ~Raycaster() = default;
 };
