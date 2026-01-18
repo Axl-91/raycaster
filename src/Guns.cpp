@@ -1,29 +1,27 @@
 #include "Guns.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_render.h>
 #include <stdexcept>
 #include <unistd.h>
 
 Guns::Guns() {}
 
-void Guns::setRenderer(SDL_Renderer *renderer) {
-    this->renderer = renderer;
-    loadTexture();
-}
-
-void Guns::loadTexture() {
+void Guns::loadTextures(SDL_Renderer *renderer) {
     SDL_Surface *surface = IMG_Load("assets/guns.png");
     if (!surface) {
-        throw std::runtime_error("SDL surface error on Guns");
+        throw std::runtime_error(std::string("Failed to load guns.png: ") +
+                                 IMG_GetError());
     }
 
     auto color = SDL_MapRGB(surface->format, 152, 0, 136);
     SDL_SetColorKey(surface, SDL_TRUE, color);
 
-    this->texture = SDL_CreateTextureFromSurface(this->renderer, surface);
+    this->texture = SDL_CreateTextureFromSurface(renderer, surface);
     if (!this->texture) {
         SDL_FreeSurface(surface);
-        throw std::runtime_error("SDL texture error on Guns");
+        throw std::runtime_error(std::string("Failed to create gun texture: ") +
+                                 SDL_GetError());
     }
     SDL_FreeSurface(surface);
 }
@@ -57,7 +55,7 @@ void Guns::handleShooting() {
     }
 }
 
-void Guns::render() {
+void Guns::render(SDL_Renderer *renderer) {
     if (this->shooting) {
         int frame = this->auxNum / this->offset;
         this->srcGun.x = this->offset * frame;
@@ -69,7 +67,7 @@ void Guns::render() {
         }
     }
     SDL_Rect gun = {96, 72, this->GUN_WIDTH, this->GUN_HEIGHT};
-    SDL_RenderCopy(this->renderer, this->texture, &this->srcGun, &gun);
+    SDL_RenderCopy(renderer, this->texture, &this->srcGun, &gun);
 }
 
 Guns::~Guns() { SDL_DestroyTexture(this->texture); }

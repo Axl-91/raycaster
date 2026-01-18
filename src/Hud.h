@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_render.h>
 
 class Hud {
   private:
@@ -17,13 +18,6 @@ class Hud {
     SDL_Rect srcNumber = {0, 0, 0, 0};
     SDL_Rect srcKey = {0, 0, 0, 0};
     SDL_Texture *texture;
-    SDL_Renderer *renderer;
-
-    /**
-     * Load hud sprite sheet texture from file
-     * @throws std::runtime_error if surface or texture creation fails
-     */
-    void loadTexture();
 
   public:
     Hud();
@@ -32,10 +26,10 @@ class Hud {
     Hud operator=(const Hud &copy) = delete;
 
     /**
-     * Set renderer for the Hud Object and initialize texture
-     * @param renderer SDL renderer to use for creating textures
+     * Load hud sprite sheet texture from file
+     * @throws std::runtime_error if surface or texture creation fails
      */
-    void setRenderer(SDL_Renderer *renderer);
+    void loadTexture(SDL_Renderer *renderer);
 
     /**
      * Handles keyboard input for gun selection on HUD
@@ -46,12 +40,7 @@ class Hud {
     /**
      * Render the HUD sprite to the screen
      */
-    void renderHud(int winWidth, int winHeight);
-
-    /**
-     * Render the gun sprite on the hud to the screen
-     */
-    void renderGun(int winWidth, int winHeight);
+    void renderHud(SDL_Renderer *renderer);
 
     ~Hud();
 };

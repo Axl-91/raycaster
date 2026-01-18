@@ -1,13 +1,17 @@
 #ifndef __VECTOR__
 #define __VECTOR__
 
+/**
+ * 2D Vector class
+ * Can represent positions, directions, offsets, or velocities in 2D space
+ */
 class Vector {
   private:
     float x;
     float y;
 
   public:
-    Vector(float posX = 0, float posY = 0);
+    Vector(float x = 0, float y = 0);
 
     float getX() const;
 
@@ -35,8 +39,6 @@ class Vector {
      * @return The Euclidean distance between the two vectors
      */
     float distance(const Vector &vector) const;
-
-    ~Vector();
 };
 
 #endif

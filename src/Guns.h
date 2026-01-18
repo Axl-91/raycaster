@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_render.h>
 
 class Guns {
   private:
@@ -16,13 +17,6 @@ class Guns {
     int auxNum = 0;
     bool shooting = false;
     SDL_Texture *texture;
-    SDL_Renderer *renderer;
-
-    /**
-     * Load gun sprite sheet texture from file
-     * @throws std::runtime_error if surface or texture creation fails
-     */
-    void loadTexture();
 
   public:
     Guns();
@@ -30,10 +24,10 @@ class Guns {
     Guns &operator=(const Guns &copy) = delete;
 
     /**
-     * Set renderer for the Gun Object and initialize texture
-     * @param renderer SDL renderer to use for creating textures
+     * Load gun sprite sheet texture from file
+     * @throws std::runtime_error if surface or texture creation fails
      */
-    void setRenderer(SDL_Renderer *renderer);
+    void loadTextures(SDL_Renderer *renderer);
 
     /**
      * Handles keyboard input for gun selection and shooting
@@ -56,7 +50,7 @@ class Guns {
      * Render the gun sprite to the screen
      * Handles shooting animation by cycling through sprite frames
      */
-    void render();
+    void render(SDL_Renderer *renderer);
 
     ~Guns();
 };

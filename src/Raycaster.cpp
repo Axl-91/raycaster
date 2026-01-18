@@ -1,12 +1,13 @@
 #include "Raycaster.h"
 #include "Constants.h"
+#include "Player.h"
 #include "Vector.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <cmath>
 
-Raycaster::Raycaster(Vector &playerPos, float playerAngle, Map &map)
-    : playerPos(playerPos), playerAngle(playerAngle), map(map) {}
+Raycaster::Raycaster(const Player &player, Map &map)
+    : playerPos(player.getPos()), playerAngle(player.getAngle()), map(map) {}
 
 void Raycaster::moveRayIntoWall(Ray &ray, const Vector &step) {
     bool hitWall = false;
@@ -148,7 +149,7 @@ void Raycaster::renderWalls(int posX) {
     int wallHeight =
         static_cast<int>((BLOCK_SIZE * SCREEN_WIDTH) / this->finalRay.distance);
 
-    float screenCenterY = SCREEN_HEIGHT / 2.0f;
+    float screenCenterY = USABLE_SCREEN_HEIGHT / 2.0f;
     float wallCenter = wallHeight / 2.0f;
     int wallInitPosY = static_cast<int>(screenCenterY - wallCenter);
 

@@ -9,17 +9,12 @@
 
 class Player {
   private:
-    static constexpr float OFFSET_RAYCASTER = PI / 6;
-    static constexpr float STEP_RAYCASTER =
-        (OFFSET_RAYCASTER * 2) / SCREEN_WIDTH;
-
     static constexpr float MOVE_SPEED = 3.0f;
     static constexpr float ROTATION_SPEED = PI / 36;
 
     float posX;
     float posY;
     float angle = 0;
-    float distancesList[SCREEN_WIDTH];
     Map map;
 
     /**
@@ -31,27 +26,18 @@ class Player {
     void rotateLeft();
     void rotateRight();
 
-    /**
-     * Checks if the object is visible by the Player
-     * @param posObj a Vector that represents the position of the object
-     */
-    bool objIsVisible(Vector &posObj);
-
-    /**
-     * Render all the walls on the Player vision on screen
-     */
-    void renderWalls();
-
-    /**
-     * Render all the objects that are visible to the Player on screen
-     */
-    void renderObjects();
-
   public:
-    Player();
+    Player(float x, float y, Map &map);
 
-    void setPos(float x, float y);
-    void setMap(Map &map);
+    /**
+     * @return Position of the player
+     */
+    Vector getPos() const;
+
+    /**
+     * @return Angle of the player
+     */
+    float getAngle() const;
 
     /**
      * Handles the movements of the player based on keyboard input
@@ -59,9 +45,10 @@ class Player {
     void handleMovement();
 
     /**
-     * Render the walls and the objects on screen
+     * Checks if the object is visible by the Player
+     * @param posObj a Vector that represents the position of the object
      */
-    void render();
+    bool objIsVisible(Vector &posObj);
 
     ~Player();
 };

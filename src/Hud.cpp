@@ -1,22 +1,19 @@
 #include "Hud.h"
+#include "Constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_render.h>
 #include <stdexcept>
 
 Hud::Hud() {}
 
-void Hud::setRenderer(SDL_Renderer *renderer) {
-    this->renderer = renderer;
-    loadTexture();
-}
-
-void Hud::loadTexture() {
+void Hud::loadTexture(SDL_Renderer *renderer) {
     SDL_Surface *surface = IMG_Load("assets/hud.png");
     if (!surface) {
         throw std::runtime_error("SDL surface error on HUD");
     }
 
-    this->texture = SDL_CreateTextureFromSurface(this->renderer, surface);
+    this->texture = SDL_CreateTextureFromSurface(renderer, surface);
     if (!this->texture) {
         throw std::runtime_error("SDL texture error on HUD");
     }
@@ -42,16 +39,16 @@ void Hud::pollEvent(SDL_Event &event) {
     }
 }
 
-void Hud::renderHud(int winWidth, int winHeight) {
-    SDL_Rect hud = {winWidth - this->HUD_WIDTH, winHeight - this->HUD_HEIGHT,
-                    this->HUD_WIDTH, this->HUD_HEIGHT};
-    SDL_RenderCopy(this->renderer, this->texture, &srcHud, &hud);
-}
+void Hud::renderHud(SDL_Renderer *renderer) {
+    SDL_Rect hud = {SCREEN_WIDTH - this->HUD_WIDTH,
+                    SCREEN_HEIGHT - this->HUD_HEIGHT, this->HUD_WIDTH,
+                    this->HUD_HEIGHT};
+    SDL_RenderCopy(renderer, this->texture, &srcHud, &hud);
 
-void Hud::renderGun(int winWidth, int winHeight) {
-    // TODO: Fix magic numbers
-    SDL_Rect gun = {255, 210, this->HUD_GUN_WIDTH, this->HUD_GUN_HEIGHT};
-    SDL_RenderCopy(this->renderer, this->texture, &srcGun, &gun);
+    // Rendering gun section of the HUD
+    SDL_Rect gunHud = {255, 210, this->HUD_GUN_WIDTH,
+                       this->HUD_GUN_HEIGHT}; // TODO: Fix magic numbers
+    SDL_RenderCopy(renderer, this->texture, &srcGun, &gunHud);
 }
 
 Hud::~Hud() { SDL_DestroyTexture(this->texture); }

@@ -1,7 +1,7 @@
 #include "Vector.h"
 #include <math.h>
 
-Vector::Vector(float posX, float posY) : x(posX), y(posY) {}
+Vector::Vector(float x, float y) : x(x), y(y) {}
 
 float Vector::getX() const { return this->x; }
 
@@ -28,5 +28,3 @@ float Vector::distance(const Vector &vector) const {
 
     return (sqrt((x * x) + (y * y)));
 }
-
-Vector::~Vector() {}

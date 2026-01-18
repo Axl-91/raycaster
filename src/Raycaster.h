@@ -3,6 +3,7 @@
 
 #include "Constants.h"
 #include "Map.h"
+#include "Player.h"
 #include "Vector.h"
 
 #include <iostream>
@@ -27,7 +28,7 @@ class Raycaster {
     Ray verticalRay;
     Ray finalRay;
 
-    Vector &playerPos;
+    Vector playerPos;
     float playerAngle;
     float rayAngle;
 
@@ -51,7 +52,7 @@ class Raycaster {
     void calculateFinalRay();
 
   public:
-    Raycaster(Vector &playerPos, float playerAngle, Map &map);
+    Raycaster(const Player &player, Map &map);
 
     void calculateRay(float rayAngle);
 

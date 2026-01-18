@@ -5,6 +5,8 @@
 #include "Hud.h"
 #include "Map.h"
 #include "Player.h"
+#include "Raycaster.h"
+#include "Renderer.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
@@ -13,15 +15,19 @@ class Game {
   private:
     int realWidth = 320;
     int realHeight = 240;
-    bool gameOver = false;
+
     int winWidth;
     int winHeight;
-    Hud hud;
-    Guns gun;
+
+    bool gameOver = false;
+
+    SDL_Window *window = nullptr;
+    SDL_Renderer *sdlRenderer = nullptr;
+
     Map map;
     Player player;
-    SDL_Window *window;
-    SDL_Renderer *renderer;
+    Raycaster raycaster;
+    Renderer gameRenderer;
 
     /**
      * Handle window close and exit events
@@ -29,12 +35,6 @@ class Game {
      * @param event SDL event to process
      */
     void exitPollEvent(SDL_Event &event);
-
-    /**
-     * Fill the screen with background (ceiling and floor)
-     * Draws dark gray ceiling and medium gray floor with horizon line
-     */
-    void fill();
 
   public:
     /**
