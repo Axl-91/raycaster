@@ -3,126 +3,118 @@
 #include "Vector.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <cmath>
 
 Raycaster::Raycaster(Vector &playerPos, float playerAngle, Map &map)
     : playerPos(playerPos), playerAngle(playerAngle), map(map) {}
 
 void Raycaster::calculateRay(float rayAngle) {
     this->rayAngle = rayAngle;
+
     calculateHorizontalRay();
     calculateVerticalRay();
     calculateFinalRay();
 }
 
-bool Raycaster::isAngleFacingUp() { return this->rayAngle > PI; }
-
-void Raycaster::calculateHorizontalRay() {
-    if (fabs(sin(this->rayAngle)) < EPSILON) {
-        this->hRayDist = std::numeric_limits<float>::infinity();
-        return;
-    }
-
-    Vector raySum;
+void Raycaster::moveRayIntoWall(Vector &ray, const Vector &step,
+                                float &distance) {
     bool hitWall = false;
-    float hTang = -1 / tan(this->rayAngle);
-
-    if (isAngleFacingUp()) {
-        int blockPos = this->playerPos.getY() / BLOCK_SIZE;
-
-        // Initial ray position
-        float ry = blockPos * BLOCK_SIZE - EPSILON;
-        float rx =
-            ((this->playerPos.getY() - ry) * hTang) + this->playerPos.getX();
-
-        this->horizontalRay = Vector(rx, ry);
-
-        float yo = -BLOCK_SIZE;
-        float xo = -yo * hTang;
-
-        raySum = Vector(xo, yo);
-    } else {
-        int blockPos = this->playerPos.getY() / BLOCK_SIZE;
-
-        // Initial ray position
-        float ry = blockPos * BLOCK_SIZE + BLOCK_SIZE;
-        float rx =
-            (this->playerPos.getY() - ry) * hTang + this->playerPos.getX();
-
-        this->horizontalRay = Vector(rx, ry);
-
-        float yo = BLOCK_SIZE;
-        float xo = -yo * hTang;
-
-        raySum = Vector(xo, yo);
-    }
 
     while (!hitWall) {
-        this->hRayDist = this->playerPos.distance(this->horizontalRay);
+        distance = this->playerPos.distance(ray);
 
-        if (!map.isInsideMap(this->horizontalRay)) {
+        if (!map.isInsideMap(ray)) {
             break;
         }
-        if (map.getBlock(this->horizontalRay) == 0) {
-            this->horizontalRay.sum(raySum);
+        if (map.getBlock(ray) == 0) {
+            ray.sum(step);
             continue;
         }
         hitWall = true;
     }
 }
+
+Vector Raycaster::calculateInitialRay(float blockPos, float offset, float tang,
+                                      RayDirection direction) {
+    float rx, ry;
+    float playerX = this->playerPos.getX();
+    float playerY = this->playerPos.getY();
+
+    if (direction == RayDirection::HORIZONTAL) {
+        ry = blockPos * BLOCK_SIZE + offset;
+        rx = (playerY - ry) * tang + playerX;
+    } else {
+        rx = blockPos * BLOCK_SIZE + offset;
+        ry = (playerX - rx) * tang + playerY;
+    }
+    return Vector(rx, ry);
+}
+
+bool Raycaster::isRayValid(RayDirection direction) {
+    float angle = direction == RayDirection::HORIZONTAL ? sin(this->rayAngle)
+                                                        : cos(this->rayAngle);
+
+    return (fabs(angle) > EPSILON);
+}
+
+bool Raycaster::isAngleFacingUp() { return this->rayAngle > PI; }
 
 bool Raycaster::isAngleFacingLeft() {
     return (this->rayAngle < 3 * PI / 2) && (this->rayAngle > PI / 2);
 }
 
+void Raycaster::calculateHorizontalRay() {
+    if (!isRayValid(RayDirection::HORIZONTAL)) {
+        this->hRayDist = std::numeric_limits<float>::infinity();
+        return;
+    }
+
+    float xo, yo, offset;
+    float hTang = -1 / tan(this->rayAngle);
+    int blockPos = this->playerPos.getY() / BLOCK_SIZE;
+
+    if (isAngleFacingUp()) {
+        offset = -EPSILON;
+        yo = -BLOCK_SIZE;
+        xo = -yo * hTang;
+    } else {
+        offset = BLOCK_SIZE;
+        yo = BLOCK_SIZE;
+        xo = -yo * hTang;
+    }
+
+    this->horizontalRay =
+        calculateInitialRay(blockPos, offset, hTang, RayDirection::HORIZONTAL);
+
+    Vector RayStep(xo, yo);
+    moveRayIntoWall(this->horizontalRay, RayStep, this->hRayDist);
+}
+
 void Raycaster::calculateVerticalRay() {
-    if (fabs(cos(this->rayAngle)) < EPSILON) {
+    if (!isRayValid(RayDirection::VERTICAL)) {
         this->vRayDist = std::numeric_limits<float>::infinity();
         return;
     }
 
-    Vector raySum;
-    bool hitWall = false;
+    float xo, yo, offset;
     float vTang = -tan(rayAngle);
+    int blockPos = this->playerPos.getX() / BLOCK_SIZE;
 
     if (isAngleFacingLeft()) {
-        int blockPos = this->playerPos.getX() / BLOCK_SIZE;
-
-        float rx = blockPos * BLOCK_SIZE - EPSILON;
-        float ry =
-            (this->playerPos.getX() - rx) * vTang + this->playerPos.getY();
-
-        this->verticalRay = Vector(rx, ry);
-
-        float xo = -BLOCK_SIZE;
-        float yo = -xo * vTang;
-        raySum = Vector(xo, yo);
+        offset = -EPSILON;
+        xo = -BLOCK_SIZE;
+        yo = -xo * vTang;
     } else {
-        int blockPos = this->playerPos.getX() / BLOCK_SIZE;
-
-        float rx = blockPos * BLOCK_SIZE + BLOCK_SIZE;
-        float ry =
-            (this->playerPos.getX() - rx) * vTang + this->playerPos.getY();
-
-        this->verticalRay = Vector(rx, ry);
-
-        float xo = BLOCK_SIZE;
-        float yo = -xo * vTang;
-
-        raySum = Vector(xo, yo);
+        offset = BLOCK_SIZE;
+        xo = BLOCK_SIZE;
+        yo = -xo * vTang;
     }
 
-    while (!hitWall) {
-        this->vRayDist = this->playerPos.distance(this->verticalRay);
+    this->verticalRay =
+        calculateInitialRay(blockPos, offset, vTang, RayDirection::VERTICAL);
 
-        if (!map.isInsideMap(this->verticalRay)) {
-            break;
-        }
-        if (map.getBlock(this->verticalRay) == 0) {
-            this->verticalRay.sum(raySum);
-            continue;
-        }
-        hitWall = true;
-    }
+    Vector RayStep(xo, yo);
+    moveRayIntoWall(this->verticalRay, RayStep, this->vRayDist);
 }
 
 void Raycaster::calculateFinalRay() {

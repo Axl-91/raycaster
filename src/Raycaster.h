@@ -16,6 +16,7 @@ class Raycaster {
     */
     static constexpr float EPSILON = 0.0001f;
     static constexpr int COL_WIDTH = 1;
+    enum class RayDirection { HORIZONTAL, VERTICAL };
 
     Vector horizontalRay;
     float hRayDist = std::numeric_limits<float>::infinity();
@@ -35,6 +36,13 @@ class Raycaster {
     bool isAngleFacingUp();
 
     bool isAngleFacingLeft();
+
+    bool isRayValid(RayDirection direction);
+
+    Vector calculateInitialRay(float blockPos, float offset, float tang,
+                               RayDirection direction);
+
+    void moveRayIntoWall(Vector &ray, const Vector &step, float &distance);
 
     void calculateVerticalRay();
 
