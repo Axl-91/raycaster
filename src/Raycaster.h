@@ -10,7 +10,7 @@
 
 typedef struct Ray {
     Vector position;
-    float distance;
+    float distance = std::numeric_limits<float>::infinity();
 } Ray;
 
 class Raycaster {
@@ -23,9 +23,9 @@ class Raycaster {
     static constexpr int COL_WIDTH = 1;
     enum class RayDirection { HORIZONTAL, VERTICAL };
 
-    Ray horizontalRay = {Vector(), std::numeric_limits<float>::infinity()};
-    Ray verticalRay = {Vector(), std::numeric_limits<float>::infinity()};
-    Ray finalRay = {Vector(), std::numeric_limits<float>::infinity()};
+    Ray horizontalRay;
+    Ray verticalRay;
+    Ray finalRay;
 
     Vector &playerPos;
     float playerAngle;
