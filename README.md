@@ -7,7 +7,7 @@ A C++ and SDL2 raycasting engine inspired by Wolfenstein 3D.
 **Currently refactoring** - Reorganizing code, improving structure, and adding documentation for a step-by-step tutorial.
 ## Requirements
 
-- C++17 compatible compiler
+- C++11 compatible compiler
 - SDL2
 - SDL2_image
 - CMake
@@ -20,12 +20,17 @@ sudo dnf install gcc-c++ cmake SDL2-devel SDL2_image-devel
 ## Build and Run
 ``` bash
 # BUILD 
-cmake -S . -B build # On the project folder
+cmake -S . -B build
 cd build
 make
 
 # RUN
 ./main
+```
+
+### For a Debug build
+``` bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
 ```
 
 ## About
