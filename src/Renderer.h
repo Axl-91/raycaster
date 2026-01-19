@@ -12,6 +12,7 @@
 
 class Renderer {
   private:
+    static constexpr int COL_WIDTH = 1;
     static constexpr float OFFSET_RAYCASTER = PI / 6;
     static constexpr float STEP_RAYCASTER =
         (OFFSET_RAYCASTER * 2) / SCREEN_WIDTH;
@@ -36,6 +37,24 @@ class Renderer {
      * Render floor and ceiling
      */
     void renderBackground();
+
+    /**
+     * Set the wall type that belongs to the position of the ray
+     * and if it is horizontal make it as the dark variant
+     * @param ray The ray that is on the position to the wall
+     */
+    void setWallType(Ray &ray);
+
+    /**
+     * Set the wall column to render
+     * @param ray The ray that is on the position to the wall
+     */
+    void setColWall(Ray &ray);
+
+    /**
+     * Render a 1px col of the wall hitted by the raycaster
+     */
+    void renderWallCol(int screenPos, Ray &ray);
 
     /**
      * Render all walls using raycasting

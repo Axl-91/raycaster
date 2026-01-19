@@ -3,7 +3,6 @@
 #include "DefaultMapData.h"
 #include "DefaultObjects.h"
 #include "Objects.h"
-#include "Walls.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <algorithm>
@@ -42,10 +41,7 @@ void Map::loadObjects(std::vector<MapObject> objects) {
     }
 }
 
-void Map::setRenderer(SDL_Renderer *renderer) {
-    walls.setRenderer(renderer);
-    objects.setRenderer(renderer);
-}
+void Map::setRenderer(SDL_Renderer *renderer) { objects.setRenderer(renderer); }
 
 bool Map::isInsideMap(float x, float y) {
     int posX = static_cast<int>(floor(x / BLOCK_SIZE));
@@ -72,21 +68,6 @@ int Map::getBlock(float x, float y) {
 }
 
 int Map::getBlock(const Vector &v) { return getBlock(v.getX(), v.getY()); }
-
-void Map::setWallType(Vector &vector, bool isDark) {
-    int wallType = getBlock(vector) - 1;
-    walls.setWall(wallType, isDark);
-}
-
-void Map::setColWall(float posX) {
-    int intPosX = floor(posX);
-    int xOffset = intPosX % BLOCK_SIZE;
-    walls.selectSpriteCol(xOffset);
-}
-
-void Map::renderWall(int posX, int posY, int width, int height) {
-    walls.render(posX, posY, width, height);
-}
 
 void Map::sortObjByDist(const Vector &pos) {
     // lambda function to compare distances

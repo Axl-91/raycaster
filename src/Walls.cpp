@@ -2,22 +2,18 @@
 #include "Constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_render.h>
 #include <stdexcept>
 
 Walls::Walls() {}
 
-void Walls::setRenderer(SDL_Renderer *renderer) {
-    this->renderer = renderer;
-    loadTexture();
-}
-
-void Walls::loadTexture() {
+void Walls::loadTexture(SDL_Renderer *renderer) {
     SDL_Surface *surface = IMG_Load("assets/walls.png");
     if (!surface) {
         throw std::runtime_error("SDL surface error on Walls");
     }
 
-    this->texture = SDL_CreateTextureFromSurface(this->renderer, surface);
+    this->texture = SDL_CreateTextureFromSurface(renderer, surface);
     if (!this->texture) {
         throw std::runtime_error("SDL texture error on Walls");
     }
@@ -44,9 +40,10 @@ void Walls::selectSpriteCol(int xOffset) {
     this->wallRect = {this->wallX + xOffset, this->wallY, 1, BLOCK_SIZE};
 }
 
-void Walls::render(int posX, int posY, int largo, int alto) {
-    SDL_Rect wall = {posX, posY, largo, alto};
-    SDL_RenderCopy(this->renderer, this->texture, &this->wallRect, &wall);
+void Walls::render(SDL_Renderer *renderer, int x, int y, int width,
+                   int height) {
+    SDL_Rect wall = {x, y, width, height};
+    SDL_RenderCopy(renderer, this->texture, &this->wallRect, &wall);
 }
 
 Walls::~Walls() { SDL_DestroyTexture(texture); }

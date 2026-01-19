@@ -9,9 +9,12 @@
 #include <iostream>
 #include <limits>
 
+enum class RayDirection { HORIZONTAL, VERTICAL };
+
 typedef struct Ray {
     Vector position;
     float distance = std::numeric_limits<float>::infinity();
+    RayDirection direction;
 } Ray;
 
 class Raycaster {
@@ -21,8 +24,6 @@ class Raycaster {
       and avoid precision issues when hitting tile boundaries.
     */
     static constexpr float EPSILON = 0.0001f;
-    static constexpr int COL_WIDTH = 1;
-    enum class RayDirection { HORIZONTAL, VERTICAL };
 
     Ray horizontalRay;
     Ray verticalRay;
@@ -51,14 +52,14 @@ class Raycaster {
 
     void calculateFinalRay();
 
+    void calculateRay();
+
   public:
     Raycaster(const Player &player, Map &map);
 
-    void calculateRay(float rayAngle);
+    void updatePlayerValues(const Player &player);
 
-    float getDistance();
-
-    void renderWalls(int posX);
+    Ray &getRay(float rayAngle);
 
     ~Raycaster() = default;
 };

@@ -7,10 +7,6 @@
 
 Player::Player(float x, float y, Map &map) : posX(x), posY(y), map(map) {}
 
-Vector Player::getPos() const { return Vector(this->posX, this->posY); }
-
-float Player::getAngle() const { return this->angle; }
-
 void Player::moveForward() {
     this->posX += MOVE_SPEED * cos(this->angle);
     this->posY += MOVE_SPEED * sin(this->angle);

@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "Constants.h"
+#include "Raycaster.h"
 
 namespace {
 float normalizeAngle(float angle) {
@@ -20,6 +21,7 @@ void Renderer::setRenderer(SDL_Renderer *renderer) {
 
     this->hud.loadTexture(this->sdlRenderer);
     this->gun.loadTextures(this->sdlRenderer);
+    this->wallTextures.loadTexture(this->sdlRenderer);
 
     this->map.setRenderer(this->sdlRenderer);
 }
@@ -30,13 +32,42 @@ void Renderer::renderBackground() {
                            FLOOR_COLOR.b, FLOOR_COLOR.a);
     SDL_RenderClear(this->sdlRenderer);
 
-    // TODO: The 40 is the height of the HUD, change it, no magic numbers
     SDL_Rect ceilingRect = {0, 0, SCREEN_WIDTH, (USABLE_SCREEN_HEIGHT) / 2};
 
     // Render CEILING_COLOR on the top half of the screen
     SDL_SetRenderDrawColor(this->sdlRenderer, CEILING_COLOR.r, CEILING_COLOR.g,
                            CEILING_COLOR.b, CEILING_COLOR.a);
     SDL_RenderFillRect(this->sdlRenderer, &ceilingRect);
+}
+
+void Renderer::setWallType(Ray &ray) {
+    bool isDark = ray.direction == RayDirection::VERTICAL ? true : false;
+
+    int wallType = this->map.getBlock(ray.position) - 1;
+    this->wallTextures.setWall(wallType, isDark);
+}
+
+void Renderer::setColWall(Ray &ray) {
+    float wallPos = ray.direction == RayDirection::HORIZONTAL
+                        ? ray.position.getX()
+                        : ray.position.getY();
+
+    int intPosX = floor(wallPos);
+    int xOffset = intPosX % BLOCK_SIZE;
+
+    this->wallTextures.selectSpriteCol(xOffset);
+}
+
+void Renderer::renderWallCol(int screenPos, Ray &ray) {
+    int wallHeight =
+        static_cast<int>((BLOCK_SIZE * SCREEN_WIDTH) / ray.distance);
+
+    float screenCenterY = USABLE_SCREEN_HEIGHT / 2.0f;
+    float wallCenter = wallHeight / 2.0f;
+    int wallInitPosY = static_cast<int>(screenCenterY - wallCenter);
+
+    this->wallTextures.render(this->sdlRenderer, screenPos, wallInitPosY,
+                              COL_WIDTH, wallHeight);
 }
 
 void Renderer::renderWalls() {
@@ -48,10 +79,12 @@ void Renderer::renderWalls() {
     for (int pos = 0; pos < SCREEN_WIDTH; ++pos) {
         angleRay = normalizeAngle(angleRay);
 
-        raycaster.calculateRay(angleRay);
-        raycaster.renderWalls(pos);
+        Ray ray = raycaster.getRay(angleRay);
+        setWallType(ray);
+        setColWall(ray);
+        renderWallCol(pos, ray);
 
-        this->distancesList[pos] = raycaster.getDistance();
+        this->distancesList[pos] = ray.distance;
 
         // Step is the amount neccesary to add so we can
         // fill the entire screen with the rays from -30° to +30°

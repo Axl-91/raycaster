@@ -3,6 +3,7 @@
 
 #include "Constants.h"
 #include "Map.h"
+#include "Vector.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
@@ -32,12 +33,12 @@ class Player {
     /**
      * @return Position of the player
      */
-    Vector getPos() const;
+    Vector getPos() const { return Vector(posX, posY); };
 
     /**
      * @return Angle of the player
      */
-    float getAngle() const;
+    float getAngle() const { return angle; };
 
     /**
      * Handles the movements of the player based on keyboard input

@@ -19,7 +19,6 @@ class Map {
     int columns = -1;
     std::vector<std::vector<int>> map;
 
-    Walls walls;
     Objects objects;
     std::vector<mapObject> vectObj;
 
@@ -81,29 +80,11 @@ class Map {
     bool isInsideMap(const Vector &position);
 
     /**
-     * get the Block value in the position given
+     * Get the Block value in the position given
      * @param position the Vector with the position
      * @return the value of the position on the map
      */
     int getBlock(const Vector &position);
-
-    /**
-     * Set the wall type and if isDark is true we use the dark variant
-     * @param position the position in the map where the wall is
-     * @param isDark check for the dark variant
-     */
-    void setWallType(Vector &position, bool isDark);
-
-    /**
-     * Set the wall column to render
-     * @param posX the x position that will be render as a 1px column
-     */
-    void setColWall(float posX);
-
-    /**
-     * Render the wall in the given position
-     */
-    void renderWall(int posX, int posY, int width, int height);
 
     /**
      * Sort the objects by distance with the playerPos
@@ -112,7 +93,7 @@ class Map {
     void sortObjByDist(const Vector &playerPos);
 
     /**
-     * Render the wall in the given position
+     * @return All the objects in the map
      */
     std::vector<MapObject> getObjects();
 

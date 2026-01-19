@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Constants.h"
 #include "Player.h"
 #include "Raycaster.h"
 #include "Renderer.h"
@@ -6,9 +7,9 @@
 #include <SDL2/SDL_image.h>
 #include <stdexcept>
 
-// TODO: Fix starting position for player
 Game::Game(int width, int height)
-    : winWidth(width), winHeight(height), map(), player(96, 96, this->map),
+    : winWidth(width), winHeight(height), map(),
+      player(INIT_POS_X, INIT_POS_Y, this->map),
       raycaster(this->player, this->map),
       gameRenderer(this->map, this->player, this->raycaster) {
 
@@ -59,7 +60,8 @@ void Game::pollEvent() {
 }
 
 void Game::update() {
-    player.handleMovement();
+    this->player.handleMovement();
+    this->raycaster.updatePlayerValues(this->player);
     this->gameRenderer.getGun().handleShooting();
 }
 

@@ -4,6 +4,7 @@
 #include "Constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_render.h>
 
 class Walls {
   private:
@@ -15,22 +16,15 @@ class Walls {
     int wallY = 0;
     SDL_Rect wallRect = {wallX, wallY, BLOCK_SIZE, BLOCK_SIZE};
     SDL_Texture *texture;
-    SDL_Renderer *renderer;
-
-    /**
-     * Load wall sprite sheet texture from file
-     * @throws std::runtime_error if surface or texture creation fails
-     */
-    void loadTexture();
 
   public:
     Walls();
 
     /**
-     * Set renderer for the Wall and initialize texture
-     * @param renderer SDL renderer to use for creating textures
+     * Load wall sprite sheet texture from file
+     * @throws std::runtime_error if surface or texture creation fails
      */
-    void setRenderer(SDL_Renderer *renderer);
+    void loadTexture(SDL_Renderer *renderer);
 
     /**
      * Set the wall from the sprite sheet to be used
@@ -55,7 +49,7 @@ class Walls {
      * @param height Height of the rendered sprite in pixels (default:
      * BLOCK_SIZE)
      */
-    void render(int x, int y, int width, int height);
+    void render(SDL_Renderer *renderer, int x, int y, int width, int height);
 
     ~Walls();
 };

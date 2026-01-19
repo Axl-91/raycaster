@@ -7,7 +7,16 @@
 #include <cmath>
 
 Raycaster::Raycaster(const Player &player, Map &map)
-    : playerPos(player.getPos()), playerAngle(player.getAngle()), map(map) {}
+    : playerPos(player.getPos()), playerAngle(player.getAngle()), map(map) {
+
+    this->horizontalRay.direction = RayDirection::HORIZONTAL;
+    this->verticalRay.direction = RayDirection::VERTICAL;
+}
+
+void Raycaster::updatePlayerValues(const Player &player) {
+    this->playerPos = player.getPos();
+    this->playerAngle = player.getAngle();
+}
 
 void Raycaster::moveRayIntoWall(Ray &ray, const Vector &step) {
     bool hitWall = false;
@@ -115,19 +124,9 @@ void Raycaster::calculateVerticalRay() {
 
 void Raycaster::calculateFinalRay() {
     if (this->horizontalRay.distance < this->verticalRay.distance) {
-        this->finalRay.distance = this->horizontalRay.distance;
         this->finalRay = this->horizontalRay;
-
-        map.setWallType(this->finalRay.position, false);
-        float rayX = this->finalRay.position.getX();
-        map.setColWall(rayX);
     } else {
-        this->finalRay.distance = this->verticalRay.distance;
         this->finalRay = this->verticalRay;
-
-        map.setWallType(this->finalRay.position, true);
-        float rayY = this->finalRay.position.getY();
-        map.setColWall(rayY);
     }
 
     // To avoid fisheye effect
@@ -135,23 +134,14 @@ void Raycaster::calculateFinalRay() {
     this->finalRay.distance *= cos(newAngle);
 }
 
-void Raycaster::calculateRay(float rayAngle) {
-    this->rayAngle = rayAngle;
-
+void Raycaster::calculateRay() {
     calculateHorizontalRay();
     calculateVerticalRay();
     calculateFinalRay();
 }
 
-float Raycaster::getDistance() { return this->finalRay.distance; }
-
-void Raycaster::renderWalls(int posX) {
-    int wallHeight =
-        static_cast<int>((BLOCK_SIZE * SCREEN_WIDTH) / this->finalRay.distance);
-
-    float screenCenterY = USABLE_SCREEN_HEIGHT / 2.0f;
-    float wallCenter = wallHeight / 2.0f;
-    int wallInitPosY = static_cast<int>(screenCenterY - wallCenter);
-
-    map.renderWall(posX, wallInitPosY, COL_WIDTH, wallHeight);
+Ray &Raycaster::getRay(float rayAngle) {
+    this->rayAngle = rayAngle;
+    calculateRay();
+    return this->finalRay;
 }
