@@ -12,3 +12,8 @@ A C++ and SDL2 raycasting engine inspired by Wolfenstein 3D.
 ## About
 
 *More details coming soon*
+
+## Raycasting Bible
+<p align=center>
+  <img width="583" height="126" alt="Formulas" src="https://github.com/user-attachments/assets/3f8251ef-4d0b-46ef-bb79-31f7b85ead2c" />
+</p>
