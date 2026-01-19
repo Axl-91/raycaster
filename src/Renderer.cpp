@@ -72,15 +72,13 @@ void Renderer::renderWallCol(int screenPos, Ray &ray) {
 }
 
 void Renderer::renderWalls() {
-    Raycaster raycaster(this->player, this->map);
-
     // We need to start to create rays from the angle of the player minus 30°
     float angleRay = this->player.getAngle() - OFFSET_RAYCASTER;
 
     for (int pos = 0; pos < SCREEN_WIDTH; ++pos) {
         angleRay = normalizeAngle(angleRay);
 
-        Ray ray = raycaster.getRay(angleRay);
+        Ray ray = this->raycaster.getRay(angleRay);
         setWallType(ray);
         setColWall(ray);
         renderWallCol(pos, ray);

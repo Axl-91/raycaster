@@ -61,6 +61,8 @@ bool Player::objIsVisible(const Vector &posObj) const {
     float objectAngle = atan2(dy, dx);
     float delta = objectAngle - this->angle;
 
+    // Normalization of deltaAngle to check if it's between -30° and 30°
+    // from the players vision
     if (delta < -PI)
         delta += 2.0f * PI;
     if (delta > PI)

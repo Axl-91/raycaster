@@ -35,18 +35,18 @@ void Raycaster::moveRayIntoWall(Ray &ray, const Vector &step) {
     }
 }
 
-Vector Raycaster::calculateInitialRay(float blockPos, float offset, float tang,
-                                      RayDirection direction) {
+Vector Raycaster::calculateInitPos(float blockPos, float offset, float tangent,
+                                   RayDirection direction) {
     float rx, ry;
     float playerX = this->playerPos.getX();
     float playerY = this->playerPos.getY();
 
     if (direction == RayDirection::HORIZONTAL) {
         ry = blockPos * BLOCK_SIZE + offset;
-        rx = (playerY - ry) * tang + playerX;
+        rx = (playerY - ry) * tangent + playerX;
     } else {
         rx = blockPos * BLOCK_SIZE + offset;
-        ry = (playerX - rx) * tang + playerY;
+        ry = (playerX - rx) * tangent + playerY;
     }
     return Vector(rx, ry);
 }
@@ -68,61 +68,46 @@ bool Raycaster::isAngleFacingLeft() {
     return (this->rayAngle < 3 * PI / 2) && (this->rayAngle > PI / 2);
 }
 
-void Raycaster::calculateHorizontalRay() {
-    if (!isRayValid(RayDirection::HORIZONTAL)) {
-        this->horizontalRay.distance = std::numeric_limits<float>::infinity();
+void Raycaster::calculateRay(Ray &ray, RayConfig &rayConfig) {
+    if (!isRayValid(ray.direction)) {
+        ray.distance = std::numeric_limits<float>::infinity();
         return;
     }
-
     float xo, yo, offset;
-    float hTang = -1 / tan(this->rayAngle);
-    int blockPos = this->playerPos.getY() / BLOCK_SIZE;
+    int blockPos;
 
-    if (isAngleFacingUp()) {
-        offset = -EPSILON;
-        yo = -BLOCK_SIZE;
-        xo = -yo * hTang;
+    if (ray.direction == RayDirection::HORIZONTAL) {
+        blockPos = this->playerPos.getY() / BLOCK_SIZE;
+        offset = rayConfig.isNegativeDir ? -EPSILON : BLOCK_SIZE;
+        yo = rayConfig.isNegativeDir ? -BLOCK_SIZE : BLOCK_SIZE;
+        xo = -yo * rayConfig.tangent;
     } else {
-        offset = BLOCK_SIZE;
-        yo = BLOCK_SIZE;
-        xo = -yo * hTang;
+        blockPos = this->playerPos.getX() / BLOCK_SIZE;
+        offset = rayConfig.isNegativeDir ? -EPSILON : BLOCK_SIZE;
+        xo = rayConfig.isNegativeDir ? -BLOCK_SIZE : BLOCK_SIZE;
+        yo = -xo * rayConfig.tangent;
     }
-
-    this->horizontalRay.position =
-        calculateInitialRay(blockPos, offset, hTang, RayDirection::HORIZONTAL);
+    ray.position =
+        calculateInitPos(blockPos, offset, rayConfig.tangent, ray.direction);
 
     Vector RayStep(xo, yo);
-    moveRayIntoWall(this->horizontalRay, RayStep);
+    moveRayIntoWall(ray, RayStep);
+}
+
+void Raycaster::calculateHorizontalRay() {
+    RayConfig rayConfig{isAngleFacingUp(), -1 / tan(this->rayAngle)};
+    calculateRay(this->horizontalRay, rayConfig);
 }
 
 void Raycaster::calculateVerticalRay() {
-    if (!isRayValid(RayDirection::VERTICAL)) {
-        this->verticalRay.distance = std::numeric_limits<float>::infinity();
-        return;
-    }
-
-    float xo, yo, offset;
-    float vTang = -tan(rayAngle);
-    int blockPos = this->playerPos.getX() / BLOCK_SIZE;
-
-    if (isAngleFacingLeft()) {
-        offset = -EPSILON;
-        xo = -BLOCK_SIZE;
-        yo = -xo * vTang;
-    } else {
-        offset = BLOCK_SIZE;
-        xo = BLOCK_SIZE;
-        yo = -xo * vTang;
-    }
-
-    this->verticalRay.position =
-        calculateInitialRay(blockPos, offset, vTang, RayDirection::VERTICAL);
-
-    Vector RayStep(xo, yo);
-    moveRayIntoWall(this->verticalRay, RayStep);
+    RayConfig rayConfig{isAngleFacingLeft(), -tan(this->rayAngle)};
+    calculateRay(this->verticalRay, rayConfig);
 }
 
 void Raycaster::calculateFinalRay() {
+    calculateHorizontalRay();
+    calculateVerticalRay();
+
     if (this->horizontalRay.distance < this->verticalRay.distance) {
         this->finalRay = this->horizontalRay;
     } else {
@@ -134,14 +119,8 @@ void Raycaster::calculateFinalRay() {
     this->finalRay.distance *= cos(newAngle);
 }
 
-void Raycaster::calculateRay() {
-    calculateHorizontalRay();
-    calculateVerticalRay();
-    calculateFinalRay();
-}
-
 Ray &Raycaster::getRay(float rayAngle) {
     this->rayAngle = rayAngle;
-    calculateRay();
+    calculateFinalRay();
     return this->finalRay;
 }

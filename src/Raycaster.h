@@ -17,6 +17,11 @@ typedef struct Ray {
     RayDirection direction;
 } Ray;
 
+typedef struct RayConfig {
+    bool isNegativeDir;
+    float tangent;
+} RayConfig;
+
 class Raycaster {
   private:
     /*
@@ -41,8 +46,8 @@ class Raycaster {
 
     bool isRayValid(RayDirection direction);
 
-    Vector calculateInitialRay(float blockPos, float offset, float tang,
-                               RayDirection direction);
+    Vector calculateInitPos(float blockPos, float offset, float tangent,
+                            RayDirection direction);
 
     void moveRayIntoWall(Ray &ray, const Vector &step);
 
@@ -52,7 +57,7 @@ class Raycaster {
 
     void calculateFinalRay();
 
-    void calculateRay();
+    void calculateRay(Ray &ray, RayConfig &rayConfig);
 
   public:
     Raycaster(const Player &player, Map &map);
