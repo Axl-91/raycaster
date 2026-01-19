@@ -7,14 +7,33 @@
 
 Player::Player(float x, float y, Map &map) : posX(x), posY(y), map(map) {}
 
+bool Player::canMove(float x, float y) {
+    return this->map.getBlock(Vector(x + PLAYER_RADIUS, y)) == 0 &&
+           this->map.getBlock(Vector(x - PLAYER_RADIUS, y)) == 0 &&
+           this->map.getBlock(Vector(x, y + PLAYER_RADIUS)) == 0 &&
+           this->map.getBlock(Vector(x, y - PLAYER_RADIUS)) == 0;
+}
+
 void Player::moveForward() {
-    this->posX += MOVE_SPEED * cos(this->angle);
-    this->posY += MOVE_SPEED * sin(this->angle);
+    float newX = this->posX + MOVE_SPEED * cos(this->angle);
+    float newY = this->posY + MOVE_SPEED * sin(this->angle);
+
+    if (canMove(newX, this->posY))
+        this->posX = newX;
+
+    if (canMove(this->posX, newY))
+        this->posY = newY;
 }
 
 void Player::moveBackward() {
-    this->posX -= MOVE_SPEED * cos(this->angle);
-    this->posY -= MOVE_SPEED * sin(this->angle);
+    float newX = this->posX - MOVE_SPEED * cos(this->angle);
+    float newY = this->posY - MOVE_SPEED * sin(this->angle);
+
+    if (canMove(newX, this->posY))
+        this->posX = newX;
+
+    if (canMove(this->posX, newY))
+        this->posY = newY;
 }
 
 void Player::rotateLeft() {

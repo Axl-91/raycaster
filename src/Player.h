@@ -10,6 +10,7 @@
 
 class Player {
   private:
+    static constexpr float PLAYER_RADIUS = 6.0f;
     static constexpr float MOVE_SPEED = 3.0f;
     static constexpr float ROTATION_SPEED = PI / 36;
 
@@ -26,6 +27,14 @@ class Player {
     void moveBackward();
     void rotateLeft();
     void rotateRight();
+
+    /**
+     * Checks if the player can move to the x,y position
+     * @param x the X position to validate
+     * @param y the Y position to validate
+     * @return true if the position is valid, false otherwise
+     */
+    bool canMove(float x, float y);
 
   public:
     Player(float x, float y, Map &map);
