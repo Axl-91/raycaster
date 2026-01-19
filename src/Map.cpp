@@ -2,7 +2,6 @@
 #include "Constants.h"
 #include "DefaultMapData.h"
 #include "DefaultObjects.h"
-#include "Objects.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <algorithm>
@@ -27,7 +26,7 @@ void Map::loadMap(const std::vector<std::vector<int>> &map) {
     this->rows = map.size();
     this->columns = cols;
 
-    this->map = map;
+    this->gridMap = map;
 }
 
 void Map::addObject(Vector &position, int type) {
@@ -40,8 +39,6 @@ void Map::loadObjects(std::vector<MapObject> objects) {
         addObject(object.position, object.type);
     }
 }
-
-void Map::setRenderer(SDL_Renderer *renderer) { objects.setRenderer(renderer); }
 
 bool Map::isInsideMap(float x, float y) {
     int posX = static_cast<int>(floor(x / BLOCK_SIZE));
@@ -64,7 +61,7 @@ int Map::getBlock(float x, float y) {
     int posX = static_cast<int>(floor(x / BLOCK_SIZE));
     int posY = static_cast<int>(floor(y / BLOCK_SIZE));
 
-    return map[posY][posX];
+    return gridMap[posY][posX];
 }
 
 int Map::getBlock(const Vector &v) { return getBlock(v.getX(), v.getY()); }
@@ -78,14 +75,9 @@ void Map::sortObjByDist(const Vector &pos) {
     std::sort(vectObj.begin(), vectObj.end(), compareByDistanceDesc);
 }
 
-std::vector<MapObject> Map::getObjects() { return vectObj; }
-
-void Map::setObjType(int objType) { objects.setObject(objType); }
-
-void Map::setColObject(int posX) { objects.selectSpriteCol(posX); }
-
-void Map::renderObject(int posX, int posY, int largo, int alto) {
-    objects.render(posX, posY, largo, alto);
+std::vector<MapObject> Map::getObjectsSorted(const Vector &playerPos) {
+    sortObjByDist(playerPos);
+    return vectObj;
 }
 
 Map::~Map() {}

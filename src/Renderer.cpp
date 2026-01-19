@@ -1,6 +1,8 @@
 #include "Renderer.h"
 #include "Constants.h"
 #include "Raycaster.h"
+#include <SDL2/SDL_log.h>
+#include <cmath>
 
 namespace {
 float normalizeAngle(float angle) {
@@ -22,8 +24,7 @@ void Renderer::setRenderer(SDL_Renderer *renderer) {
     this->hud.loadTexture(this->sdlRenderer);
     this->gun.loadTextures(this->sdlRenderer);
     this->wallTextures.loadTexture(this->sdlRenderer);
-
-    this->map.setRenderer(this->sdlRenderer);
+    this->objectTextures.loadTexture(this->sdlRenderer);
 }
 
 void Renderer::renderBackground() {
@@ -84,7 +85,7 @@ void Renderer::renderWalls() {
         setColWall(ray);
         renderWallCol(pos, ray);
 
-        this->distancesList[pos] = ray.distance;
+        this->wallDistances[pos] = ray.distance;
 
         // Step is the amount neccesary to add so we can
         // fill the entire screen with the rays from -30° to +30°
@@ -93,44 +94,57 @@ void Renderer::renderWalls() {
 }
 
 void Renderer::renderObjects() {
-    int uno = 1;
-    Vector posJugador = this->player.getPos();
-    this->map.sortObjByDist(posJugador);
-    std::vector<mapObject> mapObjects = this->map.getObjects();
+    Vector playerPos = this->player.getPos();
+
+    std::vector<mapObject> mapObjects = this->map.getObjectsSorted(playerPos);
 
     for (mapObject obj : mapObjects) {
         if (!this->player.objIsVisible(obj.position)) {
             continue;
         }
-        float distanciaObj = posJugador.distance(obj.position);
+        this->objectTextures.setObject(obj.type);
 
-        // Coordenadas en Y
-        float sizeObj = (64 * 320) / distanciaObj;
-        float yo = 100 - (sizeObj / 2);
-        // Coordenadas en X
-        float dx = posJugador.getX() - obj.position.getX();
-        float dy = posJugador.getY() - obj.position.getY();
+        // Get the object angle relative to player
+        // to calculate the X position on screen
+        float dx = playerPos.getX() - obj.position.getX();
+        float dy = playerPos.getY() - obj.position.getY();
+        float angleDiff = atan2(dy, dx) - this->player.getAngle();
 
-        float anguloObj = atan2(dy, dx) - this->player.getAngle();
-        float xo = tan(anguloObj) * 277.1281;
-        float x = 160.0f + xo - sizeObj / 2.0f;
+        float offsetX = tan(angleDiff) * PPD;
 
-        float anchura = sizeObj / 64;
-        int yoInt = yo;
-        int sizeObjInt = sizeObj;
-        this->map.setObjType(obj.type);
+        float objectDistance = playerPos.distance(obj.position);
 
-        for (int i = 0; i < 64; ++i) {
-            for (int j = 0; j < anchura; ++j) {
-                int z = round(x) + ((i)*anchura) + j;
-                if (z < 0 || z > 320) {
+        // How big or small im going to render in base to distance from player
+        float sizeObj = (BLOCK_SIZE * SCREEN_WIDTH) / objectDistance;
+
+        // Starting point to draw object in X
+        float xo = (SCREEN_WIDTH / 2.0f) + offsetX - sizeObj / 2.0f;
+        int baseX = static_cast<int>(std::round(xo));
+
+        // Starting point to draw object in Y
+        float yo =
+            static_cast<int>((USABLE_SCREEN_HEIGHT / 2.0f) - (sizeObj / 2.0f));
+
+        // Number of screen columns each texture column occupies
+        float colRepetitions = sizeObj / BLOCK_SIZE;
+
+        for (int objX = 0; objX < BLOCK_SIZE; ++objX) {
+            int colStart = static_cast<int>(baseX + objX * colRepetitions);
+            int colEnd = static_cast<int>(baseX + (objX + 1) * colRepetitions);
+
+            this->objectTextures.selectSpriteCol(objX);
+
+            for (int posX = colStart; posX < colEnd; ++posX) {
+                if (posX < 0 || posX >= SCREEN_WIDTH) {
+                    continue;
+                }
+                if (wallDistances[posX] < objectDistance) {
                     continue;
                 }
 
-                if (this->distancesList[z] > distanciaObj) {
-                    this->map.setColObject(i);
-                    this->map.renderObject(z, yoInt, uno, sizeObjInt);
-                }
+                // If there is no wall closer I render the object column
+                this->objectTextures.render(this->sdlRenderer, posX, yo,
+                                            COL_WIDTH, sizeObj);
             }
         }
     }

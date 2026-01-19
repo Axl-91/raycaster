@@ -3,7 +3,6 @@
 
 #include "Objects.h"
 #include "Vector.h"
-#include "Walls.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <vector>
@@ -17,9 +16,8 @@ class Map {
   private:
     int rows = -1;
     int columns = -1;
-    std::vector<std::vector<int>> map;
 
-    Objects objects;
+    std::vector<std::vector<int>> gridMap;
     std::vector<mapObject> vectObj;
 
     /**
@@ -42,6 +40,12 @@ class Map {
      * @params type the type of the object to be added
      */
     void addObject(Vector &position, int type);
+
+    /**
+     * Sort the objects by distance with the playerPos
+     * @param playerPos the Vector position of the player
+     */
+    void sortObjByDist(const Vector &playerPos);
 
     /**
      * Loads the given map
@@ -67,12 +71,6 @@ class Map {
     Map(std::vector<std::vector<int>> map, std::vector<MapObject> objects = {});
 
     /**
-     * Set renderer for the map
-     * @param renderer SDL renderer to use for creating textures
-     */
-    void setRenderer(SDL_Renderer *renderer);
-
-    /**
      * Check if the given Vector position is inside the map
      * @param position the Vector with the position
      * @return true if it is inside, false otherwise
@@ -87,32 +85,10 @@ class Map {
     int getBlock(const Vector &position);
 
     /**
-     * Sort the objects by distance with the playerPos
-     * @param playerPos the Vector position of the player
+     * @return All the objects in the map sorted based by the distance from the
+     * player
      */
-    void sortObjByDist(const Vector &playerPos);
-
-    /**
-     * @return All the objects in the map
-     */
-    std::vector<MapObject> getObjects();
-
-    /**
-     * Set the object type
-     * @param position the position in the map where the object is
-     */
-    void setObjType(int objType);
-
-    /**
-     * Set the object column to render
-     * @param posX the x position that will be render as a 1px column
-     */
-    void setColObject(int posX);
-
-    /**
-     * Render the object in the given position
-     */
-    void renderObject(int posX, int posY, int largo, int alto);
+    std::vector<MapObject> getObjectsSorted(const Vector &playerPos);
 
     ~Map();
 };

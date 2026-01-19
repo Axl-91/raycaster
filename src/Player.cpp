@@ -48,29 +48,25 @@ void Player::handleMovement() {
     }
 }
 
-bool Player::objIsVisible(Vector &posObj) {
-    /*Visibilidad hacia izq y derecha en radiales
-    serian 30 grados pero agrego 5 mas para que
-    se vea mas el sprite del objeto */
-    float gVis = 35.0 / 180.0;
-    float visible = PI * gVis;
+bool Player::objIsVisible(const Vector &posObj) const {
+    // Horizontal visibility check (left / right of the player view).
+    // The theoretical half-FOV is 30°, but we extend it to 35° so that
+    // object sprites are not clipped at the screen edges.
+    constexpr float DEG_TO_RAD = PI / 180.0f;
+    constexpr float HALF_FOV = 35.0f * DEG_TO_RAD;
 
     float dx = posObj.getX() - this->posX;
     float dy = posObj.getY() - this->posY;
 
-    float anguloObj = atan2(dy, dx);
-    float difAng = this->angle - anguloObj;
+    float objectAngle = atan2(dy, dx);
+    float delta = objectAngle - this->angle;
 
-    if (difAng < -PI) {
-        difAng += 2 * PI;
-    }
-    if (difAng > PI) {
-        difAng -= 2 * PI;
-    }
-    bool res = (difAng < visible);
-    res &= (difAng > -visible);
+    if (delta < -PI)
+        delta += 2.0f * PI;
+    if (delta > PI)
+        delta -= 2.0f * PI;
 
-    return res;
+    return delta > -HALF_FOV && delta < HALF_FOV;
 }
 
 Player::~Player() {}

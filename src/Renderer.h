@@ -17,7 +17,7 @@ class Renderer {
     static constexpr float STEP_RAYCASTER =
         (OFFSET_RAYCASTER * 2) / SCREEN_WIDTH;
 
-    float distancesList[SCREEN_WIDTH];
+    float wallDistances[SCREEN_WIDTH];
 
     SDL_Renderer *sdlRenderer = nullptr;
 

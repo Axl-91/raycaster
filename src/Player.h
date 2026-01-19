@@ -49,7 +49,7 @@ class Player {
      * Checks if the object is visible by the Player
      * @param posObj a Vector that represents the position of the object
      */
-    bool objIsVisible(Vector &posObj);
+    bool objIsVisible(const Vector &posObj) const;
 
     ~Player();
 };
