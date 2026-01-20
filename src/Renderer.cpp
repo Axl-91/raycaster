@@ -155,6 +155,7 @@ void Renderer::render() {
 
     this->hud.renderHud(this->sdlRenderer);
     this->gun.render(this->sdlRenderer);
+    // this->player.render(this->sdlRenderer);
 
     SDL_RenderPresent(this->sdlRenderer);
 }

@@ -4,6 +4,7 @@
 #include "Vector.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_render.h>
 
 Player::Player(float x, float y, Map &map) : posX(x), posY(y), map(map) {}
 
@@ -88,6 +89,27 @@ bool Player::objIsVisible(const Vector &posObj) const {
         delta -= 2.0f * PI;
 
     return delta > -HALF_FOV && delta < HALF_FOV;
+}
+
+void Player::render(SDL_Renderer *renderer) {
+    float blockX = this->posX / (this->map.getAmountCols() * BLOCK_SIZE);
+    float blockY = this->posY / (this->map.getAmountRows() * BLOCK_SIZE);
+
+    // Translate the position unto the screen
+    int x = blockX * SCREEN_WIDTH;
+    int y = blockY * SCREEN_HEIGHT;
+
+    SDL_Rect fillRect = {x - 2, y - 2, 5, 5};
+
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
+    SDL_RenderFillRect(renderer, &fillRect);
+
+    const int LINE_LENGTH = 10;
+    int endX = x + static_cast<int>(cos(angle) * LINE_LENGTH);
+    int endY = y + static_cast<int>(sin(angle) * LINE_LENGTH);
+
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0x00, 0xFF);
+    SDL_RenderDrawLine(renderer, x, y, endX, endY);
 }
 
 Player::~Player() {}

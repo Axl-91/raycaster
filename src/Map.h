@@ -85,6 +85,16 @@ class Map {
     int getBlock(const Vector &position);
 
     /**
+     * @return the amount of columns of the map
+     */
+    int getAmountCols() const { return columns; }
+
+    /**
+     * @return the amount of rows of the map
+     */
+    int getAmountRows() const { return rows; }
+
+    /**
      * @return All the objects in the map sorted based by the distance from the
      * player
      */

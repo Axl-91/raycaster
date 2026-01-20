@@ -60,6 +60,8 @@ class Player {
      */
     bool objIsVisible(const Vector &posObj) const;
 
+    void render(SDL_Renderer *renderer);
+
     ~Player();
 };
 
