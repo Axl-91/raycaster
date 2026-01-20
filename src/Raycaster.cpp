@@ -35,16 +35,20 @@ void Raycaster::moveRayIntoWall(Ray &ray, const Vector &step) {
     }
 }
 
-Vector Raycaster::calculateInitPos(float blockPos, float offset, float tangent,
+Vector Raycaster::calculateInitPos(float offset, float tangent,
                                    RayDirection direction) {
     float rx, ry;
     float playerX = this->playerPos.getX();
     float playerY = this->playerPos.getY();
 
     if (direction == RayDirection::HORIZONTAL) {
+        int blockPos = this->playerPos.getY() / BLOCK_SIZE;
+
         ry = blockPos * BLOCK_SIZE + offset;
         rx = (playerY - ry) * tangent + playerX;
     } else {
+        int blockPos = this->playerPos.getX() / BLOCK_SIZE;
+
         rx = blockPos * BLOCK_SIZE + offset;
         ry = (playerX - rx) * tangent + playerY;
     }
@@ -74,21 +78,17 @@ void Raycaster::calculateRay(Ray &ray, RayConfig &rayConfig) {
         return;
     }
     float xo, yo, offset;
-    int blockPos;
 
     if (ray.direction == RayDirection::HORIZONTAL) {
-        blockPos = this->playerPos.getY() / BLOCK_SIZE;
         offset = rayConfig.isNegativeDir ? -EPSILON : BLOCK_SIZE;
         yo = rayConfig.isNegativeDir ? -BLOCK_SIZE : BLOCK_SIZE;
         xo = -yo * rayConfig.tangent;
     } else {
-        blockPos = this->playerPos.getX() / BLOCK_SIZE;
         offset = rayConfig.isNegativeDir ? -EPSILON : BLOCK_SIZE;
         xo = rayConfig.isNegativeDir ? -BLOCK_SIZE : BLOCK_SIZE;
         yo = -xo * rayConfig.tangent;
     }
-    ray.position =
-        calculateInitPos(blockPos, offset, rayConfig.tangent, ray.direction);
+    ray.position = calculateInitPos(offset, rayConfig.tangent, ray.direction);
 
     Vector RayStep(xo, yo);
     moveRayIntoWall(ray, RayStep);
@@ -104,23 +104,22 @@ void Raycaster::calculateVerticalRay() {
     calculateRay(this->verticalRay, rayConfig);
 }
 
-void Raycaster::calculateFinalRay() {
+const Ray &Raycaster::getClosestRay() {
     calculateHorizontalRay();
     calculateVerticalRay();
 
-    if (this->horizontalRay.distance < this->verticalRay.distance) {
-        this->finalRay = this->horizontalRay;
-    } else {
-        this->finalRay = this->verticalRay;
-    }
+    Ray &closestRay = this->horizontalRay.distance < this->verticalRay.distance
+                          ? this->horizontalRay
+                          : this->verticalRay;
 
     // To avoid fisheye effect
     float newAngle = playerAngle - this->rayAngle;
-    this->finalRay.distance *= cos(newAngle);
+    closestRay.distance *= cos(newAngle);
+
+    return closestRay;
 }
 
-Ray &Raycaster::getRay(float rayAngle) {
+const Ray &Raycaster::getRay(float rayAngle) {
     this->rayAngle = rayAngle;
-    calculateFinalRay();
-    return this->finalRay;
+    return getClosestRay();
 }

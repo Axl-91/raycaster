@@ -22,9 +22,6 @@ class Hud {
   public:
     Hud();
 
-    Hud(const Hud &copy) = delete;
-    Hud operator=(const Hud &copy) = delete;
-
     /**
      * Load hud sprite sheet texture from file
      * @throws std::runtime_error if surface or texture creation fails
@@ -41,6 +38,9 @@ class Hud {
      * Render the HUD sprite to the screen
      */
     void renderHud(SDL_Renderer *renderer);
+
+    Hud(const Hud &copy) = delete;
+    Hud operator=(const Hud &copy) = delete;
 
     ~Hud();
 };
