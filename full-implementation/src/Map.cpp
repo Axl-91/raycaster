@@ -21,12 +21,10 @@ void Map::loadMap(const std::vector<std::vector<int>> &map) {
     if (map.empty()) {
         return;
     }
-    size_t cols = map.front().size();
+    this->gridMap = map;
 
     this->rows = map.size();
-    this->columns = cols;
-
-    this->gridMap = map;
+    this->columns = map.front().size();
 }
 
 void Map::addObject(Vector &position, int type) {
@@ -44,10 +42,10 @@ bool Map::isInsideMap(float x, float y) {
     int posX = static_cast<int>(floor(x / BLOCK_SIZE));
     int posY = static_cast<int>(floor(y / BLOCK_SIZE));
 
-    if (posX < 0 || posX >= this->columns)
-        return false;
+    bool xInvalid = posX < 0 || posX >= this->columns;
+    bool yInvalid = posY < 0 || posY >= this->rows;
 
-    if (posY < 0 || posY >= this->rows)
+    if (xInvalid || yInvalid)
         return false;
 
     return true;

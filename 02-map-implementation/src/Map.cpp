@@ -14,22 +14,20 @@ void Map::loadMap(const std::vector<std::vector<int>> &map) {
     if (map.empty()) {
         return;
     }
-    size_t cols = map.front().size();
+    this->gridMap = map;
 
     this->rows = map.size();
-    this->columns = cols;
-
-    this->gridMap = map;
+    this->columns = map.front().size();
 }
 
 bool Map::isInsideMap(float x, float y) {
     int posX = static_cast<int>(floor(x / BLOCK_SIZE));
     int posY = static_cast<int>(floor(y / BLOCK_SIZE));
 
-    if (posX < 0 || posX >= this->columns)
-        return false;
+    bool xInvalid = posX < 0 || posX >= this->columns;
+    bool yInvalid = posY < 0 || posY >= this->rows;
 
-    if (posY < 0 || posY >= this->rows)
+    if (xInvalid || yInvalid)
         return false;
 
     return true;
@@ -58,18 +56,21 @@ void Map::render(SDL_Renderer *renderer) const {
         for (int x = 0; x < this->columns; ++x) {
             SDL_Rect tile{x * tileW, y * tileH, tileW - 1, tileH - 1};
 
+            // We render a full block in white
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-            SDL_Rect inner{tile.x, tile.y, tileW, tileH};
-            SDL_RenderDrawRect(renderer, &inner);
+            SDL_Rect outter{tile.x, tile.y, tileW, tileH};
+            SDL_RenderDrawRect(renderer, &outter);
 
             if (gridMap[y][x] != 0) {
-                // Wall
+                // For walls we fill the color with gray
                 SDL_SetRenderDrawColor(renderer, 160, 160, 160, 255);
             } else {
-                // Empty space
+                // For empty space we fill the block with black
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
             }
 
+            // We render a block with 1px less of width and height
+            // to make the last render be used as a border
             SDL_RenderFillRect(renderer, &tile);
         }
     }
