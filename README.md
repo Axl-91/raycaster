@@ -54,3 +54,10 @@ Raycasting is a rendering technique that simulates 3D perspective by:
 <p align=center>
   <img width="583" height="126" alt="Formulas" src="https://github.com/user-attachments/assets/3f8251ef-4d0b-46ef-bb79-31f7b85ead2c" />
 </p>
+
+---
+
+<p align=center>
+  <img alt="Wolf3D" src="https://github.com/user-attachments/assets/40bb347a-0e80-429b-8eb2-fd5e3be9f9f0" />
+</p>
+
