@@ -4,7 +4,10 @@ A C++ and SDL2 raycasting engine inspired by Wolfenstein 3D.
 
 ## Status
 
-**Currently refactoring** - Reorganizing code, improving structure, and adding documentation for a step-by-step tutorial.
+Under active development. 
+
+Documentation and refactoring are in progress, and the tutorial is still in an early stage.
+
 ## Requirements
 
 - C++11 compatible compiler
@@ -35,7 +38,17 @@ cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
 
 ## About
 
-*More details coming soon*
+This is a recreational, step-by-step raycasting project.
+
+The goal of this project is to **learn and understand raycasting by building it gradually**, experimenting with the math, and visualizing how each part of the algorithm works. 
+
+**What is Raycasting?**
+
+Raycasting is a rendering technique that simulates 3D perspective by:
+1. Casting rays from the player's position
+2. Detecting wall intersections
+3. Drawing vertical slices based on distance
+4. Creating the illusion of 3D depth
 
 ## Raycasting Bible
 <p align=center>
