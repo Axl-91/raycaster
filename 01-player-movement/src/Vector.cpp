@@ -21,10 +21,3 @@ void Vector::sub(const Vector &vector) {
     this->x -= vector.getX();
     this->y -= vector.getY();
 }
-
-float Vector::distance(const Vector &vector) const {
-    float x = vector.getX() - this->x;
-    float y = vector.getY() - this->y;
-
-    return (sqrt((x * x) + (y * y)));
-}

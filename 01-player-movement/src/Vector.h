@@ -32,13 +32,6 @@ class Vector {
      * @param vector The vector to subtract from this one
      */
     void sub(const Vector &vector);
-
-    /**
-     * Calculate the distance between this vector and another vector
-     * @param vector The other vector to calculate distance to
-     * @return The Euclidean distance between the two vectors
-     */
-    float distance(const Vector &vector) const;
 };
 
 #endif

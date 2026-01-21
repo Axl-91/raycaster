@@ -6,13 +6,6 @@
 
 class Renderer {
   private:
-    static constexpr int COL_WIDTH = 1;
-    static constexpr float OFFSET_RAYCASTER = PI / 6;
-    static constexpr float STEP_RAYCASTER =
-        (OFFSET_RAYCASTER * 2) / SCREEN_WIDTH;
-
-    float wallDistances[SCREEN_WIDTH];
-
     SDL_Renderer *sdlRenderer = nullptr;
     Player &player;
 

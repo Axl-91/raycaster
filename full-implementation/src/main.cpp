@@ -1,3 +1,4 @@
+#include "Constants.h"
 #include "Game.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -5,7 +6,7 @@
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
-    Game game(640, 480);
+    Game game(WIN_WIDTH, WIN_HEIGHT);
     // game.setFullScreen();
 
     while (!game.isGameOver()) {
@@ -13,7 +14,8 @@ int main(int argc, char *argv[]) {
         game.update();
         game.render();
 
-        SDL_Delay(16);
+        // ~60FPS
+        SDL_Delay(GAME_DELAY);
     }
 
     return 0;
