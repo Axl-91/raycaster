@@ -59,6 +59,10 @@ Vector Map::mapToScreen(const Vector &mapPos) const {
 }
 
 void Map::render(SDL_Renderer *renderer) const {
+    constexpr SDL_Color BORDER = {0x36, 0x45, 0x4F, 0xFF};
+    constexpr SDL_Color WALL = {0xA5, 0x9C, 0x94, 0xFF};
+    constexpr SDL_Color EMPTY = {0x00, 0x00, 0x00, 0x00};
+
     int tileW = SCREEN_WIDTH / this->columns;
     int tileH = SCREEN_HEIGHT / this->rows;
 
@@ -66,17 +70,20 @@ void Map::render(SDL_Renderer *renderer) const {
         for (int x = 0; x < this->columns; ++x) {
             SDL_Rect tile{x * tileW, y * tileH, tileW - 1, tileH - 1};
 
-            // We render a full block in white
-            SDL_SetRenderDrawColor(renderer, 0x36, 0x45, 0x4F, 255);
+            // Border will have a dark gray color
+            SDL_SetRenderDrawColor(renderer, BORDER.r, BORDER.g, BORDER.b,
+                                   BORDER.a);
             SDL_Rect outter{tile.x, tile.y, tileW, tileH};
             SDL_RenderDrawRect(renderer, &outter);
 
             if (gridMap[y][x] != 0) {
                 // For walls we fill the color with gray
-                SDL_SetRenderDrawColor(renderer, 160, 160, 160, 255);
+                SDL_SetRenderDrawColor(renderer, WALL.r, WALL.g, WALL.b,
+                                       WALL.a);
             } else {
                 // For empty space we fill the block with black
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+                SDL_SetRenderDrawColor(renderer, EMPTY.r, EMPTY.g, EMPTY.b,
+                                       EMPTY.a);
             }
 
             // We render a block with 1px less of width and height
