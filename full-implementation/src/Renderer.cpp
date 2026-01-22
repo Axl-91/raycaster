@@ -75,7 +75,7 @@ void Renderer::renderWalls() {
     // We need to start to create rays from the angle of the player minus 30°
     float angleRay = this->player.getAngle() - OFFSET_RAYCASTER;
 
-    for (int pos = 0; pos < SCREEN_WIDTH; ++pos) {
+    for (int pos = 0; pos < AMOUNT_RAYS; ++pos) {
         angleRay = normalizeAngle(angleRay);
 
         Ray ray = this->raycaster.getRay(angleRay);

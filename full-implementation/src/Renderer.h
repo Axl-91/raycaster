@@ -14,8 +14,9 @@ class Renderer {
   private:
     static constexpr int COL_WIDTH = 1;
     static constexpr float OFFSET_RAYCASTER = PI / 6;
+    static constexpr int AMOUNT_RAYS = SCREEN_WIDTH;
     static constexpr float STEP_RAYCASTER =
-        (OFFSET_RAYCASTER * 2) / SCREEN_WIDTH;
+        (OFFSET_RAYCASTER * 2) / AMOUNT_RAYS;
 
     float wallDistances[SCREEN_WIDTH];
 

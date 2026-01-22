@@ -1,6 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+#include "Constants.h"
 #include "Map.h"
 #include "Player.h"
 #include "Raycaster.h"
@@ -9,8 +10,9 @@
 class Renderer {
   private:
     static constexpr float OFFSET_RAYCASTER = PI / 6;
+    static constexpr int AMOUNT_RAYS = SCREEN_WIDTH;
     static constexpr float STEP_RAYCASTER =
-        (OFFSET_RAYCASTER * 2) / SCREEN_WIDTH;
+        (OFFSET_RAYCASTER * 2) / AMOUNT_RAYS;
 
     SDL_Renderer *sdlRenderer = nullptr;
     Player &player;

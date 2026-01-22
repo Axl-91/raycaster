@@ -48,6 +48,16 @@ int Map::getBlock(const Vector &v) const {
     return getBlock(v.getX(), v.getY());
 }
 
+Vector Map::mapToScreen(const Vector &mapPos) const {
+    float mapWidth = this->columns * BLOCK_SIZE;
+    float mapHeight = this->rows * BLOCK_SIZE;
+
+    int screenX = static_cast<int>((mapPos.getX() / mapWidth) * SCREEN_WIDTH);
+    int screenY = static_cast<int>((mapPos.getY() / mapHeight) * SCREEN_HEIGHT);
+
+    return Vector(screenX, screenY);
+}
+
 void Map::render(SDL_Renderer *renderer) const {
     int tileW = SCREEN_WIDTH / this->columns;
     int tileH = SCREEN_HEIGHT / this->rows;
@@ -57,7 +67,7 @@ void Map::render(SDL_Renderer *renderer) const {
             SDL_Rect tile{x * tileW, y * tileH, tileW - 1, tileH - 1};
 
             // We render a full block in white
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+            SDL_SetRenderDrawColor(renderer, 0x36, 0x45, 0x4F, 255);
             SDL_Rect outter{tile.x, tile.y, tileW, tileH};
             SDL_RenderDrawRect(renderer, &outter);
 

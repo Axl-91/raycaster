@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "Constants.h"
 #include "Raycaster.h"
 #include "Vector.h"
 
@@ -29,25 +30,19 @@ void Renderer::renderRays() {
     // We need to start to create rays from the angle of the player minus 30°
     float angleRay = this->player.getAngle() - OFFSET_RAYCASTER;
 
-    Vector playerPos = this->player.getPos();
+    Vector playerPos = this->map.mapToScreen(this->player.getPos());
 
-    float mapPixelWidth = map.getAmountCols() * BLOCK_SIZE;
-    float mapPixelHeight = map.getAmountRows() * BLOCK_SIZE;
-
-    int x = (playerPos.getX() / mapPixelWidth) * SCREEN_WIDTH;
-    int y = (playerPos.getY() / mapPixelHeight) * SCREEN_HEIGHT;
-
-    for (int pos = 0; pos < SCREEN_WIDTH; ++pos) {
+    for (int pos = 0; pos < AMOUNT_RAYS; ++pos) {
         angleRay = normalizeAngle(angleRay);
 
         Ray ray = this->raycaster.getRay(angleRay);
 
-        int xRay = (ray.position.getX() / mapPixelWidth) * SCREEN_WIDTH;
-        int yRay = (ray.position.getY() / mapPixelHeight) * SCREEN_HEIGHT;
+        Vector rayPos = this->map.mapToScreen(ray.position);
 
-        SDL_SetRenderDrawColor(sdlRenderer, 0x00, 0xFF, 0x00, 0xFF);
-
-        SDL_RenderDrawLine(sdlRenderer, x, y, xRay, yRay);
+        // We're going to render the rays with the green color
+        SDL_SetRenderDrawColor(sdlRenderer, 0x08, 0xFF, 0x08, 0x01);
+        SDL_RenderDrawLine(sdlRenderer, playerPos.getX(), playerPos.getY(),
+                           rayPos.getX(), rayPos.getY());
 
         angleRay += STEP_RAYCASTER;
     }

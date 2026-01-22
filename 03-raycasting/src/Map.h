@@ -65,6 +65,15 @@ class Map {
     int getBlock(const Vector &position) const;
 
     /**
+     * Convert map coordinates to screen coordinates scales a position from the
+     * full map space to fit within the screen dimensions
+     *
+     * @param mapPos position in map space (pixels in the full map)
+     * @return Vector containing the scaled screen coordinates
+     */
+    Vector mapToScreen(const Vector &mapPos) const;
+
+    /**
      * @return the amount of columns of the map
      */
     int getAmountCols() const { return columns; }
