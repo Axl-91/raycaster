@@ -20,8 +20,6 @@ class Guns {
 
   public:
     Guns();
-    Guns(const Guns &copy) = delete;
-    Guns &operator=(const Guns &copy) = delete;
 
     /**
      * Load gun sprite sheet texture from file
@@ -51,6 +49,9 @@ class Guns {
      * Handles shooting animation by cycling through sprite frames
      */
     void render(SDL_Renderer *renderer);
+
+    Guns(const Guns &copy) = delete;
+    Guns operator=(const Guns &copy) = delete;
 
     ~Guns();
 };

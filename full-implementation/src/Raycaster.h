@@ -115,6 +115,9 @@ class Raycaster {
      */
     const Ray &getRay(float rayAngle);
 
+    Raycaster(const Raycaster &copy) = delete;
+    Raycaster operator=(const Raycaster &copy) = delete;
+
     ~Raycaster() = default;
 };
 

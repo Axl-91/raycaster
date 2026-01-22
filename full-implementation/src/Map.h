@@ -100,6 +100,9 @@ class Map {
      */
     std::vector<MapObject> getObjectsSorted(const Vector &playerPos);
 
+    Map(const Map &copy) = delete;
+    Map operator=(const Map &copy) = delete;
+
     ~Map();
 };
 

@@ -51,6 +51,9 @@ class Objects {
     void render(SDL_Renderer *renderer, int x, int y, int width = BLOCK_SIZE,
                 int height = BLOCK_SIZE);
 
+    Objects(const Objects &copy) = delete;
+    Objects operator=(const Objects &copy) = delete;
+
     ~Objects();
 };
 

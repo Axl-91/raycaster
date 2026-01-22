@@ -51,6 +51,9 @@ class Walls {
      */
     void render(SDL_Renderer *renderer, int x, int y, int width, int height);
 
+    Walls(const Walls &copy) = delete;
+    Walls operator=(const Walls &copy) = delete;
+
     ~Walls();
 };
 

@@ -1,6 +1,7 @@
 #ifndef __GAME__
 #define __GAME__
 
+#include "Constants.h"
 #include "Guns.h"
 #include "Hud.h"
 #include "Map.h"
@@ -13,8 +14,8 @@
 
 class Game {
   private:
-    int realWidth = 320;
-    int realHeight = 240;
+    int realWidth = SCREEN_WIDTH;
+    int realHeight = SCREEN_HEIGHT;
 
     int winWidth;
     int winHeight;
@@ -77,6 +78,9 @@ class Game {
      * @return true if game should close, false otherwise
      */
     bool isGameOver();
+
+    Game(const Game &copy) = delete;
+    Game operator=(const Game &copy) = delete;
 
     ~Game();
 };

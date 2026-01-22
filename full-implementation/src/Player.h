@@ -17,7 +17,7 @@ class Player {
     float posX;
     float posY;
     float angle = 0;
-    Map map;
+    const Map &map;
 
     /**
      * Player movement controls.
@@ -37,7 +37,7 @@ class Player {
     bool canMove(float x, float y);
 
   public:
-    Player(float x, float y, Map &map);
+    Player(float x, float y, const Map &map);
 
     /**
      * @return Position of the player
