@@ -53,10 +53,7 @@ void Game::pollEvent() {
     }
 }
 
-void Game::update() {
-    this->player.handleMovement();
-    this->raycaster.updatePlayerValues(this->player);
-}
+void Game::update() { this->player.handleMovement(); }
 
 void Game::render() { this->gameRenderer.render(); }
 

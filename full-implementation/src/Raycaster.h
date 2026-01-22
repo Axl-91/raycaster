@@ -30,15 +30,13 @@ class Raycaster {
     */
     static constexpr float EPSILON = 0.0001f;
 
+    float rayAngle;
+
     Ray horizontalRay;
     Ray verticalRay;
 
-    float rayAngle;
-
-    Vector playerPos;
-    float playerAngle;
-
-    Map &map;
+    const Player &player;
+    const Map &map;
 
     /**
      * Checks if the angle is facing up (angle between 180° and 360°)
@@ -108,13 +106,7 @@ class Raycaster {
     const Ray &getClosestRay();
 
   public:
-    Raycaster(const Player &player, Map &map);
-
-    /**
-     * updates the values of the players that the raycaster needs
-     * @param player the Player with the info we need (position and angle)
-     */
-    void updatePlayerValues(const Player &player);
+    Raycaster(const Player &player, const Map &map);
 
     /**
      * Returns the ray that is closest to the player

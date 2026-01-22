@@ -20,7 +20,7 @@ void Map::loadMap(const std::vector<std::vector<int>> &map) {
     this->columns = map.front().size();
 }
 
-bool Map::isInsideMap(float x, float y) {
+bool Map::isInsideMap(float x, float y) const {
     int posX = static_cast<int>(floor(x / BLOCK_SIZE));
     int posY = static_cast<int>(floor(y / BLOCK_SIZE));
 
@@ -33,7 +33,7 @@ bool Map::isInsideMap(float x, float y) {
     return true;
 }
 
-bool Map::isInsideMap(const Vector &vector) {
+bool Map::isInsideMap(const Vector &vector) const {
     return isInsideMap(vector.getX(), vector.getY());
 }
 

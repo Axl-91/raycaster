@@ -6,23 +6,18 @@
 #include <SDL2/SDL_image.h>
 #include <cmath>
 
-Raycaster::Raycaster(const Player &player, Map &map)
-    : playerPos(player.getPos()), playerAngle(player.getAngle()), map(map) {
+Raycaster::Raycaster(const Player &player, const Map &map)
+    : player(player), map(map) {
 
     this->horizontalRay.direction = RayDirection::HORIZONTAL;
     this->verticalRay.direction = RayDirection::VERTICAL;
-}
-
-void Raycaster::updatePlayerValues(const Player &player) {
-    this->playerPos = player.getPos();
-    this->playerAngle = player.getAngle();
 }
 
 void Raycaster::moveRayIntoWall(Ray &ray, const Vector &step) {
     bool hitWall = false;
 
     while (!hitWall) {
-        ray.distance = this->playerPos.distance(ray.position);
+        ray.distance = this->player.getPos().distance(ray.position);
 
         if (!map.isInsideMap(ray.position)) {
             break;
@@ -38,16 +33,18 @@ void Raycaster::moveRayIntoWall(Ray &ray, const Vector &step) {
 Vector Raycaster::calculateInitPos(float offset, float tangent,
                                    RayDirection direction) {
     float rx, ry;
-    float playerX = this->playerPos.getX();
-    float playerY = this->playerPos.getY();
+    Vector playerPos = this->player.getPos();
+
+    float playerX = playerPos.getX();
+    float playerY = playerPos.getY();
 
     if (direction == RayDirection::HORIZONTAL) {
-        int blockPos = this->playerPos.getY() / BLOCK_SIZE;
+        int blockPos = playerPos.getY() / BLOCK_SIZE;
 
         ry = blockPos * BLOCK_SIZE + offset;
         rx = (playerY - ry) * tangent + playerX;
     } else {
-        int blockPos = this->playerPos.getX() / BLOCK_SIZE;
+        int blockPos = playerPos.getX() / BLOCK_SIZE;
 
         rx = blockPos * BLOCK_SIZE + offset;
         ry = (playerX - rx) * tangent + playerY;
@@ -113,7 +110,7 @@ const Ray &Raycaster::getClosestRay() {
                           : this->verticalRay;
 
     // To avoid fisheye effect
-    float newAngle = playerAngle - this->rayAngle;
+    float newAngle = this->player.getAngle() - this->rayAngle;
     closestRay.distance *= cos(newAngle);
 
     return closestRay;

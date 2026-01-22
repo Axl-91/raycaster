@@ -56,6 +56,9 @@ class Player {
 
     void render(SDL_Renderer *renderer);
 
+    Player(const Player &copy) = delete;
+    Player operator=(const Player &copy) = delete;
+
     ~Player();
 };
 

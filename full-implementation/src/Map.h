@@ -25,14 +25,14 @@ class Map {
      * @params x the X value in the array
      * @params y the Y value in the array
      */
-    bool isInsideMap(float x, float y);
+    bool isInsideMap(float x, float y) const;
 
     /**
      * Gets the block in the position x and y
      * @params x the X value in the array
      * @params y the Y value in the array
      */
-    int getBlock(float x, float y);
+    int getBlock(float x, float y) const;
 
     /**
      * Adds an object to the Map
@@ -75,14 +75,14 @@ class Map {
      * @param position the Vector with the position
      * @return true if it is inside, false otherwise
      */
-    bool isInsideMap(const Vector &position);
+    bool isInsideMap(const Vector &position) const;
 
     /**
      * Get the Block value in the position given
      * @param position the Vector with the position
      * @return the value of the position on the map
      */
-    int getBlock(const Vector &position);
+    int getBlock(const Vector &position) const;
 
     /**
      * @return the amount of columns of the map

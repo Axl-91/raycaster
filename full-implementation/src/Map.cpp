@@ -38,7 +38,7 @@ void Map::loadObjects(std::vector<MapObject> objects) {
     }
 }
 
-bool Map::isInsideMap(float x, float y) {
+bool Map::isInsideMap(float x, float y) const {
     int posX = static_cast<int>(floor(x / BLOCK_SIZE));
     int posY = static_cast<int>(floor(y / BLOCK_SIZE));
 
@@ -51,18 +51,20 @@ bool Map::isInsideMap(float x, float y) {
     return true;
 }
 
-bool Map::isInsideMap(const Vector &vector) {
+bool Map::isInsideMap(const Vector &vector) const {
     return isInsideMap(vector.getX(), vector.getY());
 }
 
-int Map::getBlock(float x, float y) {
+int Map::getBlock(float x, float y) const {
     int posX = static_cast<int>(floor(x / BLOCK_SIZE));
     int posY = static_cast<int>(floor(y / BLOCK_SIZE));
 
     return gridMap[posY][posX];
 }
 
-int Map::getBlock(const Vector &v) { return getBlock(v.getX(), v.getY()); }
+int Map::getBlock(const Vector &v) const {
+    return getBlock(v.getX(), v.getY());
+}
 
 void Map::sortObjByDist(const Vector &pos) {
     // lambda function to compare distances

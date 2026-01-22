@@ -61,7 +61,6 @@ void Game::pollEvent() {
 
 void Game::update() {
     this->player.handleMovement();
-    this->raycaster.updatePlayerValues(this->player);
     this->gameRenderer.getGun().handleShooting();
 }
 

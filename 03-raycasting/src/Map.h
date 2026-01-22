@@ -24,7 +24,7 @@ class Map {
      * @params x the X value in the array
      * @params y the Y value in the array
      */
-    bool isInsideMap(float x, float y);
+    bool isInsideMap(float x, float y) const;
 
     /**
      * Gets the block in the position x and y
@@ -55,7 +55,7 @@ class Map {
      * @param position the Vector with the position
      * @return true if it is inside, false otherwise
      */
-    bool isInsideMap(const Vector &position);
+    bool isInsideMap(const Vector &position) const;
 
     /**
      * Get the Block value in the position given
