@@ -52,6 +52,9 @@ Raycasting is a rendering technique that simulates 3D perspective by:
 
 ## Raycasting Bible
 <p align=center>
+  <img width="300" alt="Triangle" src="https://github.com/user-attachments/assets/0feba2ee-cb2f-4f4f-8f3d-fef958d64d6b" />
+</p>
+<p align=center>
   <img width="583" height="126" alt="Formulas" src="https://github.com/user-attachments/assets/3f8251ef-4d0b-46ef-bb79-31f7b85ead2c" />
 </p>
 
