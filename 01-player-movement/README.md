@@ -1,4 +1,4 @@
-# Step 01 - Player Movement
+# Step 1 - Player Movement
 
 In this first step, we'll create a `Player` that can move around a 2D space and rotate. This establishes the foundation for our raycaster.
 
