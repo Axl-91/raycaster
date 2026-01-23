@@ -66,7 +66,7 @@ void Game::update() {
 
 void Game::render() { this->gameRenderer.render(); }
 
-bool Game::isGameOver() { return this->gameOver; }
+bool Game::isGameOver() const { return this->gameOver; }
 
 Game::~Game() {
     if (this->sdlRenderer) {

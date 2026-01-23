@@ -42,13 +42,13 @@ class Raycaster {
      * Checks if the angle is facing up (angle between 180° and 360°)
      * @return true when angle is facing up, false otherwise
      */
-    bool isAngleFacingUp();
+    bool isAngleFacingUp() const;
 
     /**
      * Checks if the angle is facing left (angle between 90° and 270°)
      * @return true when angle is facing left, false otherwise
      */
-    bool isAngleFacingLeft();
+    bool isAngleFacingLeft() const;
 
     /**
      * Check if a ray can be cast in the given direction, rays parallel to grid
@@ -56,7 +56,7 @@ class Raycaster {
      * @param direction the direction of the ray
      * @return true if ray has a valid angle for intersection, false if parallel
      */
-    bool isRayValid(RayDirection direction);
+    bool isRayValid(RayDirection direction) const;
 
     /**
      * Calculates the initial position for the ray, this means the first
@@ -67,7 +67,7 @@ class Raycaster {
      * @return a Vector with the initial position of the ray
      */
     Vector calculateInitPos(float offset, float tangent,
-                            RayDirection direction);
+                            RayDirection direction) const;
 
     /**
      * Given a ray and a Vector step, it will check if the ray collides with a

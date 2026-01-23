@@ -37,7 +37,7 @@ class Hud {
     /**
      * Render the HUD sprite to the screen
      */
-    void renderHud(SDL_Renderer *renderer);
+    void renderHud(SDL_Renderer *renderer) const;
 
     Hud(const Hud &copy) = delete;
     Hud operator=(const Hud &copy) = delete;

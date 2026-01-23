@@ -37,7 +37,7 @@ class Renderer {
     /**
      * Render floor and ceiling
      */
-    void renderBackground();
+    void renderBackground() const;
 
     /**
      * Set the wall type that belongs to the position of the ray
@@ -55,7 +55,7 @@ class Renderer {
     /**
      * Render a 1px col of the wall hitted by the raycaster
      */
-    void renderWallCol(int screenPos, Ray &ray);
+    void renderWallCol(int screenPos, Ray &ray) const;
 
     /**
      * Render all walls using raycasting

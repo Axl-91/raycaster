@@ -34,7 +34,7 @@ class Player {
      * @param y the Y position to validate
      * @return true if the position is valid, false otherwise
      */
-    bool canMove(float x, float y);
+    bool canMove(float x, float y) const;
 
   public:
     Player(float x, float y, const Map &map);
@@ -60,7 +60,7 @@ class Player {
      */
     bool objIsVisible(const Vector &posObj) const;
 
-    void render(SDL_Renderer *renderer);
+    void render(SDL_Renderer *renderer) const;
 
     Player(const Player &copy) = delete;
     Player operator=(const Player &copy) = delete;

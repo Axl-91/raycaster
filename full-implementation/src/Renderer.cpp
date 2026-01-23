@@ -27,7 +27,7 @@ void Renderer::setRenderer(SDL_Renderer *renderer) {
     this->objectTextures.loadTexture(this->sdlRenderer);
 }
 
-void Renderer::renderBackground() {
+void Renderer::renderBackground() const {
     // Fill all screen with the FLOOR_COLOR
     SDL_SetRenderDrawColor(this->sdlRenderer, FLOOR_COLOR.r, FLOOR_COLOR.g,
                            FLOOR_COLOR.b, FLOOR_COLOR.a);
@@ -59,7 +59,7 @@ void Renderer::setColWall(Ray &ray) {
     this->wallTextures.selectSpriteCol(xOffset);
 }
 
-void Renderer::renderWallCol(int screenPos, Ray &ray) {
+void Renderer::renderWallCol(int screenPos, Ray &ray) const {
     int wallHeight =
         static_cast<int>((BLOCK_SIZE * SCREEN_WIDTH) / ray.distance);
 

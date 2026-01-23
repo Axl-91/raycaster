@@ -8,7 +8,7 @@
 
 Player::Player(float x, float y, const Map &map) : posX(x), posY(y), map(map) {}
 
-bool Player::canMove(float x, float y) {
+bool Player::canMove(float x, float y) const {
     return this->map.getBlock(Vector(x + PLAYER_RADIUS, y)) == 0 &&
            this->map.getBlock(Vector(x - PLAYER_RADIUS, y)) == 0 &&
            this->map.getBlock(Vector(x, y + PLAYER_RADIUS)) == 0 &&
@@ -91,7 +91,7 @@ bool Player::objIsVisible(const Vector &posObj) const {
     return delta > -HALF_FOV && delta < HALF_FOV;
 }
 
-void Player::render(SDL_Renderer *renderer) {
+void Player::render(SDL_Renderer *renderer) const {
     float blockX = this->posX / (this->map.getAmountCols() * BLOCK_SIZE);
     float blockY = this->posY / (this->map.getAmountRows() * BLOCK_SIZE);
 

@@ -45,7 +45,7 @@ class Game {
      * @param height Physical window height in pixels
      * @throws std::runtime_error if SDL initialization fails
      */
-    Game(int width = 320, int height = 240);
+    Game(int width = SCREEN_WIDTH, int height = SCREEN_HEIGHT);
 
     /**
      * Set the game window to fullscreen mode
@@ -77,7 +77,7 @@ class Game {
      * Check if the game should exit
      * @return true if game should close, false otherwise
      */
-    bool isGameOver();
+    bool isGameOver() const;
 
     Game(const Game &copy) = delete;
     Game operator=(const Game &copy) = delete;

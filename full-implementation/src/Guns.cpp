@@ -26,8 +26,6 @@ void Guns::loadTextures(SDL_Renderer *renderer) {
     SDL_FreeSurface(surface);
 }
 
-bool Guns::isShooting() { return this->shooting; }
-
 void Guns::pollEvent(SDL_Event &event) {
     if (!this->shooting && event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
@@ -56,6 +54,8 @@ void Guns::handleShooting() {
 }
 
 void Guns::render(SDL_Renderer *renderer) {
+    // TODO: Render should just only render
+    // this logic should be on another function like 'update'
     if (this->shooting) {
         int frame = this->auxNum / this->offset;
         this->srcGun.x = this->offset * frame;
@@ -66,6 +66,8 @@ void Guns::render(SDL_Renderer *renderer) {
             this->shooting = false;
         }
     }
+
+    // TODO: Fix magic numbers
     SDL_Rect gun = {96, 72, this->GUN_WIDTH, this->GUN_HEIGHT};
     SDL_RenderCopy(renderer, this->texture, &this->srcGun, &gun);
 }

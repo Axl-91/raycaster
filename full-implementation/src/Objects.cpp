@@ -41,7 +41,7 @@ void Objects::selectSpriteCol(int xOffset) {
 }
 
 void Objects::render(SDL_Renderer *renderer, int x, int y, int width,
-                     int height) {
+                     int height) const {
     SDL_Rect object = {x, y, width, height};
     SDL_RenderCopy(renderer, this->texture, &this->objRect, &object);
 }

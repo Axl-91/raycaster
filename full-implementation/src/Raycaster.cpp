@@ -31,7 +31,7 @@ void Raycaster::moveRayIntoWall(Ray &ray, const Vector &step) {
 }
 
 Vector Raycaster::calculateInitPos(float offset, float tangent,
-                                   RayDirection direction) {
+                                   RayDirection direction) const {
     float rx, ry;
     Vector playerPos = this->player.getPos();
 
@@ -52,19 +52,19 @@ Vector Raycaster::calculateInitPos(float offset, float tangent,
     return Vector(rx, ry);
 }
 
-bool Raycaster::isRayValid(RayDirection direction) {
+bool Raycaster::isRayValid(RayDirection direction) const {
     float angle = direction == RayDirection::HORIZONTAL ? sin(this->rayAngle)
                                                         : cos(this->rayAngle);
 
     return (fabs(angle) > EPSILON);
 }
 
-bool Raycaster::isAngleFacingUp() {
+bool Raycaster::isAngleFacingUp() const {
     // Angle lower than 180°
     return this->rayAngle > PI;
 }
 
-bool Raycaster::isAngleFacingLeft() {
+bool Raycaster::isAngleFacingLeft() const {
     // Angle between 90° and 270°
     return (this->rayAngle < 3 * PI / 2) && (this->rayAngle > PI / 2);
 }

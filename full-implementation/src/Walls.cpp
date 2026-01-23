@@ -41,7 +41,7 @@ void Walls::selectSpriteCol(int xOffset) {
 }
 
 void Walls::render(SDL_Renderer *renderer, int x, int y, int width,
-                   int height) {
+                   int height) const {
     SDL_Rect wall = {x, y, width, height};
     SDL_RenderCopy(renderer, this->texture, &this->wallRect, &wall);
 }

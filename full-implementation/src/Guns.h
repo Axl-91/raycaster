@@ -42,7 +42,7 @@ class Guns {
     /**
      * @return true if gun is currently shooting, false otherwise
      */
-    bool isShooting();
+    bool isShooting() const { return this->shooting; };
 
     /**
      * Render the gun sprite to the screen

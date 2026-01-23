@@ -49,7 +49,8 @@ class Walls {
      * @param height Height of the rendered sprite in pixels (default:
      * BLOCK_SIZE)
      */
-    void render(SDL_Renderer *renderer, int x, int y, int width, int height);
+    void render(SDL_Renderer *renderer, int x, int y, int width,
+                int height) const;
 
     Walls(const Walls &copy) = delete;
     Walls operator=(const Walls &copy) = delete;
