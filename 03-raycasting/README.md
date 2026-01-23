@@ -58,19 +58,26 @@ For each ray, we need to find where it intersects with the grid:
 
 ### 1. Horizontal Intersections
 
-Check where the ray crosses horizontal grid lines (rows):
+Check where the ray crosses horizontal grid lines:
 
 - Calculate first horizontal intersection
 - Step along horizontal grid lines
 - Stop when hitting a wall
 
+<img width="640" height="480" alt="horizontals" src="https://github.com/user-attachments/assets/eb81c174-572b-4161-afd9-d64dca0cb402" />
+
+
+
 ### 2. Vertical Intersections
 
-Check where the ray crosses vertical grid lines (columns):
+Check where the ray crosses vertical grid lines:
 
 - Calculate first vertical intersection
 - Step along vertical grid lines
 - Stop when hitting a wall
+
+<img width="640" height="480" alt="verticals" src="https://github.com/user-attachments/assets/76ee4c09-5538-4910-809a-47e032860f5b" />
+
 
 ### 3. Choose Closest Hit
 ```cpp
