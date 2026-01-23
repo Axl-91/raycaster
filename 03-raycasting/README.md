@@ -33,6 +33,9 @@ static constexpr float STEP_RAYCASTER = FOV / SCREEN_WIDTH;
 - Provides good sense of depth without distortion
 - Classic FPS standard (Wolfenstein 3D, DOOM)
 
+<img width="497" height="497" alt="FOV" src="https://github.com/user-attachments/assets/de948fbd-9dd9-4905-ae0b-b17f974bf906" />
+
+
 ## One Ray Per Screen Column
 
 We cast **exactly 320 rays** to fill the 320-pixel-wide screen:
