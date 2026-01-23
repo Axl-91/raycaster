@@ -43,6 +43,16 @@ The `Player` class contains:
 We use `SDL_GetKeyboardState()` instead of event-based input to allow smooth, simultaneous key presses (e.g., moving forward while rotating).
 https://github.com/Axl-91/raycaster/blob/e61ed69b4ff57ac169c7f3453b49be92148d13ec/01-player-movement/src/Player.cpp#L33-L48
 
+The movement and rotation speed are defined by the following constants:
+
+``` cpp
+static constexpr float MOVE_SPEED = 3.0f;
+static constexpr float ROTATION_SPEED = PI / 36;
+```
+
+You're free to change this values to test different speeds.
+
+
 ## Renderer
 
 The Renderer class is going to be the sole responsable of rendering everything on the program, as for now it will only render the player
