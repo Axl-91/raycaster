@@ -2,6 +2,10 @@
 
 In this step, we implement the core raycasting algorithm that creates a 3D perspective from a 2D map. We'll cast rays from the player's position to detect walls and calculate distances.
 
+![raycasting](https://github.com/user-attachments/assets/500855fa-a3cf-4bde-a6e6-e9f0ad0f4f59)
+
+---
+
 ## The Raycasting Concept
 
 Raycasting simulates 3D by casting rays from the player's position in different directions. Each ray:
