@@ -34,7 +34,8 @@ static constexpr float STEP_RAYCASTER = FOV / SCREEN_WIDTH;
 - Classic FPS standard (Wolfenstein 3D, DOOM)
 
 <img width="497" height="497" alt="FOV" src="https://github.com/user-attachments/assets/de948fbd-9dd9-4905-ae0b-b17f974bf906" />
-
+<br/>
+<em>Image taken from <a href="https://splashkit.io/guides/physics/8-3d-projection-raycasting/">SplashKit</a></em>
 
 ## One Ray Per Screen Column
 
@@ -92,11 +93,14 @@ The closest intersection is the actual wall the ray hit.
 
 ## Fisheye Correction
 
-Without correction, rays at angles create a "fisheye" distortion
+Without correction, rays at angles create a "fisheye" distortion, we'll fix this by projecting the distance onto the player's viewing plane:
 
-We fix this by projecting the distance onto the player's viewing plane:
+<img width="683" height="409" alt="Fisheye" src="https://github.com/user-attachments/assets/c0f1f5ab-3f82-4756-bfb4-858e2a6ff042" />
+
+Having the difference of the angles, plus the distance of the player and the ray we can calculate the distance onto the Projection Plane.
 
 This ensures walls appear flat, not curved.
+
 
 ## Visualization
 
