@@ -18,6 +18,9 @@ class Renderer {
     static constexpr float STEP_RAYCASTER =
         (OFFSET_RAYCASTER * 2) / AMOUNT_RAYS;
 
+    static constexpr SDL_Color FLOOR_COLOR = {0x80, 0x80, 0x80, 0xFF};
+    static constexpr SDL_Color CEILING_COLOR = {0x33, 0x33, 0x33, 0xFF};
+
     float wallDistances[SCREEN_WIDTH];
 
     SDL_Renderer *sdlRenderer = nullptr;
@@ -30,9 +33,6 @@ class Renderer {
     Objects objectTextures;
     Hud hud;
     Guns gun;
-
-    static constexpr SDL_Color FLOOR_COLOR = {0x80, 0x80, 0x80, 0xFF};
-    static constexpr SDL_Color CEILING_COLOR = {0x33, 0x33, 0x33, 0xFF};
 
     /**
      * Render floor and ceiling

@@ -15,15 +15,18 @@ class Renderer {
     static constexpr float STEP_RAYCASTER =
         (OFFSET_RAYCASTER * 2) / AMOUNT_RAYS;
 
+    static constexpr SDL_Color FLOOR_COLOR = {0x80, 0x80, 0x80, 0xFF};
+    static constexpr SDL_Color CEILING_COLOR = {0x33, 0x33, 0x33, 0xFF};
+
     SDL_Renderer *sdlRenderer = nullptr;
     Player &player;
     Map &map;
     Raycaster &raycaster;
 
     /**
-     * Clears screen
+     * Render floor and ceiling
      */
-    void clearScreen();
+    void renderBackground() const;
 
     /**
      * Render a 1px col of the wall hitted by the raycaster

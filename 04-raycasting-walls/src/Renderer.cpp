@@ -20,9 +20,18 @@ void Renderer::setRenderer(SDL_Renderer *renderer) {
     this->sdlRenderer = renderer;
 }
 
-void Renderer::clearScreen() {
-    SDL_SetRenderDrawColor(this->sdlRenderer, 0, 0, 0, 0);
+void Renderer::renderBackground() const {
+    // Fill all screen with the FLOOR_COLOR
+    SDL_SetRenderDrawColor(this->sdlRenderer, FLOOR_COLOR.r, FLOOR_COLOR.g,
+                           FLOOR_COLOR.b, FLOOR_COLOR.a);
     SDL_RenderClear(this->sdlRenderer);
+
+    SDL_Rect ceilingRect = {0, 0, SCREEN_WIDTH, (SCREEN_HEIGHT) / 2};
+
+    // Render CEILING_COLOR on the top half of the screen
+    SDL_SetRenderDrawColor(this->sdlRenderer, CEILING_COLOR.r, CEILING_COLOR.g,
+                           CEILING_COLOR.b, CEILING_COLOR.a);
+    SDL_RenderFillRect(this->sdlRenderer, &ceilingRect);
 }
 
 void Renderer::renderWallCol(int screenPos, Ray &ray) const {
@@ -35,6 +44,7 @@ void Renderer::renderWallCol(int screenPos, Ray &ray) const {
 
     SDL_Rect wallRect = {screenPos, wallInitPosY, COL_WIDTH, wallHeight};
 
+    // Vertical walls are rendered darker to simulate light direction
     if (ray.direction == RayDirection::VERTICAL) {
         SDL_SetRenderDrawColor(this->sdlRenderer, 0xFF, 0x00, 0x00, 0x00);
     } else {
@@ -61,7 +71,7 @@ void Renderer::renderWalls() {
 }
 
 void Renderer::render() {
-    clearScreen();
+    renderBackground();
 
     // this->map.render(this->sdlRenderer);
     // this->player.render(this->sdlRenderer);
