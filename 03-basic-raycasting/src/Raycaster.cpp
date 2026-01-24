@@ -109,10 +109,6 @@ const Ray &Raycaster::getClosestRay() {
                           ? this->horizontalRay
                           : this->verticalRay;
 
-    // To avoid fisheye effect
-    float newAngle = this->player.getAngle() - this->rayAngle;
-    closestRay.distance *= cos(newAngle);
-
     return closestRay;
 }
 

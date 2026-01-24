@@ -82,34 +82,9 @@ Check where the ray crosses vertical grid lines:
 <img width="640" height="480" alt="verticals" src="https://github.com/user-attachments/assets/76ee4c09-5538-4910-809a-47e032860f5b" />
 
 
-### 3. Choose Closest Hit
-```cpp
-if (horizontalDistance < verticalDistance) {
-    useHorizontalHit();
-} else {
-    useVerticalHit();
-}
-```
+### 3. Choose Final Ray
 
-The closest intersection is the actual wall the ray hit.
-
-## Fisheye
-
-In a raycasting engine, walls that are directly in front of the player should appear taller than walls that are farther away. However, when rays are cast at different angles, walls near the edges of the screen appear stretched and curved. This distortion is known as the **fisheye effect**.
-
-The fisheye effect happens because the raw distance of each ray is measured along the ray itself, not straight ahead from the player. Rays cast at sharper angles travel a longer distance to hit the same wall, even though the wall is actually at the same depth.
-
-### Fixing the Fisheye Effect
-
-To fix this distortion, we need the perpendicular distance from the player to the wall, not the ray’s full length.
-
-We achieve this by projecting the ray distance onto the player’s viewing direction. This is done by multiplying the ray distance by the cosine of the angle difference between the ray and the player’s view angle:
-
-<img width="683" height="409" alt="Fisheye" src="https://github.com/user-attachments/assets/c0f1f5ab-3f82-4756-bfb4-858e2a6ff042" />
-
-<em>Remember the [Raycasting Bible](https://github.com/Axl-91/raycaster?tab=readme-ov-file#raycasting-bible)</em>
-
-By using this corrected distance, all walls at the same depth are rendered with the same height, producing a visually correct and distortion-free result.
+After calculating both horizontal and vertical ray intersections, we choose whichever is closest to the player. The closest ray is the one we project onto the screen.
 
 ## Visualization
 
