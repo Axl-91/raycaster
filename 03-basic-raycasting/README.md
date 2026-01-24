@@ -67,7 +67,9 @@ Check where the ray crosses horizontal grid lines:
 
 <img width="640" height="480" alt="horizontals" src="https://github.com/user-attachments/assets/eb81c174-572b-4161-afd9-d64dca0cb402" />
 
+<img width="700" height="400" alt="hRay" src="https://github.com/user-attachments/assets/118a2e2e-5119-43ea-b2f6-e8ccd5925573" />
 
+<em>Remember the [Raycasting Bible](https://github.com/Axl-91/raycaster?tab=readme-ov-file#raycasting-bible)</em>
 
 ### 2. Vertical Intersections
 
