@@ -18,6 +18,9 @@ class Renderer {
     static constexpr SDL_Color FLOOR_COLOR = {0x80, 0x80, 0x80, 0xFF};
     static constexpr SDL_Color CEILING_COLOR = {0x33, 0x33, 0x33, 0xFF};
 
+    static constexpr SDL_Color WALL_VERTICAL_COLOR = {0x80, 0x05, 0x00, 0x00};
+    static constexpr SDL_Color WALL_HORIZONTAL_COLOR = {0xFF, 0x00, 0x00, 0x00};
+
     SDL_Renderer *sdlRenderer = nullptr;
     Player &player;
     Map &map;

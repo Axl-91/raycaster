@@ -45,12 +45,12 @@ void Renderer::renderWallCol(int screenPos, Ray &ray) const {
     SDL_Rect wallRect = {screenPos, wallInitPosY, COL_WIDTH, wallHeight};
 
     // Vertical walls are rendered darker to simulate light direction
-    if (ray.direction == RayDirection::VERTICAL) {
-        SDL_SetRenderDrawColor(this->sdlRenderer, 0xFF, 0x00, 0x00, 0x00);
-    } else {
-        SDL_SetRenderDrawColor(this->sdlRenderer, 0x80, 0x05, 0x00, 0x00);
-    };
+    SDL_Color wallColor = (ray.direction == RayDirection::VERTICAL)
+                              ? WALL_VERTICAL_COLOR
+                              : WALL_HORIZONTAL_COLOR;
 
+    SDL_SetRenderDrawColor(this->sdlRenderer, wallColor.r, wallColor.g,
+                           wallColor.b, wallColor.a);
     SDL_RenderFillRect(this->sdlRenderer, &wallRect);
 }
 
