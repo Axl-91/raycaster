@@ -1,5 +1,9 @@
 # Step 1 - Player Movement
 
+![player](https://github.com/user-attachments/assets/ffe8cb03-e621-4ade-a160-1f915d7c597f)
+
+
+
 In this first step, we'll create a `Player` that can move around a 2D space and rotate. This establishes the foundation for our raycaster.
 
 ## SDL Setup
