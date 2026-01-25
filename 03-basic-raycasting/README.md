@@ -86,6 +86,12 @@ Check where the ray crosses vertical grid lines:
 
 After calculating both horizontal and vertical ray intersections, we choose whichever is closest to the player. The closest ray is the one we project onto the screen.
 
+<img width="451" height="360" alt="Rays" src="https://github.com/user-attachments/assets/37d6a4e0-408d-4da9-9c36-91d4797d31fb" />
+
+
+<em>In this case the horizontal ray would be the proyected ray </em>
+
+
 ## Visualization
 
 In this step, we render a top-down view showing:
