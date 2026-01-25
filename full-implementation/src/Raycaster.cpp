@@ -60,7 +60,7 @@ bool Raycaster::isRayValid(RayDirection direction) const {
 }
 
 bool Raycaster::isAngleFacingUp() const {
-    // Angle lower than 180°
+    // Angle higher than 180°
     return this->rayAngle > PI;
 }
 
