@@ -20,6 +20,12 @@ Documentation and refactoring are in progress, and the tutorial is still in an e
 sudo dnf install gcc-c++ cmake SDL2-devel SDL2_image-devel
 ```
 
+## Steps
+1. **[Player Movement](https://github.com/Axl-91/raycaster/tree/main/01-player-movement)**: Initialize SDL project, create the player class, and implement basic movement and rotation controls
+2. **[Map Implementation](https://github.com/Axl-91/raycaster/tree/main/02-map-implementation)**: Create a 2D map system and implement collision detection to prevent walking through walls
+3. **[Basic Raycasting](https://github.com/Axl-91/raycaster/tree/main/03-basic-raycasting)**: Implement the raycasting algorithm - casting rays across the field of view to detect walls
+4. **[Raycasting Walls](https://github.com/Axl-91/raycaster/tree/main/04-raycasting-walls)**: Transform ray distances into 3D wall rendering, apply fisheye correction, and add directional shading for depth
+
 ## Build and Run
 ``` bash
 # BUILD 
