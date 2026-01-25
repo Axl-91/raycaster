@@ -1,11 +1,10 @@
 # Step 2 – Map Implementation
 
-![map](https://github.com/user-attachments/assets/c5991d74-e3f9-4a35-9633-a0de64db7147)
-
-
 In this step we introduce the **map system**, which defines the world layout used by the raycasting engine.
 
 The map is implemented as a **15×20 grid**, chosen to roughly match the screen resolution of **320×240**. This makes it easy to later represent the map on screen without scaling issues.
+
+![map](https://github.com/user-attachments/assets/c5991d74-e3f9-4a35-9633-a0de64db7147)
 
 ## Map Layout
 

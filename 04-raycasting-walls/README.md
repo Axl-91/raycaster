@@ -1,8 +1,8 @@
 # Step 4 - Raycasting Walls
 
-![walls](https://github.com/user-attachments/assets/1acdd86c-703b-4460-8bfa-89013f39da77)
-
 In this step, we transform the top-down view into a proper first-person 3D perspective by rendering walls based on ray distances.
+
+![walls](https://github.com/user-attachments/assets/1acdd86c-703b-4460-8bfa-89013f39da77)
 
 ## From Rays to Walls
 
