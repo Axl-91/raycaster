@@ -81,6 +81,10 @@ Check where the ray crosses vertical grid lines:
 
 <img width="640" height="480" alt="verticals" src="https://github.com/user-attachments/assets/76ee4c09-5538-4910-809a-47e032860f5b" />
 
+<img width="700" height="400" alt="vRay" src="https://github.com/user-attachments/assets/0749fb8f-5886-44d4-800a-029198cc9293" />
+
+<em>Remember the [Raycasting Bible](https://github.com/Axl-91/raycaster?tab=readme-ov-file#raycasting-bible)</em>
+
 ### 3. Choose Final Ray
 
 After calculating both horizontal and vertical ray intersections, we choose whichever is closest to the player. The closest ray is the one we project onto the screen.
