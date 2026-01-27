@@ -48,7 +48,7 @@ void Renderer::setWallType(Ray &ray) {
     this->wallTextures.setWall(wallType, isDark);
 }
 
-void Renderer::setColWall(Ray &ray) {
+void Renderer::setWallCol(Ray &ray) {
     float wallPos = ray.direction == RayDirection::HORIZONTAL
                         ? ray.position.getX()
                         : ray.position.getY();
@@ -80,7 +80,7 @@ void Renderer::renderWalls() {
 
         Ray ray = this->raycaster.getRay(angleRay);
         setWallType(ray);
-        setColWall(ray);
+        setWallCol(ray);
         renderWallCol(pos, ray);
 
         this->wallDistances[pos] = ray.distance;

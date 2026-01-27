@@ -28,3 +28,5 @@ target_compile_options(sdl-lib PRIVATE
 add_executable(main src/main.cpp)
 
 target_link_libraries(main PRIVATE sdl-lib SDL2 SDL2_image)
+
+file(COPY assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

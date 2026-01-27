@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Raycaster.h"
+#include "Walls.h"
 #include <SDL2/SDL.h>
 
 class Renderer {
@@ -26,10 +27,25 @@ class Renderer {
     Map &map;
     Raycaster &raycaster;
 
+    Walls wallTextures;
+
     /**
      * Render floor and ceiling
      */
     void renderBackground() const;
+
+    /**
+     * Set the wall type that belongs to the position of the ray
+     * and if it is horizontal make it as the dark variant
+     * @param ray The ray that is on the position to the wall
+     */
+    void setWallType(Ray &ray);
+
+    /**
+     * Set the wall column to render
+     * @param ray The ray that is on the position to the wall
+     */
+    void setWallCol(Ray &ray);
 
     /**
      * Render a 1px col of the wall hitted by the raycaster

@@ -18,6 +18,7 @@ Renderer::Renderer(Player &player, Map &map, Raycaster &raycaster)
 
 void Renderer::setRenderer(SDL_Renderer *renderer) {
     this->sdlRenderer = renderer;
+    this->wallTextures.loadTexture(this->sdlRenderer);
 }
 
 void Renderer::renderBackground() const {
@@ -34,6 +35,24 @@ void Renderer::renderBackground() const {
     SDL_RenderFillRect(this->sdlRenderer, &ceilingRect);
 }
 
+void Renderer::setWallType(Ray &ray) {
+    bool isDark = ray.direction == RayDirection::VERTICAL ? true : false;
+
+    int wallType = this->map.getBlock(ray.position) - 1;
+    this->wallTextures.setWall(wallType, isDark);
+}
+
+void Renderer::setWallCol(Ray &ray) {
+    float wallPos = ray.direction == RayDirection::HORIZONTAL
+                        ? ray.position.getX()
+                        : ray.position.getY();
+
+    int intPosX = floor(wallPos);
+    int xOffset = intPosX % BLOCK_SIZE;
+
+    this->wallTextures.selectSpriteCol(xOffset);
+}
+
 void Renderer::renderWallCol(int screenPos, Ray &ray) const {
     int wallHeight =
         static_cast<int>((BLOCK_SIZE * SCREEN_WIDTH) / ray.distance);
@@ -42,16 +61,8 @@ void Renderer::renderWallCol(int screenPos, Ray &ray) const {
     float wallCenter = wallHeight / 2.0f;
     int wallInitPosY = static_cast<int>(screenCenterY - wallCenter);
 
-    SDL_Rect wallRect = {screenPos, wallInitPosY, COL_WIDTH, wallHeight};
-
-    // Vertical walls are rendered darker to simulate light direction
-    SDL_Color wallColor = (ray.direction == RayDirection::VERTICAL)
-                              ? WALL_VERTICAL_COLOR
-                              : WALL_HORIZONTAL_COLOR;
-
-    SDL_SetRenderDrawColor(this->sdlRenderer, wallColor.r, wallColor.g,
-                           wallColor.b, wallColor.a);
-    SDL_RenderFillRect(this->sdlRenderer, &wallRect);
+    this->wallTextures.render(this->sdlRenderer, screenPos, wallInitPosY,
+                              COL_WIDTH, wallHeight);
 }
 
 void Renderer::renderWalls() {
@@ -62,6 +73,8 @@ void Renderer::renderWalls() {
         angleRay = normalizeAngle(angleRay);
 
         Ray ray = this->raycaster.getRay(angleRay);
+        setWallType(ray);
+        setWallCol(ray);
         renderWallCol(pos, ray);
 
         // Step is the amount neccesary to add so we can

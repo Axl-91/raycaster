@@ -50,7 +50,7 @@ class Renderer {
      * Set the wall column to render
      * @param ray The ray that is on the position to the wall
      */
-    void setColWall(Ray &ray);
+    void setWallCol(Ray &ray);
 
     /**
      * Render a 1px col of the wall hitted by the raycaster
