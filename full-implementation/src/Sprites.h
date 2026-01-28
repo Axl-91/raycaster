@@ -20,8 +20,11 @@ class Sprites {
     Sprites();
 
     /**
-     * Load objects sprite sheet texture from file with the columns and the
-     * offset given
+     * Load objects sprite sheet texture
+     * @param path the path to the sprite sheet to load
+     * @param spriteCols the amount of columns of the sprite sheet
+     * @param transparent true if the sprite has a transparent background, false
+     * otherwise
      * @throws std::runtime_error if surface or texture creation fails
      */
     void loadTexture(SDL_Renderer *renderer, const char *path, int spriteCols,
@@ -37,7 +40,7 @@ class Sprites {
     /**
      * Set how many variants each sprite has
      * Walls have 2 variants (light + dark), objects have 1
-     * @param variantCount Number of sprite slots per logical sprite
+     * @param variantCount Number of sprite variants
      */
     void setVariantCount(int variantCount) {
         this->variantCount = variantCount;
@@ -49,6 +52,9 @@ class Sprites {
      */
     void setSprite(int spriteNum);
 
+    /**
+     * Set the sprite as the next one on the sprite sheet
+     */
     void nextSprite();
 
     /**
