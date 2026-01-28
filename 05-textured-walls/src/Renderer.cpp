@@ -18,7 +18,9 @@ Renderer::Renderer(Player &player, Map &map, Raycaster &raycaster)
 
 void Renderer::setRenderer(SDL_Renderer *renderer) {
     this->sdlRenderer = renderer;
-    this->wallTextures.loadTexture(this->sdlRenderer);
+    this->wallSprites.loadTexture(this->sdlRenderer, "assets/walls.png", 3,
+                                  false);
+    this->wallSprites.setVariantCount(2);
 }
 
 void Renderer::renderBackground() const {
@@ -36,10 +38,13 @@ void Renderer::renderBackground() const {
 }
 
 void Renderer::setWallType(Ray &ray) {
-    bool isDark = ray.direction == RayDirection::VERTICAL ? true : false;
-
     int wallType = this->map.getBlock(ray.position) - 1;
-    this->wallTextures.setWall(wallType, isDark);
+    this->wallSprites.setSprite(wallType);
+
+    bool isDark = ray.direction == RayDirection::VERTICAL ? true : false;
+    if (isDark) {
+        this->wallSprites.nextSprite();
+    }
 }
 
 void Renderer::setWallCol(Ray &ray) {
@@ -50,7 +55,7 @@ void Renderer::setWallCol(Ray &ray) {
     int intPosX = floor(wallPos);
     int xOffset = intPosX % BLOCK_SIZE;
 
-    this->wallTextures.selectSpriteCol(xOffset);
+    this->wallSprites.selectSpriteCol(xOffset);
 }
 
 void Renderer::renderWallCol(int screenPos, Ray &ray) const {
@@ -61,8 +66,8 @@ void Renderer::renderWallCol(int screenPos, Ray &ray) const {
     float wallCenter = wallHeight / 2.0f;
     int wallInitPosY = static_cast<int>(screenCenterY - wallCenter);
 
-    this->wallTextures.render(this->sdlRenderer, screenPos, wallInitPosY,
-                              COL_WIDTH, wallHeight);
+    this->wallSprites.render(this->sdlRenderer, screenPos, wallInitPosY,
+                             COL_WIDTH, wallHeight);
 }
 
 void Renderer::renderWalls() {
