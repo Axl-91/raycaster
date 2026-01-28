@@ -13,7 +13,7 @@ set(SOURCES
     src/Map.cpp
     src/Raycaster.cpp
     src/DefaultMapData.cpp
-    src/Walls.cpp
+    src/Sprites.cpp
 )
 
 add_library(sdl-lib)

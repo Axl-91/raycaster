@@ -5,7 +5,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Raycaster.h"
-#include "Walls.h"
+#include "Sprites.h"
 #include <SDL2/SDL.h>
 
 class Renderer {
@@ -27,7 +27,7 @@ class Renderer {
     Map &map;
     Raycaster &raycaster;
 
-    Walls wallTextures;
+    Sprites wallSprites;
 
     /**
      * Render floor and ceiling

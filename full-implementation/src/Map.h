@@ -1,7 +1,6 @@
 #ifndef __MAP__
 #define __MAP__
 
-#include "Objects.h"
 #include "Vector.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
