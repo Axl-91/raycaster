@@ -10,8 +10,8 @@ class Sprites {
     int y = 0;
 
     int spriteCols;
-    int separator = 0;
-    int offset = 1;
+    int spacing = 0;
+    int variantCount = 1;
 
     SDL_Rect spriteRect = {x, y, BLOCK_SIZE, BLOCK_SIZE};
     SDL_Texture *texture;
@@ -27,13 +27,25 @@ class Sprites {
     void loadTexture(SDL_Renderer *renderer, const char *path, int spriteCols,
                      bool transparent);
 
-    void setSeparator(int separator) { this->separator = separator; }
-
-    void setOffset(int offset) { this->offset = offset; }
+    /**
+     * Set the horizontal spacing between sprites in the sprite sheet
+     * to prevent texture bleeding during rendering
+     * @param separator Pixel spacing between sprites
+     */
+    void setSpacing(int spacing) { this->spacing = spacing; }
 
     /**
-     * Set the object from the sprite sheet to be used
-     * @param objNum the number of the object to be used
+     * Set how many variants each sprite has
+     * Walls have 2 variants (light + dark), objects have 1
+     * @param variantCount Number of sprite slots per logical sprite
+     */
+    void setVariantCount(int variantCount) {
+        this->variantCount = variantCount;
+    }
+
+    /**
+     * Set the sprite from the sprite sheet to be used
+     * @param spriteNum the number of the sprite to be used
      */
     void setSprite(int spriteNum);
 
@@ -41,7 +53,6 @@ class Sprites {
 
     /**
      * Select which column of the sprite sheet to render
-     * Used for vertical slice rendering in raycasting (1 pixel wide columns)
      * @param xOffset Column offset from the left edge of the sprite (in pixels)
      */
     void selectSpriteCol(int xOffset);

@@ -26,11 +26,11 @@ void Renderer::setRenderer(SDL_Renderer *renderer) {
 
     this->wallSprites.loadTexture(this->sdlRenderer, "assets/walls.png", 3,
                                   false);
-    this->wallSprites.setOffset(2);
+    this->wallSprites.setVariantCount(2);
 
     this->objectSprites.loadTexture(this->sdlRenderer, "assets/objects.png", 5,
                                     true);
-    this->objectSprites.setSeparator(1);
+    this->objectSprites.setSpacing(1);
 }
 
 void Renderer::renderBackground() const {

@@ -30,8 +30,8 @@ void Sprites::setSprite(int spriteNum) {
     int col = spriteNum % this->spriteCols;
     int row = spriteNum / this->spriteCols;
 
-    this->x = col * this->offset * (BLOCK_SIZE + this->separator);
-    this->y = row * (BLOCK_SIZE + this->separator);
+    this->x = col * this->variantCount * (BLOCK_SIZE + this->spacing);
+    this->y = row * (BLOCK_SIZE + this->spacing);
 
     this->spriteRect.x = this->x;
     this->spriteRect.y = this->y;
