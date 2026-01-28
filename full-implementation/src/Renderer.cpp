@@ -23,8 +23,14 @@ void Renderer::setRenderer(SDL_Renderer *renderer) {
 
     this->hud.loadTexture(this->sdlRenderer);
     this->gun.loadTextures(this->sdlRenderer);
-    this->wallTextures.loadTexture(this->sdlRenderer);
-    this->objectTextures.loadTexture(this->sdlRenderer);
+
+    this->wallSprites.loadTexture(this->sdlRenderer, "assets/walls.png", 3,
+                                  false);
+    this->wallSprites.setOffset(2);
+
+    this->objectSprites.loadTexture(this->sdlRenderer, "assets/objects.png", 5,
+                                    true);
+    this->objectSprites.setSeparator(1);
 }
 
 void Renderer::renderBackground() const {
@@ -42,10 +48,13 @@ void Renderer::renderBackground() const {
 }
 
 void Renderer::setWallType(Ray &ray) {
-    bool isDark = ray.direction == RayDirection::VERTICAL ? true : false;
-
     int wallType = this->map.getBlock(ray.position) - 1;
-    this->wallTextures.setWall(wallType, isDark);
+    this->wallSprites.setSprite(wallType);
+
+    bool isDark = ray.direction == RayDirection::VERTICAL ? true : false;
+    if (isDark) {
+        this->wallSprites.nextSprite();
+    }
 }
 
 void Renderer::setWallCol(Ray &ray) {
@@ -56,7 +65,7 @@ void Renderer::setWallCol(Ray &ray) {
     int intPosX = floor(wallPos);
     int xOffset = intPosX % BLOCK_SIZE;
 
-    this->wallTextures.selectSpriteCol(xOffset);
+    this->wallSprites.selectSpriteCol(xOffset);
 }
 
 void Renderer::renderWallCol(int screenPos, Ray &ray) const {
@@ -67,8 +76,8 @@ void Renderer::renderWallCol(int screenPos, Ray &ray) const {
     float wallCenter = wallHeight / 2.0f;
     int wallInitPosY = static_cast<int>(screenCenterY - wallCenter);
 
-    this->wallTextures.render(this->sdlRenderer, screenPos, wallInitPosY,
-                              COL_WIDTH, wallHeight);
+    this->wallSprites.render(this->sdlRenderer, screenPos, wallInitPosY,
+                             COL_WIDTH, wallHeight);
 }
 
 void Renderer::renderWalls() {
@@ -100,7 +109,7 @@ void Renderer::renderObjects() {
         if (!this->player.objIsVisible(obj.position)) {
             continue;
         }
-        this->objectTextures.setObject(obj.type);
+        this->objectSprites.setSprite(obj.type);
 
         // Get the object angle relative to player
         // to calculate the X position on screen
@@ -130,7 +139,7 @@ void Renderer::renderObjects() {
             int colStart = static_cast<int>(baseX + objX * colRepetitions);
             int colEnd = static_cast<int>(baseX + (objX + 1) * colRepetitions);
 
-            this->objectTextures.selectSpriteCol(objX);
+            this->objectSprites.selectSpriteCol(objX);
 
             for (int posX = colStart; posX < colEnd; ++posX) {
                 if (posX < 0 || posX >= SCREEN_WIDTH) {
@@ -141,8 +150,8 @@ void Renderer::renderObjects() {
                 }
 
                 // If there is no wall closer I render the object column
-                this->objectTextures.render(this->sdlRenderer, posX, yo,
-                                            COL_WIDTH, sizeObj);
+                this->objectSprites.render(this->sdlRenderer, posX, yo,
+                                           COL_WIDTH, sizeObj);
             }
         }
     }

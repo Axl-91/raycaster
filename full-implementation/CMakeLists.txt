@@ -13,8 +13,7 @@ set(SOURCES
     src/Player.cpp
     src/Raycaster.cpp
     src/Map.cpp
-    src/Walls.cpp
-    src/Objects.cpp
+    src/Sprites.cpp
     src/Renderer.cpp
     src/DefaultMapData.cpp
     src/DefaultObjects.cpp

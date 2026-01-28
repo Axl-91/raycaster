@@ -6,11 +6,12 @@
 #include <SDL2/SDL_render.h>
 class Sprites {
   private:
-    int x;
-    int y;
+    int x = 0;
+    int y = 0;
 
     int spriteCols;
-    int offset;
+    int separator = 0;
+    int offset = 1;
 
     SDL_Rect spriteRect = {x, y, BLOCK_SIZE, BLOCK_SIZE};
     SDL_Texture *texture;
@@ -23,13 +24,20 @@ class Sprites {
      * offset given
      * @throws std::runtime_error if surface or texture creation fails
      */
-    void loadTexture(SDL_Renderer *renderer, int spriteCols, int offset);
+    void loadTexture(SDL_Renderer *renderer, const char *path, int spriteCols,
+                     bool transparent);
+
+    void setSeparator(int separator) { this->separator = separator; }
+
+    void setOffset(int offset) { this->offset = offset; }
 
     /**
      * Set the object from the sprite sheet to be used
      * @param objNum the number of the object to be used
      */
-    void setSprite(int SpriteNum);
+    void setSprite(int spriteNum);
+
+    void nextSprite();
 
     /**
      * Select which column of the sprite sheet to render

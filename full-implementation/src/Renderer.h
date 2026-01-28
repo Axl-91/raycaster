@@ -4,10 +4,9 @@
 #include "Guns.h"
 #include "Hud.h"
 #include "Map.h"
-#include "Objects.h"
 #include "Player.h"
 #include "Raycaster.h"
-#include "Walls.h"
+#include "Sprites.h"
 #include <SDL2/SDL.h>
 
 class Renderer {
@@ -29,8 +28,8 @@ class Renderer {
     Player &player;
     Raycaster &raycaster;
 
-    Walls wallTextures;
-    Objects objectTextures;
+    Sprites wallSprites;
+    Sprites objectSprites;
     Hud hud;
     Guns gun;
 
