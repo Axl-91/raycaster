@@ -1,6 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <cmath>
 constexpr float PI = 3.14159265358979323846f;
 
 constexpr int SCREEN_WIDTH = 320;
@@ -15,5 +16,11 @@ constexpr int INIT_POS_X = 96;
 constexpr int INIT_POS_Y = 96;
 
 constexpr int BLOCK_SIZE = 64;
+
+// Field of View: 60°
+constexpr float FOV = PI / 3;
+
+// Projection Plane Distance
+const float PPD = (SCREEN_WIDTH / 2.0f) / tan(FOV / 2.0f);
 
 #endif

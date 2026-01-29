@@ -27,9 +27,12 @@ class Renderer {
     static constexpr SDL_Color WALL_HORIZONTAL_COLOR = {0xFF, 0x00, 0x00, 0x00};
 
     SDL_Renderer *sdlRenderer = nullptr;
+
     Player &player;
     Map &map;
+
     Raycaster &raycaster;
+    float wallDistances[SCREEN_WIDTH];
 
     Sprites wallSprites;
     Sprites objectSprites;
@@ -61,6 +64,16 @@ class Renderer {
      * Render all walls using raycasting
      */
     void renderWalls();
+
+    /**
+     * Render a single object
+     */
+    void renderObject(float offsetX, float objDistance);
+
+    /**
+     * Render all objects/sprites in the player's vision
+     */
+    void renderVisibleObjects();
 
   public:
     /**

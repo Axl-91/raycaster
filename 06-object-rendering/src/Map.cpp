@@ -1,14 +1,22 @@
 #include "Map.h"
 #include "Constants.h"
 #include "DefaultMapData.h"
+#include "DefaultObjects.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_render.h>
+#include <algorithm>
 #include <vector>
 
-Map::Map() { loadMap(DEFAULT_MAP); }
+Map::Map() {
+    loadMap(DEFAULT_MAP);
+    loadObjects(DEFAULT_OBJECTS);
+}
 
-Map::Map(std::vector<std::vector<int>> map) { loadMap(map); }
+Map::Map(std::vector<std::vector<int>> map, std::vector<mapObject> objects) {
+    loadMap(map);
+    loadObjects(objects);
+}
 
 void Map::loadMap(const std::vector<std::vector<int>> &map) {
     if (map.empty()) {
@@ -18,6 +26,17 @@ void Map::loadMap(const std::vector<std::vector<int>> &map) {
 
     this->rows = map.size();
     this->columns = map.front().size();
+}
+
+void Map::addObject(Vector &position, int type) {
+    MapObject obj = {position, type};
+    vectObj.push_back(obj);
+}
+
+void Map::loadObjects(std::vector<MapObject> objects) {
+    for (MapObject object : objects) {
+        addObject(object.position, object.type);
+    }
 }
 
 bool Map::isInsideMap(float x, float y) const {
@@ -46,6 +65,20 @@ int Map::getBlock(float x, float y) const {
 
 int Map::getBlock(const Vector &v) const {
     return getBlock(v.getX(), v.getY());
+}
+
+void Map::sortObjByDist(const Vector &pos) {
+    // lambda function to compare distances
+    auto compareByDistanceDesc = [&pos](const MapObject &objA,
+                                        const MapObject &objB) {
+        return pos.distance(objA.position) > pos.distance(objB.position);
+    };
+    std::sort(vectObj.begin(), vectObj.end(), compareByDistanceDesc);
+}
+
+std::vector<MapObject> Map::getObjectsSorted(const Vector &playerPos) {
+    sortObjByDist(playerPos);
+    return vectObj;
 }
 
 Vector Map::mapToScreen(const Vector &mapPos) const {

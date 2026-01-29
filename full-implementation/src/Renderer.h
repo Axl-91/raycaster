@@ -24,13 +24,13 @@ class Renderer {
     static constexpr SDL_Color FLOOR_COLOR = {0x80, 0x80, 0x80, 0xFF};
     static constexpr SDL_Color CEILING_COLOR = {0x33, 0x33, 0x33, 0xFF};
 
-    float wallDistances[SCREEN_WIDTH];
-
     SDL_Renderer *sdlRenderer = nullptr;
 
     Map &map;
     Player &player;
+
     Raycaster &raycaster;
+    float wallDistances[SCREEN_WIDTH];
 
     Sprites wallSprites;
     Sprites objectSprites;

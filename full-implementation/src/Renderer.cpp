@@ -24,6 +24,8 @@ void Renderer::setRenderer(SDL_Renderer *renderer) {
     this->hud.loadTexture(this->sdlRenderer);
     this->gun.loadTextures(this->sdlRenderer);
 
+    // TODO: Information like assets path, columns, variants, and transparency
+    // should came from a config file
     this->wallSprites.loadTexture(this->sdlRenderer, WALLS_PATH, 3, false);
     this->wallSprites.setVariantCount(2);
 

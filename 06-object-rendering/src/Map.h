@@ -34,10 +34,29 @@ class Map {
     int getBlock(float x, float y) const;
 
     /**
+     * Adds an object to the Map
+     * @params position a Vector with the position of the object
+     * @params type the type of the object to be added
+     */
+    void addObject(Vector &position, int type);
+
+    /**
+     * Sort the objects by distance with the playerPos
+     * @param playerPos the Vector position of the player
+     */
+    void sortObjByDist(const Vector &playerPos);
+
+    /**
      * Loads the given map
      * @params map an array of arrays of int, represents a map
      */
     void loadMap(const std::vector<std::vector<int>> &map);
+
+    /**
+     * Loads a the given objects
+     * @params objects an array of mapObject
+     */
+    void loadObjects(std::vector<mapObject> objects);
 
   public:
     /**
@@ -46,9 +65,9 @@ class Map {
     Map();
 
     /**
-     * Initializes the Map with the given map
+     * Initializes the Map with the given map and object
      */
-    Map(std::vector<std::vector<int>> map);
+    Map(std::vector<std::vector<int>> map, std::vector<MapObject> objects = {});
 
     /**
      * Check if the given Vector position is inside the map
@@ -82,6 +101,12 @@ class Map {
      * @return the amount of rows of the map
      */
     int getAmountRows() const { return rows; }
+
+    /**
+     * @return All the objects in the map sorted based by the distance from the
+     * player
+     */
+    std::vector<MapObject> getObjectsSorted(const Vector &playerPos);
 
     void render(SDL_Renderer *renderer) const;
 
