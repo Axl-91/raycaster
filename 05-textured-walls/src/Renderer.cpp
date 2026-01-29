@@ -41,8 +41,8 @@ void Renderer::setWallType(Ray &ray) {
     int wallType = this->map.getBlock(ray.position) - 1;
     this->wallSprites.setSprite(wallType);
 
-    bool isDark = ray.direction == RayDirection::VERTICAL ? true : false;
-    if (isDark) {
+    // If its vertical I change the variant to the dark one
+    if (ray.direction == RayDirection::VERTICAL) {
         this->wallSprites.nextSprite();
     }
 }
