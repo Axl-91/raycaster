@@ -1,8 +1,6 @@
 #include "Renderer.h"
 #include "Constants.h"
 #include "Raycaster.h"
-#include <SDL2/SDL_log.h>
-#include <cmath>
 
 namespace {
 float normalizeAngle(float angle) {
@@ -15,17 +13,12 @@ float normalizeAngle(float angle) {
 }
 } // namespace
 
-Renderer::Renderer(Map &map, Player &player, Raycaster &raycaster)
-    : map(map), player(player), raycaster(raycaster) {}
+Renderer::Renderer(Player &player, Map &map, Raycaster &raycaster)
+    : player(player), map(map), raycaster(raycaster) {}
 
 void Renderer::setRenderer(SDL_Renderer *renderer) {
     this->sdlRenderer = renderer;
 
-    this->hud.loadTexture(this->sdlRenderer);
-    this->gun.loadTextures(this->sdlRenderer);
-
-    // TODO: Information like assets path, columns, variants, and transparency
-    // should came from a config file
     this->wallSprites.loadTexture(this->sdlRenderer, WALLS_PATH, 3, false);
     this->wallSprites.setVariantCount(2);
 
@@ -39,7 +32,7 @@ void Renderer::renderBackground() const {
                            FLOOR_COLOR.b, FLOOR_COLOR.a);
     SDL_RenderClear(this->sdlRenderer);
 
-    SDL_Rect ceilingRect = {0, 0, SCREEN_WIDTH, (USABLE_SCREEN_HEIGHT) / 2};
+    SDL_Rect ceilingRect = {0, 0, SCREEN_WIDTH, (SCREEN_HEIGHT) / 2};
 
     // Render CEILING_COLOR on the top half of the screen
     SDL_SetRenderDrawColor(this->sdlRenderer, CEILING_COLOR.r, CEILING_COLOR.g,
@@ -72,7 +65,7 @@ void Renderer::renderWallCol(int screenPos, Ray &ray) const {
     int wallHeight =
         static_cast<int>((BLOCK_SIZE * SCREEN_WIDTH) / ray.distance);
 
-    float screenCenterY = USABLE_SCREEN_HEIGHT / 2.0f;
+    float screenCenterY = SCREEN_HEIGHT / 2.0f;
     float wallCenter = wallHeight / 2.0f;
     int wallInitPosY = static_cast<int>(screenCenterY - wallCenter);
 
@@ -109,8 +102,7 @@ void Renderer::renderObject(float offsetX, float objDistance) {
     int baseX = static_cast<int>(std::round(xo));
 
     // Starting point to draw object in Y
-    float yo =
-        static_cast<int>((USABLE_SCREEN_HEIGHT / 2.0f) - (sizeObj / 2.0f));
+    float yo = static_cast<int>((SCREEN_HEIGHT / 2.0f) - (sizeObj / 2.0f));
 
     // Number of screen columns each texture column occupies
     float colRepetitions = sizeObj / BLOCK_SIZE;
@@ -162,12 +154,12 @@ void Renderer::renderVisibleObjects() {
 
 void Renderer::render() {
     renderBackground();
+
+    // this->map.render(this->sdlRenderer);
+    // this->player.render(this->sdlRenderer);
+
     renderWalls();
     renderVisibleObjects();
-
-    this->hud.renderHud(this->sdlRenderer);
-    this->gun.render(this->sdlRenderer);
-    // this->player.render(this->sdlRenderer);
 
     SDL_RenderPresent(this->sdlRenderer);
 }

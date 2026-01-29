@@ -1,8 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "Guns.h"
-#include "Hud.h"
+#include "Constants.h"
 #include "Map.h"
 #include "Player.h"
 #include "Raycaster.h"
@@ -24,18 +23,19 @@ class Renderer {
     static constexpr SDL_Color FLOOR_COLOR = {0x80, 0x80, 0x80, 0xFF};
     static constexpr SDL_Color CEILING_COLOR = {0x33, 0x33, 0x33, 0xFF};
 
+    static constexpr SDL_Color WALL_VERTICAL_COLOR = {0x80, 0x05, 0x00, 0x00};
+    static constexpr SDL_Color WALL_HORIZONTAL_COLOR = {0xFF, 0x00, 0x00, 0x00};
+
     SDL_Renderer *sdlRenderer = nullptr;
 
-    Map &map;
     Player &player;
+    Map &map;
 
     Raycaster &raycaster;
     float wallDistances[SCREEN_WIDTH];
 
     Sprites wallSprites;
     Sprites objectSprites;
-    Hud hud;
-    Guns gun;
 
     /**
      * Render floor and ceiling
@@ -79,28 +79,17 @@ class Renderer {
     /**
      * Constructor - initializes renderer dependencies
      */
-    Renderer(Map &map, Player &player, Raycaster &raycaster);
+    Renderer(Player &player, Map &map, Raycaster &raycaster);
 
     /**
-     * Set SDL renderer and initialize all textures
-     * Must be called after SDL initialization
+     * Set SDL renderer
      */
     void setRenderer(SDL_Renderer *renderer);
 
     /**
-     * Render complete frame (background, walls, objects, HUD, gun)
+     * Render Player and raycaster rays
      */
     void render();
-
-    /**
-     * Get reference to gun for input handling
-     */
-    Guns &getGun() { return gun; }
-
-    /**
-     * Get reference to HUD for input handling
-     */
-    Hud &getHud() { return hud; }
 
     Renderer(const Renderer &) = delete;
     Renderer &operator=(const Renderer &) = delete;
