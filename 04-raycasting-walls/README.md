@@ -8,10 +8,34 @@ In this step, we transform the top-down view into a proper first-person 3D persp
 
 Instead of drawing rays in top-down view, we now:
 
-- Cast rays across the field of view
-- Calculate wall height based on ray distance (closer walls appear taller)
-- Render walls one vertical pixel column at a time
-- Apply shading to distinguish wall orientations and simulate directional lighting
+- **Cast rays across the field of view** (see Step 03)
+
+- **Calculate wall height based on ray distance**  
+  Uses the formula: `wallHeight = (BLOCK_SIZE * BLOCK_SIZE / distance)`
+  
+  Closer walls have shorter distances, resulting in larger heights on screen. This inverse relationship creates the depth illusion - just like how nearby objects look bigger than distant ones in real life.
+
+- **Render walls one vertical pixel column at a time**  
+  We draw 320 vertical lines (one per ray/screen column), each with height determined by that ray's distance. This slice-by-slice approach builds the complete 3D view:
+```
+  Ray 0 → Wall height 100px → Draw line at X=0, 100px tall
+  Ray 1 → Wall height 98px  → Draw line at X=1, 98px tall
+  ...
+  Ray 319 → Wall height 50px → Draw line at X=319, 50px tall
+```
+
+**Apply shading to distinguish wall orientations**  
+  
+  We use different brightness levels for vertical vs horizontal walls to add depth and help distinguish wall orientations:
+  
+  - **Horizontal walls** (North/South facing): Brighter
+  - **Vertical walls** (East/West facing): Darker
+
+```cpp
+  bool isDark = ray.direction == RayDirection::VERTICAL;
+```
+  
+  This fixed lighting scheme creates visual distinction between wall types without complex calculations. It's a classic technique from Wolfenstein 3D that helps players navigate 3D spaces by making different wall orientations instantly recognizable.
 
 ## Fisheye
 
