@@ -32,6 +32,7 @@ sudo dnf install gcc-c++ cmake SDL2-devel SDL2_image-devel
 6. **[Rendering Objects](https://github.com/Axl-91/raycaster/tree/main/06-rendering-objects)**: Render sprites (objects) in the world, handle perspective scaling, visibility checks, and correct occlusion against walls.
 
 ### Complete Implementation
+
 **[Full Implementation](https://github.com/Axl-91/raycaster/tree/main/full-implementation)** - Fully-featured raycaster with HUD, weapons, and shooting mechanics. Use as reference or starting point for your own game.
 
 ## Build and Run
