@@ -3,7 +3,12 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_render.h>
 
-Player::Player(float x, float y, const Map &map) : posX(x), posY(y), map(map) {}
+Player::Player(Map &map) : map(map) {
+    Vector position = this->map.getInitPos();
+
+    this->posX = position.getX();
+    this->posY = position.getY();
+}
 
 bool Player::canMove(float x, float y) const {
     return this->map.getBlock(Vector(x + PLAYER_RADIUS, y)) == 0 &&

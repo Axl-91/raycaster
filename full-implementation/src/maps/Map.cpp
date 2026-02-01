@@ -1,38 +1,40 @@
 #include "Map.h"
 #include "../utils/Constants.h"
+#include "MapParser.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <algorithm>
 #include <vector>
 
-Map::Map() {
-    loadMap(DEFAULT_MAP);
-    loadObjects(DEFAULT_OBJECTS);
-}
+Map::Map() { loadMap(DEFAULT_MAP); }
 
-Map::Map(std::string mapPath, std::string objectsPath) {
-    loadMap(mapPath);
-    loadObjects(objectsPath);
-}
+Map::Map(std::string mapPath) { loadMap(mapPath); }
 
 void Map::loadMap(const std::string &mapPath) {
-    this->gridMap = mapParser(mapPath);
+    MapParser mapParser = MapParser(mapPath);
 
-    this->rows = this->gridMap.size();
-    this->columns = this->gridMap.front().size();
-}
+    this->gridMap = mapParser.getMap();
 
-void Map::addObject(Vector &position, int type) {
-    MapObject obj = {position, type};
-    vectObj.push_back(obj);
-}
+    Vector mapSize = mapParser.getMapSize();
 
-void Map::loadObjects(const std::string &objectsPath) {
-    ObjectsData objects = parseObjects(objectsPath);
+    this->columns = mapSize.getX();
+    this->rows = mapSize.getY();
+
+    ObjectsData objects = mapParser.getObjects();
 
     for (MapObject object : objects) {
-        addObject(object.position, object.type);
+        MapObject obj = {object.position, object.type};
+        this->vectObj.push_back(obj);
     }
+
+    this->playersPos = mapParser.getPlayersPos();
+}
+
+Vector Map::getInitPos() {
+    Vector pos = this->playersPos.back();
+    this->playersPos.pop_back();
+
+    return pos;
 }
 
 bool Map::isInsideMap(float x, float y) const {

@@ -18,11 +18,6 @@ constexpr int USABLE_SCREEN_HEIGHT = SCREEN_HEIGHT - HUD_HEIGHT;
 
 constexpr int BLOCK_SIZE = 64;
 
-// TODO: Find better way to set init pos
-// Initial position should be tied with the map
-constexpr int INIT_POS_X = 96;
-constexpr int INIT_POS_Y = 96;
-
 // Field of View: 60°
 constexpr float FOV = PI / 3;
 

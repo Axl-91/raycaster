@@ -17,7 +17,6 @@ set(SOURCES
     src/components/Hud.cpp
     src/maps/Map.cpp
     src/maps/MapParser.cpp
-    src/maps/ObjectParser.cpp
     src/utils/Vector.cpp
 )
 
