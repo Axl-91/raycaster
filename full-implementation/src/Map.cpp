@@ -1,7 +1,7 @@
 #include "Map.h"
 #include "Constants.h"
-#include "DefaultMapData.h"
-#include "DefaultObjects.h"
+#include "MapParser.h"
+#include "ObjectParser.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <algorithm>
@@ -12,19 +12,16 @@ Map::Map() {
     loadObjects(DEFAULT_OBJECTS);
 }
 
-Map::Map(std::vector<std::vector<int>> map, std::vector<mapObject> objects) {
-    loadMap(map);
-    loadObjects(objects);
+Map::Map(std::string mapPath, std::string objectsPath) {
+    loadMap(mapPath);
+    loadObjects(objectsPath);
 }
 
-void Map::loadMap(const std::vector<std::vector<int>> &map) {
-    if (map.empty()) {
-        return;
-    }
-    this->gridMap = map;
+void Map::loadMap(const std::string &mapPath) {
+    this->gridMap = mapParser(mapPath);
 
-    this->rows = map.size();
-    this->columns = map.front().size();
+    this->rows = this->gridMap.size();
+    this->columns = this->gridMap.front().size();
 }
 
 void Map::addObject(Vector &position, int type) {
@@ -32,7 +29,9 @@ void Map::addObject(Vector &position, int type) {
     vectObj.push_back(obj);
 }
 
-void Map::loadObjects(std::vector<MapObject> objects) {
+void Map::loadObjects(const std::string &objectsPath) {
+    ObjectsData objects = parseObjects(objectsPath);
+
     for (MapObject object : objects) {
         addObject(object.position, object.type);
     }
