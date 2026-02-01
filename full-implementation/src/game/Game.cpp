@@ -1,8 +1,4 @@
 #include "Game.h"
-#include "Constants.h"
-#include "Player.h"
-#include "Raycaster.h"
-#include "Renderer.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdexcept>
@@ -51,10 +47,14 @@ void Game::pollEvent() {
 
     while (SDL_PollEvent(&event)) {
         exitPollEvent(event);
-        this->gameRenderer.getGun().pollEvent(event);
 
-        if (!this->gameRenderer.getGun().isShooting()) {
-            this->gameRenderer.getHud().pollEvent(event);
+        Guns &gun = this->gameRenderer.getGun();
+        Hud &hud = this->gameRenderer.getHud();
+
+        gun.pollEvent(event);
+
+        if (!gun.isShooting()) {
+            hud.pollEvent(event);
         }
     }
 }

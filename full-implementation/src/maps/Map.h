@@ -1,23 +1,25 @@
 #ifndef __MAP__
 #define __MAP__
 
-#include "Vector.h"
+#include "../utils/Vector.h"
+#include "MapParser.h"
+#include "ObjectParser.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <string>
 #include <vector>
 
-typedef struct mapObject {
-    Vector position;
-    int type;
-} MapObject;
+#define DEFAULT_MAP "resources/maps/defaultMap.yaml"
+
+#define DEFAULT_OBJECTS "resources/objects/defaultObjects.yaml"
 
 class Map {
   private:
     int rows = -1;
     int columns = -1;
 
-    std::vector<std::vector<int>> gridMap;
-    std::vector<mapObject> vectObj;
+    MapData gridMap;
+    ObjectsData vectObj;
 
     /**
      * Check if the x and y positions are inside the map array
@@ -50,13 +52,13 @@ class Map {
      * Loads the given map
      * @params map an array of arrays of int, represents a map
      */
-    void loadMap(const std::vector<std::vector<int>> &map);
+    void loadMap(const std::string &mapPath);
 
     /**
      * Loads a the given objects
      * @params objects an array of mapObject
      */
-    void loadObjects(std::vector<mapObject> objects);
+    void loadObjects(const std::string &objectsPath);
 
   public:
     /**
@@ -67,7 +69,7 @@ class Map {
     /**
      * Initializes the Map with the given map and object
      */
-    Map(std::vector<std::vector<int>> map, std::vector<MapObject> objects = {});
+    Map(std::string mapPath, std::string objectsPath = "");
 
     /**
      * Check if the given Vector position is inside the map

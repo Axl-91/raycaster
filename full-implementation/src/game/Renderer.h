@@ -1,12 +1,12 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "Guns.h"
-#include "Hud.h"
-#include "Map.h"
-#include "Player.h"
+#include "../components/Guns.h"
+#include "../components/Hud.h"
+#include "../components/Player.h"
+#include "../components/Sprites.h"
+#include "../maps/Map.h"
 #include "Raycaster.h"
-#include "Sprites.h"
 #include <SDL2/SDL.h>
 
 #define WALLS_PATH "assets/walls.png"

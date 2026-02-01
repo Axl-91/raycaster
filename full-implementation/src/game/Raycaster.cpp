@@ -1,7 +1,4 @@
 #include "Raycaster.h"
-#include "Constants.h"
-#include "Player.h"
-#include "Vector.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <cmath>

@@ -1,0 +1,21 @@
+objects:
+  - position:
+      x: 640
+      y: 192
+    type: 6
+  - position:
+      x: 192
+      y: 384
+    type: 9
+  - position:
+      x: 192
+      y: 448
+    type: 9
+  - position:
+      x: 192
+      y: 320
+    type: 9
+  - position:
+      x: 705
+      y: 192
+    type: 9

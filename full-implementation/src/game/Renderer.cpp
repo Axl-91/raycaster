@@ -1,6 +1,4 @@
 #include "Renderer.h"
-#include "Constants.h"
-#include "Raycaster.h"
 #include <SDL2/SDL_log.h>
 #include <cmath>
 

@@ -1,5 +1,5 @@
 #include "Hud.h"
-#include "Constants.h"
+#include "../utils/Constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_render.h>

@@ -2,34 +2,43 @@ cmake_minimum_required(VERSION 3.10)
 
 project(Raycaster LANGUAGES CXX)
 
+# Find required packages
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 set(SOURCES
-    src/Game.cpp
-    src/Vector.cpp
-    src/Hud.cpp
-    src/Guns.cpp
-    src/Player.cpp
-    src/Raycaster.cpp
-    src/Map.cpp
-    src/Sprites.cpp
-    src/Renderer.cpp
-    src/DefaultMapData.cpp
-    src/DefaultObjects.cpp
+    src/game/Game.cpp
+    src/game/Raycaster.cpp
+    src/game/Renderer.cpp
+    src/components/Player.cpp
+    src/components/Sprites.cpp
+    src/components/Guns.cpp
+    src/components/Hud.cpp
+    src/maps/Map.cpp
+    src/maps/MapParser.cpp
+    src/maps/ObjectParser.cpp
+    src/utils/Vector.cpp
 )
 
+# Create a library for SDL-related files
 add_library(sdl-lib)
 target_sources(sdl-lib PRIVATE ${SOURCES})
 
+# Set C++ standard
 target_compile_features(sdl-lib PRIVATE cxx_std_11)
 
+# Set compile options for Debug configuration
 target_compile_options(sdl-lib PRIVATE
     $<$<CONFIG:Debug>:-g -O0 -Wall -Wextra>
 )
 
+# Create the executable
 add_executable(main src/main.cpp)
 
-target_link_libraries(main PRIVATE sdl-lib SDL2 SDL2_image)
+# Link libraries
+target_link_libraries(main PRIVATE sdl-lib SDL2 SDL2_image yaml-cpp)
 
+# Copy assets and resources to the build directory
 file(COPY assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

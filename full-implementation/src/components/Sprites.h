@@ -1,7 +1,7 @@
 #ifndef __SPRITES__
 #define __SPRITES__
 
-#include "Constants.h"
+#include "../utils/Constants.h"
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 class Sprites {
