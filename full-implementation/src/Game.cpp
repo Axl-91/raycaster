@@ -51,10 +51,14 @@ void Game::pollEvent() {
 
     while (SDL_PollEvent(&event)) {
         exitPollEvent(event);
-        this->gameRenderer.getGun().pollEvent(event);
 
-        if (!this->gameRenderer.getGun().isShooting()) {
-            this->gameRenderer.getHud().pollEvent(event);
+        Guns &gun = this->gameRenderer.getGun();
+        Hud &hud = this->gameRenderer.getHud();
+
+        gun.pollEvent(event);
+
+        if (!gun.isShooting()) {
+            hud.pollEvent(event);
         }
     }
 }

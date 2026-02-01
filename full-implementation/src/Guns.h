@@ -18,6 +18,11 @@ class Guns {
     bool shooting = false;
     SDL_Texture *texture;
 
+    /**
+     * Updates the animation state if the Guns is in the shooting state
+     */
+    void update();
+
   public:
     Guns();
 

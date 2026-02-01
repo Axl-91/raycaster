@@ -53,9 +53,7 @@ void Guns::handleShooting() {
     }
 }
 
-void Guns::render(SDL_Renderer *renderer) {
-    // TODO: Render should just only render
-    // this logic should be on another function like 'update'
+void Guns::update() {
     if (this->shooting) {
         int frame = this->auxNum / this->offset;
         this->srcGun.x = this->offset * frame;
@@ -66,6 +64,10 @@ void Guns::render(SDL_Renderer *renderer) {
             this->shooting = false;
         }
     }
+}
+
+void Guns::render(SDL_Renderer *renderer) {
+    update();
 
     // TODO: Fix magic numbers
     SDL_Rect gun = {96, 72, this->GUN_WIDTH, this->GUN_HEIGHT};
