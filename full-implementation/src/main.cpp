@@ -1,5 +1,5 @@
-#include "Constants.h"
-#include "Game.h"
+#include "game/Game.h"
+#include "utils/Constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>

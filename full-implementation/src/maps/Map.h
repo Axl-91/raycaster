@@ -1,9 +1,9 @@
 #ifndef __MAP__
 #define __MAP__
 
+#include "../utils/Vector.h"
 #include "MapParser.h"
 #include "ObjectParser.h"
-#include "Vector.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <string>

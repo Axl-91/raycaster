@@ -1,8 +1,4 @@
 #include "Game.h"
-#include "Constants.h"
-#include "Player.h"
-#include "Raycaster.h"
-#include "Renderer.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdexcept>

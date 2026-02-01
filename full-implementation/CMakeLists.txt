@@ -8,17 +8,17 @@ find_package(SDL2_image REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
 set(SOURCES
-    src/Game.cpp
-    src/Vector.cpp
-    src/Hud.cpp
-    src/Guns.cpp
-    src/Player.cpp
-    src/Raycaster.cpp
-    src/Map.cpp
-    src/Sprites.cpp
-    src/Renderer.cpp
-    src/MapParser.cpp
-    src/ObjectParser.cpp
+    src/game/Game.cpp
+    src/game/Raycaster.cpp
+    src/game/Renderer.cpp
+    src/components/Player.cpp
+    src/components/Sprites.cpp
+    src/components/Guns.cpp
+    src/components/Hud.cpp
+    src/maps/Map.cpp
+    src/maps/MapParser.cpp
+    src/maps/ObjectParser.cpp
+    src/utils/Vector.cpp
 )
 
 # Create a library for SDL-related files

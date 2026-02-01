@@ -1,11 +1,11 @@
 #ifndef __GAME__
 #define __GAME__
 
-#include "Constants.h"
-#include "Guns.h"
-#include "Hud.h"
-#include "Map.h"
-#include "Player.h"
+#include "../components/Guns.h"
+#include "../components/Hud.h"
+#include "../components/Player.h"
+#include "../maps/Map.h"
+#include "../utils/Constants.h"
 #include "Raycaster.h"
 #include "Renderer.h"
 #include <SDL2/SDL.h>

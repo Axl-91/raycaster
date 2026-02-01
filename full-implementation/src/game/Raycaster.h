@@ -1,10 +1,10 @@
 #ifndef __RAYCASTER__
 #define __RAYCASTER__
 
-#include "Constants.h"
-#include "Map.h"
-#include "Player.h"
-#include "Vector.h"
+#include "../components/Player.h"
+#include "../maps/Map.h"
+#include "../utils/Constants.h"
+#include "../utils/Vector.h"
 
 #include <iostream>
 #include <limits>

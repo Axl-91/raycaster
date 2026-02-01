@@ -1,9 +1,9 @@
 #ifndef __PLAYER__
 #define __PLAYER__
 
-#include "Constants.h"
-#include "Map.h"
-#include "Vector.h"
+#include "../maps/Map.h"
+#include "../utils/Constants.h"
+#include "../utils/Vector.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>

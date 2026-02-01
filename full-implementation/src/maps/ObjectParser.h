@@ -1,7 +1,7 @@
 #ifndef OBJECT_PARSER_H
 #define OBJECT_PARSER_H
 
-#include "Vector.h"
+#include "../utils/Vector.h"
 #include <string>
 #include <vector>
 
