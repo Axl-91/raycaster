@@ -3,15 +3,12 @@
 
 #include "../utils/Vector.h"
 #include "MapParser.h"
-#include "ObjectParser.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <string>
 #include <vector>
 
 #define DEFAULT_MAP "resources/maps/defaultMap.yaml"
-
-#define DEFAULT_OBJECTS "resources/objects/defaultObjects.yaml"
 
 class Map {
   private:
@@ -20,6 +17,7 @@ class Map {
 
     MapData gridMap;
     ObjectsData vectObj;
+    PlayersPos playersPos;
 
     /**
      * Check if the x and y positions are inside the map array
@@ -69,7 +67,9 @@ class Map {
     /**
      * Initializes the Map with the given map and object
      */
-    Map(std::string mapPath, std::string objectsPath = "");
+    Map(std::string mapPath);
+
+    Vector getInitPos();
 
     /**
      * Check if the given Vector position is inside the map

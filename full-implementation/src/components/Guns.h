@@ -1,6 +1,7 @@
 #ifndef __TEXTURE_GUNS__
 #define __TEXTURE_GUNS__
 
+#include "../utils/Constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_render.h>
@@ -9,6 +10,10 @@ class Guns {
   private:
     static constexpr int GUN_WIDTH = 128;
     static constexpr int GUN_HEIGHT = 128;
+
+    static constexpr int GUN_POS_X = (SCREEN_WIDTH / 2.0f) - (GUN_WIDTH / 2.0f);
+    static constexpr int GUN_POS_Y = USABLE_SCREEN_HEIGHT - GUN_HEIGHT;
+
     static constexpr int FRAMES_MAX = 4;
     static constexpr int ANIMATION_SPEED = 18;
 

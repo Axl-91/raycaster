@@ -4,8 +4,7 @@
 #include <stdexcept>
 
 Game::Game(int width, int height)
-    : winWidth(width), winHeight(height), map(),
-      player(INIT_POS_X, INIT_POS_Y, this->map),
+    : winWidth(width), winHeight(height), map(), player(this->map),
       raycaster(this->player, this->map),
       gameRenderer(this->map, this->player, this->raycaster) {
 
