@@ -13,11 +13,12 @@ Documentation and refactorings are in progress...
 - C++11 compatible compiler
 - SDL2
 - SDL2_image
+- YAML-CPP
 - CMake
 
 ### Install dependencies
 ``` bash
-sudo dnf install gcc-c++ cmake SDL2-devel SDL2_image-devel
+sudo dnf install gcc-c++ cmake SDL2-devel SDL2_image-devel yaml-cpp-devel
 ```
 
 ## Tutorial Path
