@@ -16,15 +16,12 @@ void Map::loadMap(const std::string &mapPath) {
     this->gridMap = mapParser.getMap();
 
     Vector mapSize = mapParser.getMapSize();
-
     this->columns = mapSize.getX();
     this->rows = mapSize.getY();
 
     ObjectsData objects = mapParser.getObjects();
-
-    for (MapObject object : objects) {
-        MapObject obj = {object.position, object.type};
-        this->vectObj.push_back(obj);
+    for (const MapObject &object : objects) {
+        this->vectObj.push_back({object.position, object.type});
     }
 
     this->playersPos = mapParser.getPlayersPos();
