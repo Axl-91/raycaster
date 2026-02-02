@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <algorithm>
+#include <stdexcept>
 #include <vector>
 
 Map::Map() { loadMap(DEFAULT_MAP); }
@@ -28,6 +29,9 @@ void Map::loadMap(const std::string &mapPath) {
 }
 
 Vector Map::getInitPos() {
+    if (this->playersPos.empty()) {
+        throw std::out_of_range("No player positions available");
+    }
     Vector pos = this->playersPos.back();
     this->playersPos.pop_back();
 
