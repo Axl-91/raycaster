@@ -57,8 +57,8 @@ void Guns::update() {
     if (this->shooting) {
         int frame = this->auxNum / this->offset;
         this->srcGun.x = this->offset * frame;
-        this->auxNum += this->ANIMATION_SPEED;
-        if (frame > this->FRAMES_MAX) {
+        this->auxNum += ANIMATION_SPEED;
+        if (frame > FRAMES_MAX) {
             this->auxNum = 0;
             this->srcGun.x = 0;
             this->shooting = false;
@@ -69,8 +69,7 @@ void Guns::update() {
 void Guns::render(SDL_Renderer *renderer) {
     update();
 
-    // TODO: Fix magic numbers
-    SDL_Rect gun = {96, 72, this->GUN_WIDTH, this->GUN_HEIGHT};
+    SDL_Rect gun = {GUN_POS_X, GUN_POS_Y, GUN_WIDTH, GUN_HEIGHT};
     SDL_RenderCopy(renderer, this->texture, &this->srcGun, &gun);
 }
 
