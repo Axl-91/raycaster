@@ -46,7 +46,7 @@ void Hud::renderHud(SDL_Renderer *renderer) const {
 
     // Rendering gun section of the HUD
     // TODO: Fix magic numbers
-    SDL_Rect gunHud = {255, 210, HUD_GUN_WIDTH, HUD_GUN_HEIGHT};
+    SDL_Rect gunHud = {HUD_GUN_X, HUD_GUN_Y, HUD_GUN_WIDTH, HUD_GUN_HEIGHT};
     SDL_RenderCopy(renderer, this->texture, &this->srcGun, &gunHud);
 }
 
