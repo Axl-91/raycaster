@@ -21,7 +21,7 @@ Beyond the step-by-step tutorial, this implementation adds:
 
 ## Screen Layout
 
-The main 3D viewport renders at `SCREEN_HEIGHT - HUD_HEIGHT` to leave room for the HUD overlay.
+The main 3D viewport will be different as we render the height at `SCREEN_HEIGHT - HUD_HEIGHT` to leave room for the HUD overlay.
 
 ```cpp
 constexpr int SCREEN_HEIGHT = 240;
@@ -30,20 +30,26 @@ constexpr int HUD_HEIGHT = 40;
 constexpr int USABLE_SCREEN_HEIGHT = SCREEN_HEIGHT - HUD_HEIGHT;
 ```
 
-Wall rendering calculates positions within the reduced viewport, then the HUD is drawn on top.
+Walls & sprites rendering calculates positions within the reduced viewport, then the HUD is drawn on top.
 
-### Weapon Animation
+### Weapon
+
+#### Positioning
+
+Weapons will be rendered at the center of the X-axis and at the bottom of the Y-axis.
+  
+#### Selection
+
+Each weapon (1-4) corresponds to a different sprite in the gun sprite sheet. Selecting a weapon:
+- Updates the gun sprite displayed at bottom-center
+- Updates the weapon icon in the HUD
+  
+#### Animation
 
 When firing:
 1. `Space` key triggers `gun.handleShooting()`
 2. Gun sprite cycles through animation frames
 3. After animation completes, gun returns to idle state
-
-### Weapon Selection
-
-Each weapon (1-4) corresponds to a different sprite in the gun sprite sheet. Selecting a weapon:
-- Updates the gun sprite displayed at bottom-center
-- Updates the weapon icon in the HUD
 
 ## Extending This Implementation
 
