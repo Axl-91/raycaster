@@ -19,12 +19,11 @@ Renderer::Renderer(Map &map, Player &player, Raycaster &raycaster)
 void Renderer::setRenderer(SDL_Renderer *renderer) {
     this->sdlRenderer = renderer;
 
-    this->hud.loadTexture(this->sdlRenderer, "assets/hud.png");
+    // TODO: Info like assets path, columns and variants should come from a
+    // config file
+    this->hud.loadTexture(this->sdlRenderer, HUD_PATH);
+    this->gun.loadTexture(this->sdlRenderer, GUN_PATH);
 
-    this->gun.loadTexture(this->sdlRenderer, "assets/guns.png");
-
-    // TODO: Information like assets path, columns, variants, and transparency
-    // should came from a config file
     this->wallSprites.loadTexture(this->sdlRenderer, WALLS_PATH, 3);
     this->wallSprites.setVariantCount(2);
 

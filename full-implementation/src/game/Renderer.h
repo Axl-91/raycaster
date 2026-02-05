@@ -11,6 +11,8 @@
 
 #define WALLS_PATH "assets/walls.png"
 #define OBJ_PATH "assets/objects.png"
+#define HUD_PATH "assets/hud.png"
+#define GUN_PATH "assets/guns.png"
 
 class Renderer {
   private:
