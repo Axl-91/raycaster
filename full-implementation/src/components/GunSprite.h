@@ -2,11 +2,12 @@
 #define __TEXTURE_GUNS__
 
 #include "../utils/Constants.h"
+#include "Sprite.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_render.h>
 
-class Guns {
+class GunSprite : public Sprite {
   private:
     static constexpr int GUN_WIDTH = 128;
     static constexpr int GUN_HEIGHT = 128;
@@ -17,11 +18,9 @@ class Guns {
     static constexpr int FRAMES_MAX = 4;
     static constexpr int ANIMATION_SPEED = 18;
 
-    SDL_Rect srcGun = {0, 0, 64, 64};
-    int offset = 65;
+    int offset = BLOCK_SIZE + 1;
     int auxNum = 0;
     bool shooting = false;
-    SDL_Texture *texture;
 
     /**
      * Updates the animation state if the Guns is in the shooting state
@@ -29,13 +28,7 @@ class Guns {
     void update();
 
   public:
-    Guns();
-
-    /**
-     * Load gun sprite sheet texture from file
-     * @throws std::runtime_error if surface or texture creation fails
-     */
-    void loadTextures(SDL_Renderer *renderer);
+    GunSprite();
 
     /**
      * Handles keyboard input for gun selection and shooting
@@ -59,11 +52,6 @@ class Guns {
      * Handles shooting animation by cycling through sprite frames
      */
     void render(SDL_Renderer *renderer);
-
-    Guns(const Guns &copy) = delete;
-    Guns operator=(const Guns &copy) = delete;
-
-    ~Guns();
 };
 
 #endif

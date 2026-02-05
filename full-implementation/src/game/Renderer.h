@@ -1,16 +1,18 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "../components/Guns.h"
-#include "../components/Hud.h"
+#include "../components/GunSprite.h"
+#include "../components/HudSprite.h"
 #include "../components/Player.h"
-#include "../components/Sprites.h"
+#include "../components/StaticSprite.h"
 #include "../maps/Map.h"
 #include "Raycaster.h"
 #include <SDL2/SDL.h>
 
 #define WALLS_PATH "assets/walls.png"
 #define OBJ_PATH "assets/objects.png"
+#define HUD_PATH "assets/hud.png"
+#define GUN_PATH "assets/guns.png"
 
 class Renderer {
   private:
@@ -32,10 +34,10 @@ class Renderer {
     Raycaster &raycaster;
     float wallDistances[SCREEN_WIDTH];
 
-    Sprites wallSprites;
-    Sprites objectSprites;
-    Hud hud;
-    Guns gun;
+    StaticSprite wallSprites;
+    StaticSprite objectSprites;
+    HudSprite hud;
+    GunSprite gun;
 
     /**
      * Render floor and ceiling
@@ -95,12 +97,12 @@ class Renderer {
     /**
      * Get reference to gun for input handling
      */
-    Guns &getGun() { return gun; }
+    GunSprite &getGun() { return gun; }
 
     /**
      * Get reference to HUD for input handling
      */
-    Hud &getHud() { return hud; }
+    HudSprite &getHud() { return hud; }
 
     Renderer(const Renderer &) = delete;
     Renderer &operator=(const Renderer &) = delete;

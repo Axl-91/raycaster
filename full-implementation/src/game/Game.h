@@ -1,8 +1,8 @@
 #ifndef __GAME__
 #define __GAME__
 
-#include "../components/Guns.h"
-#include "../components/Hud.h"
+#include "../components/GunSprite.h"
+#include "../components/HudSprite.h"
 #include "../components/Player.h"
 #include "../maps/Map.h"
 #include "../utils/Constants.h"
