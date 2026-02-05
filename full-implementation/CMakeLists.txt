@@ -12,9 +12,10 @@ set(SOURCES
     src/game/Raycaster.cpp
     src/game/Renderer.cpp
     src/components/Player.cpp
-    src/components/Sprites.cpp
-    src/components/Guns.cpp
-    src/components/Hud.cpp
+    src/components/Sprite.cpp
+    src/components/StaticSprite.cpp
+    src/components/GunSprite.cpp
+    src/components/HudSprite.cpp
     src/maps/Map.cpp
     src/maps/MapParser.cpp
     src/utils/Vector.cpp

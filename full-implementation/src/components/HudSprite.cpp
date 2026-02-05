@@ -1,26 +1,12 @@
-#include "Hud.h"
+#include "HudSprite.h"
 #include "../utils/Constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_render.h>
-#include <stdexcept>
 
-Hud::Hud() {}
+HudSprite::HudSprite() {}
 
-void Hud::loadTexture(SDL_Renderer *renderer) {
-    SDL_Surface *surface = IMG_Load("assets/hud.png");
-    if (!surface) {
-        throw std::runtime_error("SDL surface error on HUD");
-    }
-
-    this->texture = SDL_CreateTextureFromSurface(renderer, surface);
-    if (!this->texture) {
-        throw std::runtime_error("SDL texture error on HUD");
-    }
-    SDL_FreeSurface(surface);
-}
-
-void Hud::pollEvent(SDL_Event &event) {
+void HudSprite::pollEvent(SDL_Event &event) {
     if (event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
         case SDLK_1:
@@ -39,7 +25,7 @@ void Hud::pollEvent(SDL_Event &event) {
     }
 }
 
-void Hud::renderHud(SDL_Renderer *renderer) const {
+void HudSprite::render(SDL_Renderer *renderer) const {
     SDL_Rect hud = {SCREEN_WIDTH - HUD_WIDTH, SCREEN_HEIGHT - HUD_HEIGHT,
                     HUD_WIDTH, HUD_HEIGHT};
     SDL_RenderCopy(renderer, this->texture, &this->srcHud, &hud);
@@ -48,5 +34,3 @@ void Hud::renderHud(SDL_Renderer *renderer) const {
     SDL_Rect gunHud = {HUD_GUN_X, HUD_GUN_Y, HUD_GUN_WIDTH, HUD_GUN_HEIGHT};
     SDL_RenderCopy(renderer, this->texture, &this->srcGun, &gunHud);
 }
-
-Hud::~Hud() { SDL_DestroyTexture(this->texture); }

@@ -47,8 +47,8 @@ void Game::pollEvent() {
     while (SDL_PollEvent(&event)) {
         exitPollEvent(event);
 
-        Guns &gun = this->gameRenderer.getGun();
-        Hud &hud = this->gameRenderer.getHud();
+        GunSprite &gun = this->gameRenderer.getGun();
+        HudSprite &hud = this->gameRenderer.getHud();
 
         gun.pollEvent(event);
 

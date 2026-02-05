@@ -19,15 +19,16 @@ Renderer::Renderer(Map &map, Player &player, Raycaster &raycaster)
 void Renderer::setRenderer(SDL_Renderer *renderer) {
     this->sdlRenderer = renderer;
 
-    this->hud.loadTexture(this->sdlRenderer);
-    this->gun.loadTextures(this->sdlRenderer);
+    this->hud.loadTexture(this->sdlRenderer, "assets/hud.png");
+
+    this->gun.loadTexture(this->sdlRenderer, "assets/guns.png");
 
     // TODO: Information like assets path, columns, variants, and transparency
     // should came from a config file
-    this->wallSprites.loadTexture(this->sdlRenderer, WALLS_PATH, 3, false);
+    this->wallSprites.loadTexture(this->sdlRenderer, WALLS_PATH, 3);
     this->wallSprites.setVariantCount(2);
 
-    this->objectSprites.loadTexture(this->sdlRenderer, OBJ_PATH, 5, true);
+    this->objectSprites.loadTexture(this->sdlRenderer, OBJ_PATH, 5);
     this->objectSprites.setSpacing(1);
 }
 
@@ -51,7 +52,7 @@ void Renderer::setWallType(Ray &ray) {
 
     // If its vertical I change the variant to the dark one
     if (ray.direction == RayDirection::VERTICAL) {
-        this->wallSprites.nextSprite();
+        this->wallSprites.changeVariant();
     }
 }
 
@@ -163,7 +164,7 @@ void Renderer::render() {
     renderWalls();
     renderVisibleObjects();
 
-    this->hud.renderHud(this->sdlRenderer);
+    this->hud.render(this->sdlRenderer);
     this->gun.render(this->sdlRenderer);
     // this->player.render(this->sdlRenderer);
 
