@@ -7,8 +7,6 @@
 #include <stdexcept>
 #include <vector>
 
-Map::Map() { loadMap(DEFAULT_MAP); }
-
 Map::Map(std::string mapPath) { loadMap(mapPath); }
 
 void Map::loadMap(const std::string &mapPath) {

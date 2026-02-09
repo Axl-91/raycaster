@@ -14,6 +14,8 @@
 
 class Game {
   private:
+    Config config;
+
     int realWidth = SCREEN_WIDTH;
     int realHeight = SCREEN_HEIGHT;
 

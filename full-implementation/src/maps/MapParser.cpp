@@ -1,5 +1,5 @@
 #include "MapParser.h"
-#include <iostream>
+#include <stdexcept>
 #include <yaml-cpp/yaml.h>
 
 MapParser::MapParser(const std::string &filepath) {
@@ -8,8 +8,7 @@ MapParser::MapParser(const std::string &filepath) {
 
 MapData MapParser::getMap() {
     if (!this->yamlNode["map"]) {
-        std::cerr << "Invalid map file: Missing 'map' section." << std::endl;
-        return {};
+        std::runtime_error("Invalid Map File: Missing 'map' section.");
     }
 
     MapData map;
@@ -23,8 +22,7 @@ MapData MapParser::getMap() {
 
 Vector MapParser::getMapSize() {
     if (!this->yamlNode["map"]) {
-        std::cerr << "Invalid map file: Missing 'map' section." << std::endl;
-        return {};
+        std::runtime_error("Invalid Map File: Missing 'map' section.");
     }
 
     int columns = this->yamlNode["map"]["size"]["columns"].as<int>();
@@ -35,9 +33,7 @@ Vector MapParser::getMapSize() {
 
 ObjectsData MapParser::getObjects() {
     if (!this->yamlNode["objects"]) {
-        std::cerr << "Invalid objects file: Missing 'objects' section."
-                  << std::endl;
-        return {};
+        std::runtime_error("Invalid Map File: Missing 'objects' section.");
     }
 
     ObjectsData objects;
@@ -54,9 +50,7 @@ ObjectsData MapParser::getObjects() {
 
 PlayersPos MapParser::getPlayersPos() {
     if (!this->yamlNode["players"]) {
-        std::cerr << "Invalid objects file: Missing 'objects' section."
-                  << std::endl;
-        return {};
+        std::runtime_error("Invalid Map File: Missing 'players' section.");
     }
 
     PlayersPos playersPos;

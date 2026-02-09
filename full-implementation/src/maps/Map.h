@@ -8,8 +8,6 @@
 #include <string>
 #include <vector>
 
-#define DEFAULT_MAP "resources/maps/defaultMap.yaml"
-
 class Map {
   private:
     int rows = -1;
@@ -60,14 +58,9 @@ class Map {
 
   public:
     /**
-     * Initializes the Map with the DEFAULT_MAP and DEFAULT_OBJECTS
-     */
-    Map();
-
-    /**
      * Initializes the Map with the given map and object
      */
-    Map(std::string mapPath);
+    Map(std::string mapPath = "resources/maps/defaultMap.yaml");
 
     Vector getInitPos();
 

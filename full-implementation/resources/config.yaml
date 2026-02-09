@@ -1,0 +1,22 @@
+sprites:
+  walls: 
+    path: "assets/walls.png"
+    cols: 3
+    spacing: 0
+    variants: 2
+  objects:
+    path: "assets/objects.png"
+    cols: 5
+    spacing: 1
+    variants: 1
+  hud: 
+    path: "assets/hud.png"
+    cols: 1
+    spacing: 0
+    variants: 1
+  guns: 
+    path: "assets/guns.png"
+    cols: 1
+    spacing: 0
+    variants: 1
+
