@@ -1,5 +1,5 @@
-#ifndef CONFIG_PARSER_H
-#define CONFIG_PARSER_H
+#ifndef CONFIG_H
+#define CONFIG_H
 
 #include <yaml-cpp/node/node.h>
 
