@@ -17,6 +17,10 @@ class Config {
   public:
     Config(const std::string &path = "resources/config.yaml");
 
+    int getWinWidth();
+
+    int getWinHeight();
+
     const SpriteConfig getWallsSpriteConfig();
 
     const SpriteConfig getObjectsSpriteConfig();

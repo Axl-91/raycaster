@@ -4,16 +4,15 @@
 #include <SDL2/SDL_image.h>
 #include <stdexcept>
 
-Game::Game(int width, int height)
-    : config(), winWidth(width), winHeight(height), map(), player(this->map),
-      raycaster(this->player, this->map),
+Game::Game()
+    : config(), map(), player(this->map), raycaster(this->player, this->map),
       gameRenderer(this->map, this->player, this->raycaster) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         throw std::runtime_error(std::string("SDL_Init failed: ") +
                                  SDL_GetError());
     }
 
-    if (SDL_CreateWindowAndRenderer(this->winWidth, this->winHeight,
+    if (SDL_CreateWindowAndRenderer(config.getWinWidth(), config.getWinHeight(),
                                     SDL_RENDERER_ACCELERATED, &this->window,
                                     &this->sdlRenderer) != 0) {
         SDL_Quit();

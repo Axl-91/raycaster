@@ -1,3 +1,6 @@
+game:
+  width: 640
+  height: 480
 sprites:
   walls: 
     path: "assets/walls.png"

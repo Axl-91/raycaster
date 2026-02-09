@@ -6,6 +6,20 @@ Config::Config(const std::string &filepath) {
     this->yamlNode = YAML::LoadFile(filepath);
 }
 
+int Config::getWinWidth() {
+    if (!this->yamlNode["game"]) {
+        std::runtime_error("Invalid Config File: Missing 'game' section.");
+    }
+    return this->yamlNode["game"]["width"].as<int>();
+}
+
+int Config::getWinHeight() {
+    if (!this->yamlNode["game"]) {
+        std::runtime_error("Invalid Config File: Missing 'game' section.");
+    }
+    return this->yamlNode["game"]["height"].as<int>();
+}
+
 const SpriteConfig Config::getWallsSpriteConfig() {
     if (!this->yamlNode["sprites"]["walls"]) {
         std::runtime_error(
