@@ -6,6 +6,7 @@
 #include "../components/Player.h"
 #include "../components/StaticSprite.h"
 #include "../maps/Map.h"
+#include "Config.h"
 #include "Raycaster.h"
 #include <SDL2/SDL.h>
 
@@ -36,8 +37,8 @@ class Renderer {
 
     StaticSprite wallSprites;
     StaticSprite objectSprites;
-    HudSprite hud;
-    GunSprite gun;
+    HudSprite hudSprites;
+    GunSprite gunSprites;
 
     /**
      * Render floor and ceiling
@@ -87,7 +88,7 @@ class Renderer {
      * Set SDL renderer and initialize all textures
      * Must be called after SDL initialization
      */
-    void setRenderer(SDL_Renderer *renderer);
+    void setRenderer(SDL_Renderer *renderer, Config &config);
 
     /**
      * Render complete frame (background, walls, objects, HUD, gun)
@@ -97,12 +98,12 @@ class Renderer {
     /**
      * Get reference to gun for input handling
      */
-    GunSprite &getGun() { return gun; }
+    GunSprite &getGun() { return gunSprites; }
 
     /**
      * Get reference to HUD for input handling
      */
-    HudSprite &getHud() { return hud; }
+    HudSprite &getHud() { return hudSprites; }
 
     Renderer(const Renderer &) = delete;
     Renderer &operator=(const Renderer &) = delete;

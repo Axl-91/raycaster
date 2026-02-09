@@ -1,17 +1,48 @@
 #include "MapParser.h"
-#include <iostream>
+#include <stdexcept>
 #include <yaml-cpp/yaml.h>
+
+namespace {
+void validateValue(YAML::Node node, std::string value) {
+    if (!node[value]) {
+        std::ostringstream oss;
+        oss << "Invalid Map Format: Missing " << value << " section.";
+        throw std::runtime_error(oss.str());
+    }
+}
+} // namespace
 
 MapParser::MapParser(const std::string &filepath) {
     this->yamlNode = YAML::LoadFile(filepath);
+    validateFormat();
+}
+
+void MapParser::validateFormat() {
+    validateValue(this->yamlNode, "map");
+    validateValue(this->yamlNode["map"], "tiles");
+    validateValue(this->yamlNode["map"], "size");
+    validateValue(this->yamlNode["map"]["size"], "columns");
+    validateValue(this->yamlNode["map"]["size"], "rows");
+
+    validateValue(this->yamlNode, "objects");
+
+    for (const auto &obj : this->yamlNode["objects"]) {
+        validateValue(obj, "position");
+        validateValue(obj["position"], "x");
+        validateValue(obj["position"], "y");
+        validateValue(obj, "type");
+    }
+
+    validateValue(this->yamlNode, "players");
+
+    for (const auto &player : this->yamlNode["players"]) {
+        validateValue(player, "position");
+        validateValue(player["position"], "x");
+        validateValue(player["position"], "y");
+    }
 }
 
 MapData MapParser::getMap() {
-    if (!this->yamlNode["map"]) {
-        std::cerr << "Invalid map file: Missing 'map' section." << std::endl;
-        return {};
-    }
-
     MapData map;
 
     for (const auto &row : this->yamlNode["map"]["tiles"]) {
@@ -22,11 +53,6 @@ MapData MapParser::getMap() {
 }
 
 Vector MapParser::getMapSize() {
-    if (!this->yamlNode["map"]) {
-        std::cerr << "Invalid map file: Missing 'map' section." << std::endl;
-        return {};
-    }
-
     int columns = this->yamlNode["map"]["size"]["columns"].as<int>();
     int rows = this->yamlNode["map"]["size"]["rows"].as<int>();
 
@@ -34,12 +60,6 @@ Vector MapParser::getMapSize() {
 }
 
 ObjectsData MapParser::getObjects() {
-    if (!this->yamlNode["objects"]) {
-        std::cerr << "Invalid objects file: Missing 'objects' section."
-                  << std::endl;
-        return {};
-    }
-
     ObjectsData objects;
 
     for (const auto &obj : this->yamlNode["objects"]) {
@@ -53,18 +73,12 @@ ObjectsData MapParser::getObjects() {
 }
 
 PlayersPos MapParser::getPlayersPos() {
-    if (!this->yamlNode["players"]) {
-        std::cerr << "Invalid objects file: Missing 'objects' section."
-                  << std::endl;
-        return {};
-    }
-
     PlayersPos playersPos;
 
-    for (const auto &obj : this->yamlNode["players"]) {
+    for (const auto &player : this->yamlNode["players"]) {
         Vector position;
-        position = Vector(obj["position"]["x"].as<float>(),
-                          obj["position"]["y"].as<float>());
+        position = Vector(player["position"]["x"].as<float>(),
+                          player["position"]["y"].as<float>());
 
         playersPos.push_back(position);
     }

@@ -1,12 +1,11 @@
 #include "game/Game.h"
-#include "utils/Constants.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_timer.h>
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
-    Game game(WIN_WIDTH, WIN_HEIGHT);
+    Game game;
     // game.setFullScreen();
 
     while (!game.isGameOver()) {

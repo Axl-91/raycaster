@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.10)
 
 project(Raycaster LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Find required packages
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
@@ -11,6 +14,7 @@ set(SOURCES
     src/game/Game.cpp
     src/game/Raycaster.cpp
     src/game/Renderer.cpp
+    src/game/Config.cpp
     src/components/Player.cpp
     src/components/Sprite.cpp
     src/components/StaticSprite.cpp

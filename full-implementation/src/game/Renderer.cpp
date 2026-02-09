@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "Config.h"
 #include <SDL2/SDL_log.h>
 #include <cmath>
 
@@ -16,19 +17,24 @@ float normalizeAngle(float angle) {
 Renderer::Renderer(Map &map, Player &player, Raycaster &raycaster)
     : map(map), player(player), raycaster(raycaster) {}
 
-void Renderer::setRenderer(SDL_Renderer *renderer) {
+void Renderer::setRenderer(SDL_Renderer *renderer, Config &config) {
     this->sdlRenderer = renderer;
 
-    // TODO: Info like assets path, columns and variants should come from a
-    // config file
-    this->hud.loadTexture(this->sdlRenderer, HUD_PATH);
-    this->gun.loadTexture(this->sdlRenderer, GUN_PATH);
+    SpriteConfig hudConfig = config.getHudSpriteConfig();
+    SpriteConfig gunsConfig = config.getGunsSpriteConfig();
+    SpriteConfig wallsConfig = config.getWallsSpriteConfig();
+    SpriteConfig objConfig = config.getObjectsSpriteConfig();
 
-    this->wallSprites.loadTexture(this->sdlRenderer, WALLS_PATH, 3);
-    this->wallSprites.setVariantCount(2);
+    this->hudSprites.loadTexture(this->sdlRenderer, hudConfig.path.c_str());
+    this->gunSprites.loadTexture(this->sdlRenderer, gunsConfig.path.c_str());
 
-    this->objectSprites.loadTexture(this->sdlRenderer, OBJ_PATH, 5);
-    this->objectSprites.setSpacing(1);
+    this->wallSprites.loadTexture(this->sdlRenderer, wallsConfig.path.c_str(),
+                                  wallsConfig.columns);
+    this->wallSprites.setVariantCount(wallsConfig.variants);
+
+    this->objectSprites.loadTexture(this->sdlRenderer, objConfig.path.c_str(),
+                                    objConfig.columns);
+    this->objectSprites.setSpacing(objConfig.spacing);
 }
 
 void Renderer::renderBackground() const {
@@ -163,8 +169,8 @@ void Renderer::render() {
     renderWalls();
     renderVisibleObjects();
 
-    this->hud.render(this->sdlRenderer);
-    this->gun.render(this->sdlRenderer);
+    this->hudSprites.render(this->sdlRenderer);
+    this->gunSprites.render(this->sdlRenderer);
     // this->player.render(this->sdlRenderer);
 
     SDL_RenderPresent(this->sdlRenderer);

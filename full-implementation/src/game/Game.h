@@ -14,11 +14,10 @@
 
 class Game {
   private:
+    Config config;
+
     int realWidth = SCREEN_WIDTH;
     int realHeight = SCREEN_HEIGHT;
-
-    int winWidth;
-    int winHeight;
 
     bool gameOver = false;
 
@@ -45,7 +44,7 @@ class Game {
      * @param height Physical window height in pixels
      * @throws std::runtime_error if SDL initialization fails
      */
-    Game(int width = SCREEN_WIDTH, int height = SCREEN_HEIGHT);
+    Game();
 
     /**
      * Set the game window to fullscreen mode
