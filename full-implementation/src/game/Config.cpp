@@ -2,29 +2,60 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 
+namespace {
+void validateValue(YAML::Node node, std::string value) {
+    if (!node[value]) {
+        std::ostringstream oss;
+        oss << "Invalid Config Format: Missing " << value << " section.";
+        throw std::runtime_error(oss.str());
+    }
+}
+} // namespace
+
 Config::Config(const std::string &filepath) {
     this->yamlNode = YAML::LoadFile(filepath);
+    validateFormat();
 }
 
-int Config::getWinWidth() {
-    if (!this->yamlNode["game"]) {
-        std::runtime_error("Invalid Config File: Missing 'game' section.");
-    }
-    return this->yamlNode["game"]["width"].as<int>();
+void Config::validateFormat() {
+    validateValue(this->yamlNode, "game");
+    validateValue(this->yamlNode["game"], "width");
+    validateValue(this->yamlNode["game"], "height");
+
+    validateValue(this->yamlNode, "sprites");
+
+    validateValue(this->yamlNode["sprites"], "walls");
+    validateValue(this->yamlNode["sprites"]["walls"], "path");
+    validateValue(this->yamlNode["sprites"]["walls"], "cols");
+    validateValue(this->yamlNode["sprites"]["walls"], "spacing");
+    validateValue(this->yamlNode["sprites"]["walls"], "variants");
+
+    validateValue(this->yamlNode["sprites"], "objects");
+    validateValue(this->yamlNode["sprites"]["objects"], "path");
+    validateValue(this->yamlNode["sprites"]["objects"], "cols");
+    validateValue(this->yamlNode["sprites"]["objects"], "spacing");
+    validateValue(this->yamlNode["sprites"]["objects"], "variants");
+
+    validateValue(this->yamlNode["sprites"], "hud");
+    validateValue(this->yamlNode["sprites"]["hud"], "path");
+    validateValue(this->yamlNode["sprites"]["hud"], "cols");
+    validateValue(this->yamlNode["sprites"]["hud"], "spacing");
+    validateValue(this->yamlNode["sprites"]["hud"], "variants");
+
+    validateValue(this->yamlNode["sprites"], "guns");
+    validateValue(this->yamlNode["sprites"]["guns"], "path");
+    validateValue(this->yamlNode["sprites"]["guns"], "cols");
+    validateValue(this->yamlNode["sprites"]["guns"], "spacing");
+    validateValue(this->yamlNode["sprites"]["guns"], "variants");
 }
+
+int Config::getWinWidth() { return this->yamlNode["game"]["width"].as<int>(); }
 
 int Config::getWinHeight() {
-    if (!this->yamlNode["game"]) {
-        std::runtime_error("Invalid Config File: Missing 'game' section.");
-    }
     return this->yamlNode["game"]["height"].as<int>();
 }
 
 const SpriteConfig Config::getWallsSpriteConfig() {
-    if (!this->yamlNode["sprites"]["walls"]) {
-        std::runtime_error(
-            "Invalid Config File: Missing 'sprites/walls' section.");
-    }
     YAML::Node wallsNode = this->yamlNode["sprites"]["walls"];
 
     SpriteConfig spriteConfig = {
@@ -38,10 +69,6 @@ const SpriteConfig Config::getWallsSpriteConfig() {
 }
 
 const SpriteConfig Config::getObjectsSpriteConfig() {
-    if (!this->yamlNode["sprites"]["objects"]) {
-        std::runtime_error(
-            "Invalid Config File: Missing 'sprites/objects' section.");
-    }
     YAML::Node objNode = this->yamlNode["sprites"]["objects"];
 
     SpriteConfig spriteConfig = {
@@ -52,10 +79,6 @@ const SpriteConfig Config::getObjectsSpriteConfig() {
 }
 
 const SpriteConfig Config::getHudSpriteConfig() {
-    if (!this->yamlNode["sprites"]["hud"]) {
-        std::runtime_error(
-            "Invalid Config File: Missing 'sprites/hud' section.");
-    }
     YAML::Node hudNode = this->yamlNode["sprites"]["hud"];
 
     SpriteConfig spriteConfig = {
@@ -66,10 +89,6 @@ const SpriteConfig Config::getHudSpriteConfig() {
 }
 
 const SpriteConfig Config::getGunsSpriteConfig() {
-    if (!this->yamlNode["sprites"]["guns"]) {
-        std::runtime_error(
-            "Invalid Config File: Missing 'sprites/guns' section.");
-    }
     YAML::Node gunsNode = this->yamlNode["sprites"]["guns"];
 
     SpriteConfig spriteConfig = {

@@ -19,19 +19,33 @@ class MapParser {
   private:
     YAML::Node yamlNode;
 
+    /**
+     * Validates the format of the map file
+     */
+    void validateFormat();
+
   public:
     MapParser(const std::string &filepath);
 
     /**
-     * Function that load a map from a YAML file
      * @return a vector of vectors of int representing the map
      */
     MapData getMap();
 
+    /**
+     * @return a vector of vectors of int representing the map dimensions
+     */
     Vector getMapSize();
 
+    /**
+     * @return a vector of the objects data
+     */
     ObjectsData getObjects();
 
+    /**
+     * @return a vector of 'Vector' that represents the position of the players
+     * on the map
+     */
     PlayersPos getPlayersPos();
 };
 
