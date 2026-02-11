@@ -4,8 +4,6 @@ A C++ and SDL2 raycasting engine inspired by Wolfenstein 3D.
 
 ## Status
 
-Under active development. 
-
 Documentation and refactorings are in progress...
 
 ## Requirements
