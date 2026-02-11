@@ -6,7 +6,6 @@
 
 int main(int argc, char *argv[]) {
     Game game;
-    // game.setFullScreen();
 
     while (!game.isGameOver()) {
         game.pollEvent();

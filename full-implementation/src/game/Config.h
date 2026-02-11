@@ -33,6 +33,11 @@ class Config {
     int getWinHeight();
 
     /**
+     * @return true if the default is full screen, false otherwise
+     */
+    bool isWinFullScreen();
+
+    /**
      * @return walls sprite config
      */
     const SpriteConfig getWallsSpriteConfig();

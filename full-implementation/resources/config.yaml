@@ -1,6 +1,7 @@
 game:
   width: 640
   height: 480
+  fullScreen: false
 sprites:
   walls: 
     path: "assets/walls.png"

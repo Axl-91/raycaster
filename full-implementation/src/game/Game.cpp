@@ -25,6 +25,10 @@ Game::Game()
                              this->realHeight);
 
     this->gameRenderer.setRenderer(this->sdlRenderer, this->config);
+
+    if (this->config.isWinFullScreen()) {
+        setFullScreen();
+    }
 }
 
 void Game::setFullScreen() {

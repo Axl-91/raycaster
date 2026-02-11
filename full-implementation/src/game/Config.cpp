@@ -21,6 +21,7 @@ void Config::validateFormat() {
     validateValue(this->yamlNode, "game");
     validateValue(this->yamlNode["game"], "width");
     validateValue(this->yamlNode["game"], "height");
+    validateValue(this->yamlNode["game"], "fullScreen");
 
     validateValue(this->yamlNode, "sprites");
 
@@ -53,6 +54,10 @@ int Config::getWinWidth() { return this->yamlNode["game"]["width"].as<int>(); }
 
 int Config::getWinHeight() {
     return this->yamlNode["game"]["height"].as<int>();
+}
+
+bool Config::isWinFullScreen() {
+    return this->yamlNode["game"]["fullScreen"].as<bool>();
 }
 
 const SpriteConfig Config::getWallsSpriteConfig() {
