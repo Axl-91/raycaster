@@ -19,6 +19,18 @@ Beyond the step-by-step tutorial, this implementation adds:
 - Shooting animations with sprite-based gun graphics
 - Weapon display synchronized with HUD
 
+### Map File
+The map `yaml` file will store
+ -  Map representation with dimensions
+ -  Objects in map
+ -  Players initial position
+
+### Config File
+The config `yaml` file will store
+ - Windows dimensions
+ - Is windows full screen
+ - Sprite sheets path (walls, objects, guns, HUD)
+
 ## Screen Layout
 
 The main 3D viewport will be different as we render the height at `SCREEN_HEIGHT - HUD_HEIGHT` to leave room for the HUD overlay.
