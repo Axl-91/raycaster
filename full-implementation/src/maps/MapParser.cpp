@@ -1,16 +1,6 @@
 #include "MapParser.h"
-#include <stdexcept>
+#include "../utils/YamlUtils.h"
 #include <yaml-cpp/yaml.h>
-
-namespace {
-void validateValue(YAML::Node node, std::string value) {
-    if (!node[value]) {
-        std::ostringstream oss;
-        oss << "Invalid Map Format: Missing " << value << " section.";
-        throw std::runtime_error(oss.str());
-    }
-}
-} // namespace
 
 MapParser::MapParser(const std::string &filepath) {
     this->yamlNode = YAML::LoadFile(filepath);
@@ -18,27 +8,39 @@ MapParser::MapParser(const std::string &filepath) {
 }
 
 void MapParser::validateFormat() {
-    validateValue(this->yamlNode, "map");
-    validateValue(this->yamlNode["map"], "tiles");
-    validateValue(this->yamlNode["map"], "size");
-    validateValue(this->yamlNode["map"]["size"], "columns");
-    validateValue(this->yamlNode["map"]["size"], "rows");
+    const std::vector<std::string> mapKeys = {"tiles", "size"};
+    const std::vector<std::string> sizeKeys = {"columns", "rows"};
+    const std::vector<std::string> objKeys = {"position", "type"};
+    const std::vector<std::string> posKeys = {"x", "y"};
 
-    validateValue(this->yamlNode, "objects");
+    YAMLUtils::validateValue(this->yamlNode, "map");
 
-    for (const auto &obj : this->yamlNode["objects"]) {
-        validateValue(obj, "position");
-        validateValue(obj["position"], "x");
-        validateValue(obj["position"], "y");
-        validateValue(obj, "type");
+    for (const std::string &key : mapKeys) {
+        YAMLUtils::validateValue(this->yamlNode["map"], key);
+    }
+    for (const std::string &key : sizeKeys) {
+        YAMLUtils::validateValue(this->yamlNode["map"]["size"], key);
     }
 
-    validateValue(this->yamlNode, "players");
+    YAMLUtils::validateValue(this->yamlNode, "objects");
+
+    for (const auto &obj : this->yamlNode["objects"]) {
+        for (const std::string &key : objKeys) {
+            YAMLUtils::validateValue(obj, key);
+        }
+        for (const std::string &key : posKeys) {
+            YAMLUtils::validateValue(obj["position"], key);
+        }
+    }
+
+    YAMLUtils::validateValue(this->yamlNode, "players");
 
     for (const auto &player : this->yamlNode["players"]) {
-        validateValue(player, "position");
-        validateValue(player["position"], "x");
-        validateValue(player["position"], "y");
+        YAMLUtils::validateValue(player, "position");
+
+        for (const std::string &key : posKeys) {
+            YAMLUtils::validateValue(player["position"], key);
+        }
     }
 }
 

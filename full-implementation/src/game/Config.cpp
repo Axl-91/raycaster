@@ -1,16 +1,7 @@
 #include "Config.h"
+#include "../utils/YamlUtils.h"
 #include <string>
 #include <yaml-cpp/yaml.h>
-
-namespace {
-void validateValue(YAML::Node node, std::string value) {
-    if (!node[value]) {
-        std::ostringstream oss;
-        oss << "Invalid Config Format: Missing " << value << " section.";
-        throw std::runtime_error(oss.str());
-    }
-}
-} // namespace
 
 Config::Config(const std::string &filepath) {
     this->yamlNode = YAML::LoadFile(filepath);
@@ -18,36 +9,28 @@ Config::Config(const std::string &filepath) {
 }
 
 void Config::validateFormat() {
-    validateValue(this->yamlNode, "game");
-    validateValue(this->yamlNode["game"], "width");
-    validateValue(this->yamlNode["game"], "height");
-    validateValue(this->yamlNode["game"], "fullScreen");
+    const std::vector<std::string> gameKeys = {"width", "height", "fullScreen"};
+    const std::vector<std::string> spriteTypes = {"walls", "objects", "hud",
+                                                  "guns"};
+    const std::vector<std::string> spriteKeys = {"path", "cols", "spacing",
+                                                 "variants"};
 
-    validateValue(this->yamlNode, "sprites");
+    YAMLUtils::validateValue(this->yamlNode, "game");
 
-    validateValue(this->yamlNode["sprites"], "walls");
-    validateValue(this->yamlNode["sprites"]["walls"], "path");
-    validateValue(this->yamlNode["sprites"]["walls"], "cols");
-    validateValue(this->yamlNode["sprites"]["walls"], "spacing");
-    validateValue(this->yamlNode["sprites"]["walls"], "variants");
+    for (const std::string &key : gameKeys) {
+        YAMLUtils::validateValue(this->yamlNode["game"], key);
+    }
 
-    validateValue(this->yamlNode["sprites"], "objects");
-    validateValue(this->yamlNode["sprites"]["objects"], "path");
-    validateValue(this->yamlNode["sprites"]["objects"], "cols");
-    validateValue(this->yamlNode["sprites"]["objects"], "spacing");
-    validateValue(this->yamlNode["sprites"]["objects"], "variants");
+    YAMLUtils::validateValue(this->yamlNode, "sprites");
 
-    validateValue(this->yamlNode["sprites"], "hud");
-    validateValue(this->yamlNode["sprites"]["hud"], "path");
-    validateValue(this->yamlNode["sprites"]["hud"], "cols");
-    validateValue(this->yamlNode["sprites"]["hud"], "spacing");
-    validateValue(this->yamlNode["sprites"]["hud"], "variants");
+    for (const std::string &spriteType : spriteTypes) {
+        YAMLUtils::validateValue(this->yamlNode["sprites"], spriteType);
 
-    validateValue(this->yamlNode["sprites"], "guns");
-    validateValue(this->yamlNode["sprites"]["guns"], "path");
-    validateValue(this->yamlNode["sprites"]["guns"], "cols");
-    validateValue(this->yamlNode["sprites"]["guns"], "spacing");
-    validateValue(this->yamlNode["sprites"]["guns"], "variants");
+        for (const std::string &key : spriteKeys) {
+            YAMLUtils::validateValue(this->yamlNode["sprites"][spriteType],
+                                     key);
+        }
+    }
 }
 
 int Config::getWinWidth() { return this->yamlNode["game"]["width"].as<int>(); }
